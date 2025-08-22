@@ -236,8 +236,8 @@ function getCRsFromScale(scale){
     const targetQuality = targetChord.quality;
 
     const integer = targetChord.integer; // distance to root as integer
-    const interval = integerToInterval(integer); // e.g. ♭3
-    const roman = integerToRomanNumeral(integer); // e.g. ♭III
+    const interval = Intervals.toName(integer); // e.g. ♭3
+    const roman = Intervals.toRoman(integer); // e.g. ♭III
     const label = `${rootQuality ?? "?"} ${roman} ${targetQuality ?? "?"}`;
 
     if (rootQuality != null && targetQuality != null && Number.isInteger(integer)){
@@ -293,8 +293,8 @@ function initChordRelationships() {
 	for (let rootQuality of chordQualities) {
 	    for (let integer of integerIntervals) {
 	      	for (let targetQuality of chordQualities) {
-	      		const interval= integerToInterval(integer);
-	      		const roman= integerToRomanNumeral(integer);
+	      		const interval= Intervals.toName(integer);
+	      		const roman= Intervals.toRoman(integer);
 	      		const label= `${rootQuality} ${roman} ${targetQuality}`;
 	        	chordRelationships.push({label, rootQuality, targetQuality, interval, integer, roman});
 	      	}
@@ -303,42 +303,6 @@ function initChordRelationships() {
 
 	return chordRelationships;
 }
-
-function integerToInterval(integer) {
-  const intervals = [
-    "1",
-    "♭2",
-    "2",
-    "♭3",
-    "3", 
-    "4",
-    "♭5",
-    "5",
-    "♭6",
-    "6",
-    "♭7",
-    "7"
-  ];
-
-  const i = ((integer % 12) + 12) % 12;
-  return intervals[i];
-}
-
-function integerToRomanNumeral(integer) {
-  const numerals = [
-    "I", 
-    "♭II",
-    "II",
-    "♭III",
-    "III", 
-    "IV", 
-    "♭V", 
-    "V",
-    "♭VI",
-    "VI",
-    "♭VII",
-    "VII"
-  ];
 
   // Wrap any integer to 0–11
   const i = ((integer % 12) + 12) % 12;
