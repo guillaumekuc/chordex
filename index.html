@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chord Relationships Dump</title>
+  <!-- pico.css for minimal styling -->
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+  <main id="app" class="container">
+    <h1>Chord Relationships</h1>
+    <pre>{{ JSON.stringify(chordRelationships, null, 2) }}</pre>
+  </main>
+
+  <script type="module">
+    import Intervals from "./src/theory/Intervals.js";
+    import Scales from "./src/theory/Scales.js";
+    import ChordRelationships from "./src/theory/ChordRelationships.js";
+    import * as Common from "./src/theory/common.js";
+
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          chordRelationships: []
+        };
+      },
+      mounted() {
+        ChordRelationships.mapScales(Scales.all);
+        this.chordRelationships = ChordRelationships.all;
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
