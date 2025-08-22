@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "esbuild": "^0.25.9"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/main.js --bundle --outfile=dist/chordex.dist.js",
+    "start": "node dist/chordex.dist.js",
+    "dev": "npm run build & npm run start"
+
+  }
+}
