@@ -2,13 +2,14 @@
 
 ### Dev
 
-- esbuild ^0.23.x - bundler
+- `npm run dev`
 
 
 ### Todo
 
-- [ ] Refacto all theory classes out of main.js
-- [ ] Add simple UI using Vue.js and Pico.css
+- [x] Refacto all theory classes out of main.js
+- [ ] Add simple UI
+	- [x] Setup for vue.js + pico.css 	
 	- [ ] Scale based filtering
 	- [ ] Starting chord quality filtering
 	- [ ] Landicng chord quality filtering
