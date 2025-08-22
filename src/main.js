@@ -1,4 +1,5 @@
 import Intervals from "./theory/Intervals.js";
+import Scales from "./theory/Scales.js"
 
 (function () {
 
@@ -136,9 +137,9 @@ function getModeIntegersFromParentScale(degree, parent){
 	//debugLog('getModeIntegersFromParentScale');
 
 	const root=parent.integers[degree-1];
-	const sl=parent.integers.length; //scale length
+	const scaleLength=parent.integers.length; //scale length
 	const modeIntegers=[];
-	for (let i = 0; i < sl; i++) {
+	for (let i = 0; i < scaleLength; i++) {
 		const integer= modulo12(parent.integers[i] - root);
 		modeIntegers.push(integer);
 	}
@@ -302,11 +303,6 @@ function initChordRelationships() {
 	}
 
 	return chordRelationships;
-}
-
-  // Wrap any integer to 0–11
-  const i = ((integer % 12) + 12) % 12;
-  return numerals[i];	
 }
 
 function debugLog(...value) {
