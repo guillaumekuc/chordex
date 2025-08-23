@@ -11,7 +11,7 @@
             type="search"
             :value="searchQuery"
             @input="onSearchInput($event.target.value)"
-            placeholder='By label, intervals, qualities, scales… Operators: + | - | ,'
+            placeholder='By label, intervals, qualities, scales… Operators: + | - | , | ""'
           />
           <button class="search-btn" type="submit" aria-label="Submit search">
             OK
