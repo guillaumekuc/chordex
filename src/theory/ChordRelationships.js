@@ -122,13 +122,15 @@ function initChordRelationships(){
   		pitchClasses.push(i);
 	};
 
+	let uid=0; //unique identifier
 	for (let rootQuality of chordQualities) {
 	    for (let pitchClass of pitchClasses) {
 	      	for (let targetQuality of chordQualities) {
+	      		uid++;
 	      		const interval= Intervals.toName(pitchClass);
 	      		const roman= Intervals.toRoman(pitchClass);
 	      		const label= `${rootQuality} ${roman} ${targetQuality}`;
-	        	chordRelationships.push({label, rootQuality, targetQuality, interval, pitchClass, roman});
+	        	chordRelationships.push({label, uid: uid.toString().padStart(3, "0"), rootQuality, targetQuality, interval, pitchClass, roman});
 	      	}
 	    }
 	}
