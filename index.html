@@ -1,38 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Chord Relationships Dump</title>
-  <!-- pico.css for minimal styling -->
-  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+  <meta charset="UTF-8" />
+  <title>Chord Relationships</title>
+
+  <!-- pico.css -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+  >
+
+
   <!-- Vue 3 -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+<style>
+  [v-cloak] { display: none !important; }
+
+  #app{
+    width: 85%;
+    margin: 0 auto;
+  }
+
+  /* Grid layout */
+  .cr-grid {
+    display: grid;
+    gap: 1rem;
+    /* make all implicit rows the same height so cards match within the grid */
+    grid-auto-rows: 1fr;
+    align-items: stretch; /* stretch items to fill row height */
+  }
+  @media (min-width: 480px) { .cr-grid { grid-template-columns: repeat(1, 1fr); } }
+  @media (min-width: 768px) { .cr-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 992px) { .cr-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1200px){ .cr-grid { grid-template-columns: repeat(4, 1fr); } }
+
+  /* Card */
+  .cr-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0; /* grid gap controls spacing */
+  }
+
+  /* Title */
+  .cr-label {
+    margin: 0 0 .5rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    
+    text-overflow: ellipsis;
+  }
+
+  .cr-card-footer {
+    height:100%;
+    border-top: 1px solid var(--muted-border-color, color-mix(in oklab, currentColor 12%, transparent));
+    display:flex;
+    flex-direction: column;
+
+  }
+
+  /* Tags footer pinned to bottom for visual consistency */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem; 
+
+    
+
+  }
+
+  /* Tag chip */
+  .cr-tag {
+    font-size: .66rem;
+    font-weight: 500;
+    letter-spacing: .01em;
+    padding: .25rem .4rem;
+    border-radius: .5rem;
+    height:max-content;
+  }
+
+
+</style>
 </head>
 <body>
-  <main id="app" class="container">
-    <h1>Chord Relationships</h1>
-    <pre>{{ JSON.stringify(chordRelationships, null, 2) }}</pre>
+  <main id="app" class="container" v-cloak>
+      <nav>
+        <ul>
+          <li>
+            <details class="dropdown">
+              <summary role="button" class="secondary">{{ theme }}</summary>
+              <ul>
+                <li><a href="#" @click="setTheme('auto')">auto</a></li>
+                <li><a href="#" @click="setTheme('light')">light</a></li>
+                <li><a href="#" @click="setTheme('dark')">dark</a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </nav>
+
+    <hgroup>
+      <h1>Chordex</h1>
+      <p>A Chord Relationship (CR) shows how one chord relates to another by highlighting the interval between them and their qualities that give each CR its unique emotional character. This comprehensive taxonomy catalogs all 192 possible tertian triad CRs.</p>
+    </hgroup>
+
+    <!-- Responsive grid of cards -->
+    <section class="cr-grid">
+      <article class="cr-card" v-for="(cr, i) in chordRelationships" :key="cr.label + '-' + i">
+        <h3 class="cr-label">{{ cr.label }}</h3>
+        <footer class="cr-card-footer">
+          <div class="tags">
+            <kbd class="cr-tag" v-for="(scale, s) in (cr.scales || [])" :key="scale + '-' + s">
+              <small>{{ scale }}</small>
+            </kbd>
+          </div>
+        </footer>
+      </article>
+    </section>
   </main>
+
 
   <script type="module">
     import Intervals from "./src/theory/Intervals.js";
     import Scales from "./src/theory/Scales.js";
     import ChordRelationships from "./src/theory/ChordRelationships.js";
     import * as Common from "./src/theory/common.js";
+    import themeSwitcher from "./src/utils/minimal-theme-switcher.js";
 
     const { createApp } = Vue;
 
     createApp({
       data() {
-        return {
-          chordRelationships: []
+        return { 
+          chordRelationships: [],
+          theme: "auto",
         };
       },
+      methods: {
+        setTheme(sel){
+          themeSwitcher.scheme = sel;
+          this.theme=sel;
+        }
+      },
       mounted() {
+        themeSwitcher.init();
+        console.log(themeSwitcher)
+        // Prepare & load data
         ChordRelationships.mapScales(Scales.all);
         this.chordRelationships = ChordRelationships.all;
+        this.theme = themeSwitcher.scheme;
+
       }
     }).mount('#app');
   </script>
+  
 </body>
 </html>
