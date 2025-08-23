@@ -1,0 +1,67 @@
+<template>
+  
+
+  <article class="cr-card">
+    <h3 class="cr-label">{{ cr.label }}</h3>
+    <footer class="cr-card-footer">
+      <div class="tags">
+        <kbd
+          class="cr-tag"
+          v-for="(scale, s) in (cr.scales || [])"
+          :key="scale + '-' + s"
+        >
+          <small>{{ scale }}</small>
+        </kbd>
+      </div>
+    </footer>
+  </article>
+</template>
+
+<script setup>
+defineProps({
+  cr: {
+    type: Object,
+    required: true
+  }
+});
+</script>
+
+<style scoped>
+
+.cr-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0; /* parent grid gap controls spacing */
+}
+
+.cr-label {
+  margin: 0 0 .5rem;
+  font-size: 1rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+}
+
+.cr-card-footer {
+  height: 100%;
+  border-top: 1px solid var(--muted-border-color, color-mix(in oklab, currentColor 12%, transparent));
+  display: flex;
+  flex-direction: column;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+/* Tag chip */
+.cr-tag {
+  font-size: .66rem;
+  font-weight: 500;
+  letter-spacing: .01em;
+  padding: .25rem .4rem;
+  border-radius: .5rem;
+  height: max-content;
+}
+</style>
