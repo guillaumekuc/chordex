@@ -20,42 +20,11 @@
 @media (min-width: 992px) { .cr-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 1200px){ .cr-grid { grid-template-columns: repeat(4, 1fr); } }
 
-/* Card */
-.cr-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  margin: 0; /* grid gap controls spacing */
+/* Search */
+.cr-advanced-search{
+  margin-bottom:unset;
 }
 
-.cr-label {
-  margin: 0 0 .5rem;
-  font-size: 1rem;
-  line-height: 1.25;
-  text-overflow: ellipsis;
-}
-
-.cr-card-footer {
-  height: 100%;
-  border-top: 1px solid var(--muted-border-color, color-mix(in oklab, currentColor 12%, transparent));
-  display: flex;
-  flex-direction: column;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .35rem;
-}
-
-.cr-tag {
-  font-size: .66rem;
-  font-weight: 500;
-  letter-spacing: .01em;
-  padding: .25rem .4rem;
-  border-radius: .5rem;
-  height: max-content;
-}
 </style>
 
 
@@ -69,20 +38,8 @@
 
 <template>
   <main class="container" v-cloak>
-    <nav>
-      <ul>
-        <li>
-          <details class="dropdown">
-            <summary role="button" class="secondary">{{ theme }}</summary>
-            <ul>
-              <li><a href="#" @click.prevent="setTheme('auto')">auto</a></li>
-              <li><a href="#" @click.prevent="setTheme('light')">light</a></li>
-              <li><a href="#" @click.prevent="setTheme('dark')">dark</a></li>
-            </ul>
-          </details>
-        </li>
-      </ul>
-    </nav>
+    
+    <ThemeSwitcher />
 
     <hgroup>
       <h1>Chordex</h1>
@@ -94,9 +51,7 @@
       </p>
     </hgroup>
 
-    <article class="cr-filter">
-      <header class="cr-filter-header">test</header>
-    </article>
+    <CRSearch />
 
     <section class="cr-grid">
       <CRCard
@@ -116,28 +71,27 @@ import * as Common from "./theory/common.js";
 import themeSwitcher from "./utils/minimal-theme-switcher.js";
 
 import CRCard from "./components/CRCard.vue";
+import CRSearch from "./components/CRSearch.vue";
+import ThemeSwitcher from "./components/ThemeSwitcher.vue";
 
 export default {
   name: "App",
-  components: { CRCard },
+  components: { 
+    CRCard,
+    CRSearch,
+    ThemeSwitcher, 
+  },
   data() {
     return {
       chordRelationships: [],
-      theme: "auto",
     };
   },
   methods: {
-    setTheme(sel) {
-      themeSwitcher.scheme = sel;
-      this.theme = sel;
-    },
   },
   mounted() {
-    themeSwitcher.init();
     // Prepare & load data
     ChordRelationships.mapScales(Scales.all);
     this.chordRelationships = ChordRelationships.all;
-    this.theme = themeSwitcher.scheme;
   },
 };
 </script>
