@@ -1,4 +1,8 @@
 
+### References
+
+- Pokédex! https://www.pokemon.com/fr/pokedex
+
 
 ### Dev
 
