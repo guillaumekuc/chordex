@@ -8,11 +8,10 @@
     </hgroup>
 
     <footer class="cr-card-footer">
+      <div class="cr-common-tones">  <kbd>{{`${cr.commonTones}`}}</kbd> common tones  </div>
       <div class="tags">
         <kbd
-          class="cr-tag"
           v-for="(scale, s) in (cr.scales || [])"
-          :key="scale + '-' + s"
         >
           <small>{{ scale }}</small>
         </kbd>
@@ -32,6 +31,10 @@ defineProps({
 
 <style scoped>
 
+footer {
+  font-size: 0.75rem;
+}
+
 .cr-hgroup {
   margin-bottom: unset;
 }
@@ -48,6 +51,9 @@ defineProps({
   content:"#";
 }
 
+.cr-common-tones {
+  margin-bottom: 0.5rem;
+}
 .cr-card {
   height: 100%;
   display: flex;
@@ -76,13 +82,4 @@ defineProps({
   gap: .35rem;
 }
 
-/* Tag chip */
-.cr-tag {
-  font-size: .66rem;
-  font-weight: 500;
-  letter-spacing: .01em;
-  padding: .25rem .4rem;
-  border-radius: .5rem;
-  height: max-content;
-}
 </style>
