@@ -9,6 +9,9 @@ export default class ChordRelationships {
 
 	static {
 		this.all=initChordRelationships();
+		this.all.forEach(cr=> {
+			cr.commonTones=this.getCommonTones(cr);
+		});
 	}
 
 	static fromScale(scale) {
@@ -110,6 +113,23 @@ export default class ChordRelationships {
 			    }
 		  	}
 		}
+	}
+
+	static getCommonTones(cr) {
+		const rootPitchClasses=Triads.types[cr.rootQuality].pitchClasses;
+		const targetPitchClasses=Triads.types[cr.targetQuality].pitchClasses;
+		const normalizedTargetPitchClasses=[];
+		targetPitchClasses.forEach(targetPitchClass=> {
+			const adjusted=Intervals.add(targetPitchClass, cr.pitchClass);
+			normalizedTargetPitchClasses.push(adjusted);
+		});
+		let commonTonesCount = 0;
+		rootPitchClasses.forEach(pitchClass => {
+		  if (normalizedTargetPitchClasses.includes(pitchClass)) {
+		    commonTonesCount++;
+		  }
+		});
+		return commonTonesCount;
 	}
 
 }
