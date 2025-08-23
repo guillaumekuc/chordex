@@ -1,8 +1,12 @@
 <template>
-  
+
 
   <article class="cr-card">
-    <h3 class="cr-label">{{ cr.label }}</h3>
+    <hgroup class="cr-hgroup">
+      <small class="cr-uid" >{{ cr.uid }}</small>
+      <h3 class="cr-label">{{ cr.label }}</h3>
+    </hgroup>
+
     <footer class="cr-card-footer">
       <div class="tags">
         <kbd
@@ -28,6 +32,22 @@ defineProps({
 
 <style scoped>
 
+.cr-hgroup {
+  margin-bottom: unset;
+}
+
+.cr-hgroup > :not(:first-child):last-child {
+  --pico-color: inherit;
+  --pico-font-weight: inherit;
+}
+.cr-uid {
+  font-size: 0.66rem;
+  color: var(--pico-muted-color);
+}
+.cr-uid::before{
+  content:"#";
+}
+
 .cr-card {
   height: 100%;
   display: flex;
@@ -40,6 +60,7 @@ defineProps({
   font-size: 1rem;
   line-height: 1.25;
   text-overflow: ellipsis;
+  color: var(--pico-color) !important;
 }
 
 .cr-card-footer {
