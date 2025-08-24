@@ -20,8 +20,20 @@ export default class ChordRelationships {
 			return [];
 		}
 
+		let rootScale;
+		let rootTriads;
+
 		const triads=Triads.fromScale(scale);
-		const rootChords= triads.filter(triad => triad.rootPitchClass === 0);
+
+		if (scale.rootScale){
+			rootScale=scale.rootScale;
+			rootTriads=Triads.fromScale(rootScale);
+		} else {
+			rootScale=scale;
+			rootTriads=triads;
+		}
+
+		const rootChords= rootTriads.filter(triad => triad.rootPitchClass === 0);
 		let rootChord;
 
 		if (rootChords.length > 1) {

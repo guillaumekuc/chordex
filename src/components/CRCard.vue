@@ -11,7 +11,7 @@
       <div class="cr-common-tones">  <kbd>{{`${cr.commonTones}`}}</kbd> common tones  </div>
       <div class="tags">
         <kbd
-          v-for="(scale, s) in (cr.scales || [])"
+          v-for="(scale, s) in (crFilteredScales || [])"
         >
           <small>{{ scale }}</small>
         </kbd>
@@ -25,8 +25,37 @@ defineProps({
   cr: {
     type: Object,
     required: true
+  },
+  filteredScales: {
+    type: Object,
+    required:true
   }
 });
+
+</script>
+<script>
+export default {
+  name: "CRCard",
+  data() {
+    return {
+      
+    };
+  },
+  computed: {
+    crFilteredScales() {
+      // Filter the cr.scales to only show scales that are in filteredScales
+      return this.cr.scales.filter(scale => 
+        this.filteredScales.some(fs => fs.label === scale)
+      );
+    }
+  },
+  methods: {
+    
+  },
+  mounted() {
+
+  },
+};
 </script>
 
 <style scoped>

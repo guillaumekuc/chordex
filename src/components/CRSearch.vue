@@ -66,12 +66,26 @@
           </div>
         </section>
 
+        <!-- Fifths Modulation Level -->
+        <section>
+          <label>Fifths Level</label>
+          <div class="tags">
+            <kbd
+              v-for="n in 13" 
+              :class="{ selected: isSelected('fifthsOffsets', n-7) }"
+              @click="toggle('fifthsOffsets', n-7)"
+            > <!-- from -6 to +6. -6 and +6 are enharmonic equivalent: cycle -->
+              <small>{{ n - 7 > 0 ? '+' + (n - 7) : n - 7 }}</small>
+            </kbd>
+          </div>
+        </section>
+
         <!-- Scales -->
         <section>
           <label>Scales</label>
           <div class="tags">
             <kbd
-              v-for="(scale, s) in (scales || [])"
+              v-for="(scale, s) in filteredScales"
               :class="{ selected: isSelected('scales', scale.label) }"
               @click="toggle('scales', scale.label)"
             >
@@ -125,6 +139,7 @@ export default {
         target: [],
         scales: [],
         commonTones: [],
+        fifthsOffsets: [0],
       },
     };
   },
@@ -138,7 +153,15 @@ export default {
         target: [...this.selected.target],
         scales: [...this.selected.scales],
         commonTones: [...this.selected.commonTones],
+        fifthsOffsets: [...this.selected.fifthsOffsets],
       };
+    },
+    filteredScales() {
+      const offset = this.selected.fifthsOffsets;
+      // If nothing selected, show all scales
+      if (!offset || offset.length === 0) {return this.scales || [];}
+      // Otherwise only keep scales whose scale.fifthsOffset matches a selected value
+      return (this.scales || []).filter(scale => offset.includes(scale.fifthsOffset));
     },
   },
   methods: {
@@ -149,7 +172,7 @@ export default {
     },
     onSubmit() {
       // Emit the structured filters object (parent can listen: @search="...").
-            console.log(this.filters);
+      console.log(this.filters);
       console.log(this.selected);
       this.$emit("search", this.filters);
       // You can also access the object directly via this.filters

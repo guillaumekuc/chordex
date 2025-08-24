@@ -9,10 +9,15 @@ export default class Scales {
 	static all=[];
 
 	static {
+		for (let i=-6; i <= 6; i++){
+			this[`${i}`]=[];
+		} //init fifthOffsets
+
+
 		this.parents.major={label: "Major", pitchClasses: [0, 2, 4, 5, 7, 9, 11]};
 		this.parents.harmonicMinor={label: "Harmonic Minor", pitchClasses: [0, 2, 3, 5, 7, 8, 11]};
 		this.parents.melodicMinor={label: "Melodic Minor", pitchClasses: [0, 2, 3, 5, 7, 9, 11]};
-		this.parents.majorPentatonic={label: "Major Pentatonic", pitchClasses: [0, 2, 4, 7, 9]};
+		//this.parents.majorPentatonic={label: "Major Pentatonic", pitchClasses: [0, 2, 4, 7, 9]};
 
 		//modes
 		this.parents.major.modes=[
@@ -42,19 +47,43 @@ export default class Scales {
 			{label: "Locrian ♯2", degree: 6},                
 			{label: "Altered Scale", degree: 7},
 		];
+		/*
 		this.parents.majorPentatonic.modes=[
 			{label: "Major Pentatonic", degree: 1},
 			{label: "Suspended Pentatonic", degree: 2},
 			{label: "Pentatonic Mode III", degree: 3},
 			{label: "Pentatonic Mode IV", degree: 4},
 			{label: "Minor Pentatonic", degree: 5},
-		]
+		];
+		*/
 
 		for (let parentScale of Object.values(this.parents)){
+			if (!parentScale.modes){
+				continue;
+			}
 			for (let mode of parentScale.modes) {
 				mode.pitchClasses=this.getModePitchClasses(mode.degree, parentScale);
 				mode.parent=parentScale.label;
+				mode.fifthsOffset=0; //used to indicate modulations around the circle of fifths. Here we compute scales at "floor level", no modulation yet.
+				this['0'].push(mode);
 				this.all.push(mode);
+			}
+		}
+
+		//positive modulations
+		for (let i=1; i <= 6; i++){
+			for (let scale of this['0']){
+				const modScale=this.modulateByFifths(scale, i);
+				this[`${i}`].push(modScale);
+				this.all.push(modScale);
+			}
+		}
+
+		for (let i=-1; i >= -6; i--){
+			for (let scale of this['0']){
+				const modScale=this.modulateByFifths(scale, i);
+				this[`${i}`].push(modScale);
+				this.all.push(modScale);
 			}
 		}
 
@@ -74,6 +103,22 @@ export default class Scales {
 		}
 		modePitchClasses.sort((a, b) => a - b); 
 		return modePitchClasses;
+	}
+
+	static modulateByFifths(scale, steps){
+		const alteredPitchClasses=[];
+		for (let pitchClass of scale.pitchClasses){
+			const alteredPitchClass = Intervals.add(pitchClass, steps * 7); //7 = Perfect Fifth
+			alteredPitchClasses.push(alteredPitchClass);
+		};
+		if(!alteredPitchClasses.includes(0)){
+		}
+		alteredPitchClasses.sort((a, b) => a - b); 
+		const alteredLabel = `${scale.label}[${steps}]`;
+		const parent= scale.parent;
+		const fifthsOffset = steps;
+		const rootScale=scale; //scale at level 0 of Fifths rotation. Used to calculate root quality before modulation
+		return {label: alteredLabel, pitchClasses: alteredPitchClasses, parent: parent, fifthsOffset: fifthsOffset, rootScale: scale };
 	}
 	
 }

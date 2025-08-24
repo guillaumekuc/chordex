@@ -64,8 +64,9 @@ kbd {
     <section class="cr-grid">
       <CRCard
         v-for="(cr, i) in filteredChordRelationships"
-        :key="cr.label + '-' + i"
+        :key="cr.uid"
         :cr="cr"
+        :filteredScales="filteredScales"
       />
     </section>
   </main>
@@ -99,6 +100,15 @@ export default {
       activeFilters: {}
     };
   },
+  computed:{
+    filteredScales() {
+      const offset = this.activeFilters.fifthsOffsets;
+      // If nothing selected, show all scales
+      if (!offset || offset.length === 0) {return Scales.all || [];}
+      // Otherwise only keep scales whose scale.fifthsOffset matches a selected value
+      return (Scales.all || []).filter(scale => offset.includes(scale.fifthsOffset));
+    }
+  },
   methods: { 
     search(filters) {
       this.activeFilters = { ...filters };
@@ -112,8 +122,9 @@ export default {
     // Prepare & load data
     ChordRelationships.mapScales(Scales.all);
     this.chordRelationships = ChordRelationships.all;
-    this.filteredChordRelationships = this.chordRelationships;
-    let activeFilters= Search.defaultFilters();
+    this.activeFilters= Search.defaultFilters();
+    this.filteredChordRelationships = Search.execute(this.chordRelationships, this.activeFilters);
+    
 
 
   },

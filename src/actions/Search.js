@@ -1,14 +1,16 @@
 // /src/actions/Search.js
 import SearchParser from '../utils/SearchParser.js';
 import ChordRelationships from '../theory/ChordRelationships.js';
+import Scales from '../theory/Scales.js';
 
 
 export default class Search {
   static defaultFilters() {
-    return { query: '', root: [], intervals: [], target: [], scales: [], commonTones: [] };
+    return { query: '', root: [], intervals: [], target: [], scales: [], commonTones: [], fifthsOffsets: [0], };
   }
 
   static execute(out, f = this.defaultFilters()) {
+    console.log('Search execute');
     let results = ChordRelationships.all;
 
     // 1) text query
@@ -24,23 +26,51 @@ export default class Search {
     }
 
     // 2) root quality
-    if (f.root?.length) results = results.filter(cr => f.root.includes(cr.rootQuality));
+    if (f.root?.length) {
+      results = results.filter(cr => f.root.includes(cr.rootQuality));
+    } 
 
     // 3) intervals
-    if (f.intervals?.length) results = results.filter(cr => f.intervals.includes(cr.pitchClass));
+    if (f.intervals?.length) {
+      results = results.filter(cr => f.intervals.includes(cr.pitchClass));
+    }
 
     // 4) target quality
-    if (f.target?.length) results = results.filter(cr => f.target.includes(cr.targetQuality));
+    if (f.target?.length){ 
+      results = results.filter(cr => f.target.includes(cr.targetQuality));
+    }
 
+    
+    if (f.fifthsOffsets?.length) {
+      console.log(f.fifthsOffsets);
+
+      // filteredScales is an array of objects that have a .label property
+      const filteredScales = Scales.all.filter(scale =>
+        f.fifthsOffsets.includes(scale.fifthsOffset)
+      );
+      if (filteredScales.length) {
+        results = results.filter(cr => {
+          // cr.scales is an array of strings; filteredScales is array of objects with .label
+          const hasMatch = cr.scales.some(s =>
+            filteredScales.some(fs => fs.label === s)
+          );
+          return hasMatch;
+        });
+      }
+    }
+    
     // 5) scales
     if (f.scales?.length) {
       results = results.filter(cr =>
         Array.isArray(cr.scales) && cr.scales.some(s => f.scales.includes(s))
       );
     }
+    
 
     // 6) common tones
     if (f.commonTones?.length) results = results.filter(cr => f.commonTones.includes(cr.commonTones));
+
+    // 7) fifths OFfsets
 
     return results;
   }
