@@ -1,3 +1,6 @@
+### About
+
+A Chord Relationship (CR) shows how one chord relates to another by highlighting the interval between them and their qualities that give each CR its unique emotional color. This comprehensive taxonomy catalogs all 192 possible tertian triad CRs.
 
 ### Live!
 
