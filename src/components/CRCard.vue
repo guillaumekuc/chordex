@@ -8,7 +8,7 @@
       <h3 class="cr-label">{{ cr.label }}</h3>
       </div>
       <div class="right">
-        <button @click="playCR(cr)"><i class="fa-solid fa-play"></i></button>
+        <button @click="playCR(cr, 72, 2)"><i class="fa-solid fa-play"></i></button>
       </div>
     </hgroup>
 
@@ -27,7 +27,12 @@
 
 <script setup>
 
-import Triads from "../theory/Triads.js"
+import Triads from "../theory/Triads.js";
+import { useStore } from "../store";
+
+const store= useStore();
+
+
 
 defineProps({
   cr: {
@@ -40,23 +45,91 @@ defineProps({
   }
 });
 
-function playCR(cr){
-  const root=60;
-  const inv=0; //which inversion to use
-  console.log(cr.rootQuality);
-  console.log(Triads.types[cr.rootQuality].pitchClasses);
-  const triadPitchClasses=Triads.types[cr.rootQuality].pitchClasses;
-  const inversions=[];
-  inversions[0]=invert(triadPitchClasses, 0);
-  inversions[1]=invert(triadPitchClasses, 1);
-  inversions[2]=invert(triadPitchClasses, 2);
-  inversions[3]=invert(triadPitchClasses, 3);
-  console.log(inversions[0], inversions[1], inversions[2], inversions[3], inversions[4]);
-  const notes= inversions[inv].map(pc => pc + root);
-  console.log(notes);
+function playCR(cr, root, inv){
+  root= root || 60;
+  inv= inv || 0; //which inversion to use
+
+  const rootChord={};
+  const targetChord={};
+
+  console.log("Root quality:", cr.rootQuality);
+
+  rootChord.notes = getRootChordNotes(cr, root, inv);
+  targetChord.notes = getTargetChordNotes(cr, root, rootChord);
+
+  playCR(rootChord.notes, targetChord.notes, 1000);
 
 
-  
+  console.log("Notes:", rootChord.notes);
+  async function playCR(rootChordNotes, targetChordNotes, timeMs) {
+    await wait(0);
+      store.audio.playNotes(rootChordNotes);
+    await wait(1000);
+      store.audio.playNotes(targetChordNotes);
+  }
+
+  function getTargetChordNotes(cr, root, rootChord){
+    console.log(`getTargetChordNotes`);
+    console.log(`cr:`);
+    console.log(cr);
+
+    //get the new root
+    const targetRoot= cr.pitchClass + root;
+    console.log(targetRoot);
+    const triadPitchClasses=Triads.types[cr.targetQuality].pitchClasses;
+
+    const triadInversions={};
+    const triadInversionsNearest={};
+
+    for (let i=0; i < 3; i++) {
+      triadInversions[i]= invert(triadPitchClasses, i).map(pc => pc + targetRoot);
+      triadInversionsNearest[i]= triadInversions[i].map((pc, i ) => nearestPitch(rootChord.notes[i], pc));
+    };
+
+     console.log(triadInversions);
+     console.log(triadInversionsNearest);
+
+     const smoothest=pickSmoothest(rootChord.notes, triadInversionsNearest).target;
+
+     console.log(smoothest);
+
+    return smoothest;
+
+  }
+
+  function pickSmoothest(rootChordNotes, targetChordInversions){
+    const results=[];
+    Object.values(targetChordInversions).forEach(inv => {
+      const diffs = inv.map((note, i) => Math.abs(rootChordNotes[i] - note));   
+      const sum = diffs.reduce((x, y) => x + y);
+      results.push({root: rootChordNotes, target: inv, diffs: diffs, sum: sum});
+    });
+
+    const smoothest = results.reduce((best, current) => {
+        return current.sum < best.sum ? current : best;
+    });
+
+    console.log(`smoothest sum: ${smoothest.sum}`);
+
+    return smoothest;
+  }
+
+  function nearestPitch(target, pc) {
+    return pc + 12 * Math.round((target - pc) / 12);
+  }
+
+  function wait(timeMs) {
+    return new Promise(function(resolve) {
+        setTimeout(resolve, timeMs);
+    });
+  }
+
+  function getRootChordNotes(cr, root, inv){
+    const triadPitchClasses=Triads.types[cr.rootQuality].pitchClasses;
+    const notes = invert(triadPitchClasses, inv).map(pc => pc + root);
+    return notes;
+  }
+
   function invert(pitchClasses, n){
     const m= (n + pitchClasses.length) % pitchClasses.length;
     if (m === 0) return pitchClasses.slice();
@@ -71,9 +144,6 @@ function playCR(cr){
       })
       return normalized;
   }
-
-
-
 
 }
 

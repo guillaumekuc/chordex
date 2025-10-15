@@ -73,18 +73,19 @@ kbd {
 </template>
 
 <script>
-import Intervals from "./theory/Intervals.js";
+
 import Scales from "./theory/Scales.js";
 import ChordRelationships from "./theory/ChordRelationships.js";
 import * as Common from "./theory/common.js";
 import themeSwitcher from "./utils/minimal-theme-switcher.js";
 import Search from "./actions/Search.js";
 import Shuffle from "./actions/Shuffle.js";
-
-
 import CRCard from "./components/CRCard.vue";
 import CRSearch from "./components/CRSearch.vue";
 import ThemeSwitcher from "./components/ThemeSwitcher.vue";
+
+
+
 
 export default {
   name: "App",

@@ -7,6 +7,19 @@ export default class AudioEngine {
     this.master.connect(this.ctx.destination);
   }
 
+  playNotes(notesArray, duration = 1){
+    notesArray.forEach(note => {
+      this.playNote(note, duration);
+    })
+  }
+
+  playNote(midiNote, duration=1) { 
+    const frequency= 440 * Math.pow(2, (midiNote - 69) / 12);
+
+    this.playTone(frequency, duration);
+
+  }
+
   playTone(frequency, duration = 1) {
     if (!Number.isFinite(frequency) || frequency <= 0) return;
 
