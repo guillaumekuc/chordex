@@ -1,41 +1,3 @@
-<style>
-/* Global styles for this app */
-[v-cloak] { display: none !important; }
-
-.container#app { /* keep your width constraints on the main container */
-  width: 85%;
-  margin: 0 auto;
-}
-
-/* Grid layout */
-.cr-grid {
-  display: grid;
-  gap: 1rem;
-  /* make all implicit rows the same height so cards match within the grid */
-  grid-auto-rows: 1fr;
-  align-items: stretch; /* stretch items to fill row height */
-}
-@media (min-width: 480px) { .cr-grid { grid-template-columns: repeat(1, 1fr); } }
-@media (min-width: 768px) { .cr-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 992px) { .cr-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1200px){ .cr-grid { grid-template-columns: repeat(4, 1fr); } }
-
-/* Search */
-.cr-advanced-search{
-  margin-bottom:unset;
-}
-
-kbd {
-  font-size: .66rem;
-  font-weight: 500;
-  letter-spacing: .01em;
-  padding: .25rem .4rem;
-  border-radius: .5rem;
-  height: max-content;
-}
-
-</style>
-
 <template>
   <main class="container" v-cloak>
     
@@ -55,7 +17,7 @@ kbd {
 
     <CRSearch @search="search" />
 
-    <section style="display: flex; justify-content: center; color: var(--pico-muted-color)"><small>{{ `${filteredChordRelationships.length} results`}}</small></section>
+    <section style="display: flex; justify-content: center; color: var(--pico-muted-color)"><small>{{ `${store.filtered.length} results`}}</small></section>
 
     <section style="display: flex; justify-content: start; color: var(--pico-muted-color)"><span role="button" @click="shuffle">
       <i class="fa-solid fa-arrows-spin"></i> Shuffle!
@@ -63,7 +25,7 @@ kbd {
 
     <section class="cr-grid">
       <CRCard
-        v-for="(cr, i) in filteredChordRelationships"
+        v-for="(cr, i) in store.filtered"
         :key="cr.uid"
         :cr="cr"
         :filteredScales="filteredScales"
@@ -72,64 +34,73 @@ kbd {
   </main>
 </template>
 
-<script>
-
+<script setup>
+import { computed } from "vue";
 import Scales from "./theory/Scales.js";
-import ChordRelationships from "./theory/ChordRelationships.js";
-import * as Common from "./theory/common.js";
-import themeSwitcher from "./utils/minimal-theme-switcher.js";
 import Search from "./actions/Search.js";
 import Shuffle from "./actions/Shuffle.js";
 import CRCard from "./components/CRCard.vue";
 import CRSearch from "./components/CRSearch.vue";
 import ThemeSwitcher from "./components/ThemeSwitcher.vue";
+import { useStore } from "./store";
 
+const store = useStore();
 
+const filteredScales = computed(function () {
+  const offset = store.activeFilters.fifthsOffsets;
+  if (!offset || offset.length === 0) {
+    return Scales.all || [];
+  }
+  return (Scales.all || []).filter(function (scale) {
+    return offset.includes(scale.fifthsOffset);
+  });
+});
 
+function search(filters) {
+  store.activeFilters = { ...filters };
+  store.filtered = Search.execute(store.filtered, store.activeFilters);
+}
 
-export default {
-  name: "App",
-  components: { 
-    CRCard,
-    CRSearch,
-    ThemeSwitcher, 
-  },
-  data() {
-    return {
-      chordRelationships: [],
-      filteredChordRelationships: [],
-      activeFilters: {}
-    };
-  },
-  computed:{
-    filteredScales() {
-      const offset = this.activeFilters.fifthsOffsets;
-      // If nothing selected, show all scales
-      if (!offset || offset.length === 0) {return Scales.all || [];}
-      // Otherwise only keep scales whose scale.fifthsOffset matches a selected value
-      return (Scales.all || []).filter(scale => offset.includes(scale.fifthsOffset));
-    }
-  },
-  methods: { 
-    search(filters) {
-      this.activeFilters = { ...filters };
-      this.filteredChordRelationships = Search.execute(this.filteredChordRelationships, this.activeFilters);
-    },
-    shuffle() {
-      this.filteredChordRelationships = Shuffle.execute(this.filteredChordRelationships);
-    }
-  },
-  mounted() {
-    // Prepare & load data
-    ChordRelationships.mapScales(Scales.all);
-    this.chordRelationships = ChordRelationships.all;
-    this.activeFilters= Search.defaultFilters();
-    this.filteredChordRelationships = Search.execute(this.chordRelationships, this.activeFilters);
-    
-
-
-  },
-};
+function shuffle() {
+  store.filtered = Shuffle.execute(store.filtered);
+}
 </script>
 
 
+<style>
+  /* Global styles for this app */
+  [v-cloak] { display: none !important; }
+
+  .container#app { /* keep your width constraints on the main container */
+    width: 85%;
+    margin: 0 auto;
+  }
+
+  /* Grid layout */
+  .cr-grid {
+    display: grid;
+    gap: 1rem;
+    /* make all implicit rows the same height so cards match within the grid */
+    grid-auto-rows: 1fr;
+    align-items: stretch; /* stretch items to fill row height */
+  }
+  @media (min-width: 480px) { .cr-grid { grid-template-columns: repeat(1, 1fr); } }
+  @media (min-width: 768px) { .cr-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 992px) { .cr-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1200px){ .cr-grid { grid-template-columns: repeat(4, 1fr); } }
+
+  /* Search */
+  .cr-advanced-search{
+    margin-bottom:unset;
+  }
+
+  kbd {
+    font-size: .66rem;
+    font-weight: 500;
+    letter-spacing: .01em;
+    padding: .25rem .4rem;
+    border-radius: .5rem;
+    height: max-content;
+  }
+
+</style>

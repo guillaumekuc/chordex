@@ -1,7 +1,7 @@
 <template>
 
 
-  <article class="cr-card">
+  <article class="cr-card" >
     <hgroup class="cr-hgroup">
       <div class="left">
       <small class="cr-uid" >{{ cr.uid }}</small>
@@ -225,6 +225,10 @@ button:hover{
   display: flex;
   flex-direction: column;
   margin: 0; /* parent grid gap controls spacing */
+}
+
+.cr-card.selected {
+  outline: 2px solid red;
 }
 
 .cr-label {

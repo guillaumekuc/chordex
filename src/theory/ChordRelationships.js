@@ -167,6 +167,8 @@ function initChordRelationships(){
 	    }
 	}
 
+	console.log(chordRelationships);
+
 	return chordRelationships;
 }
 

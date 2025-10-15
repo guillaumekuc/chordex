@@ -1,6 +1,5 @@
 <template>
   <article class="cr-filter">
-
     <header class="cr-filter-header">
       <h3>Search CRs</h3>
       <div class="search-container">
@@ -30,6 +29,7 @@
           <div class="tags">
             <kbd
               v-for="(type, key) in triads"
+              :key="'root-' + key"
               :class="{ selected: isSelected('root', key) }"
               @click="toggle('root', key)"
             >
@@ -44,6 +44,7 @@
           <div class="tags">
             <kbd
               v-for="(interval, key) in intervals"
+              :key="'int-' + key"
               :class="{ selected: isSelected('intervals', key) }"
               @click="toggle('intervals', key)"
             >
@@ -58,6 +59,7 @@
           <div class="tags">
             <kbd
               v-for="(type, key) in triads"
+              :key="'target-' + key"
               :class="{ selected: isSelected('target', key) }"
               @click="toggle('target', key)"
             >
@@ -71,10 +73,11 @@
           <label>Fifths Level</label>
           <div class="tags">
             <kbd
-              v-for="n in 13" 
-              :class="{ selected: isSelected('fifthsOffsets', n-7) }"
-              @click="toggle('fifthsOffsets', n-7)"
-            > <!-- from -6 to +6. -6 and +6 are enharmonic equivalent: cycle -->
+              v-for="n in 13"
+              :key="'fifths-' + (n - 7)"
+              :class="{ selected: isSelected('fifthsOffsets', n - 7) }"
+              @click="toggle('fifthsOffsets', n - 7)"
+            >
               <small>{{ n - 7 > 0 ? '+' + (n - 7) : n - 7 }}</small>
             </kbd>
           </div>
@@ -86,6 +89,7 @@
           <div class="tags">
             <kbd
               v-for="(scale, s) in filteredScales"
+              :key="'scale-' + s"
               :class="{ selected: isSelected('scales', scale.label) }"
               @click="toggle('scales', scale.label)"
             >
@@ -100,116 +104,129 @@
           <div class="tags">
             <kbd
               v-for="n in 4"
-              :class="{ selected: isSelected('commonTones', n-1) }"
-              @click="toggle('commonTones', n-1)"
+              :key="'ct-' + (n - 1)"
+              :class="{ selected: isSelected('commonTones', n - 1) }"
+              @click="toggle('commonTones', n - 1)"
             >
               <small>{{ n - 1 }}</small>
             </kbd>
           </div>
         </section>
 
-        <div style="display: flex; flex-direction:column; align-items: end; ">
-          <button style="width: fit-content; margin-bottom:0.5rem;" type="submit" class="cr-advanced-search-submit" @click.prevent="onSubmit"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
-          <button style="width: fit-content; padding:0.25rem;" type="reset" class="cr-advanced-search-reset" @click.prevent="reset">Reset</button>
+        <!-- Submit -->
+        <div style="display: flex; flex-direction: column; align-items: end;">
+          <button
+            style="width: fit-content; margin-bottom: 0.5rem;"
+            type="submit"
+            class="cr-advanced-search-submit"
+            @click.prevent="onSubmit"
+          >
+            <i class="fa-solid fa-magnifying-glass"></i> Search
+          </button>
+
+        <!-- Reset -->
+          <button
+            style="width: fit-content; padding: 0.25rem;"
+            type="reset"
+            class="cr-advanced-search-reset"
+            @click.prevent="reset"
+          >
+            Reset
+          </button>
         </div>
-
-
       </details>
     </main>
   </article>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive, computed, onMounted } from "vue";
 import Scales from "../theory/Scales.js";
 import Triads from "../theory/Triads.js";
 import Intervals from "../theory/Intervals.js";
 
-export default {
-  name: "CRSearch",
-  data() {
-    return {
-      searchQuery: "",
-      scales: [],
-      triads: [],
-      intervals: {},
-      // Holds the user's current selections (arrays for easy serialization)
-      selected: {
-        root: [],
-        intervals: [],
-        target: [],
-        scales: [],
-        commonTones: [],
-        fifthsOffsets: [0],
-      },
-    };
-  },
-  computed: {
-    // Single structured object with all filtering criteria
-    filters() {
-      return {
-        query: this.searchQuery || "",
-        root: [...this.selected.root],
-        intervals: [...this.selected.intervals],
-        target: [...this.selected.target],
-        scales: [...this.selected.scales],
-        commonTones: [...this.selected.commonTones],
-        fifthsOffsets: [...this.selected.fifthsOffsets],
-      };
-    },
-    filteredScales() {
-      const offset = this.selected.fifthsOffsets;
-      // If nothing selected, show all scales
-      if (!offset || offset.length === 0) {return this.scales || [];}
-      // Otherwise only keep scales whose scale.fifthsOffset matches a selected value
-      return (this.scales || []).filter(scale => offset.includes(scale.fifthsOffset));
-    },
-  },
-  methods: {
-    onSearchInput(val) {
-      this.searchQuery = val;
-      this.$emit("search", this.filters);
+const emit = defineEmits(["search"]);
 
-    },
-    onSubmit() {
-      // Emit the structured filters object (parent can listen: @search="...").
-      console.log(this.filters);
-      console.log(this.selected);
-      this.$emit("search", this.filters);
-      // You can also access the object directly via this.filters
-      // or send it to whatever search routine you have here.
+const searchQuery = ref("");
+let scales = [];
+let triads = {};
+let intervals = {};
 
-    },
-    isSelected(group, value) {
-      return this.selected[group].includes(value);
-    },
-    toggle(group, value) {
-      const arr = this.selected[group];
-      const i = arr.indexOf(value);
-      if (i === -1) {
-        arr.push(value);
-      } else {
-        arr.splice(i, 1);
-      }
-      this.$emit("search", this.filters);
-    },
-    reset() {
-      this.searchQuery = "";
-      for (const k of Object.keys(this.selected)) this.selected[k] = [];
-      this.$emit("search", this.filters); // tell parent to show all again
-    },
-  },
-  mounted() {
-    this.scales = Scales.all;
-    this.triads = Triads.types;
-    this.intervals = Intervals.romans;
-  },
-};
+const selected = reactive({
+  root: [],
+  intervals: [],
+  target: [],
+  scales: [],
+  commonTones: [],
+  fifthsOffsets: [0]
+});
+
+const filters = computed(function () {
+  return {
+    query: searchQuery.value || "",
+    root: [...selected.root],
+    intervals: [...selected.intervals],
+    target: [...selected.target],
+    scales: [...selected.scales],
+    commonTones: [...selected.commonTones],
+    fifthsOffsets: [...selected.fifthsOffsets]
+  };
+});
+
+const filteredScales = computed(function () {
+  const offsets = selected.fifthsOffsets;
+  if (!offsets || offsets.length === 0) {
+    return scales.value || [];
+  }
+  return (scales.value || []).filter(function (scale) {
+    return offsets.includes(scale.fifthsOffset);
+  });
+});
+
+function onSearchInput(value) {
+  searchQuery.value = value;
+  emit("search", filters.value);
+}
+
+function onSubmit() {
+  console.log(filters.value);
+  console.log(selected);
+  emit("search", filters.value);
+}
+
+function isSelected(group, value) {
+  return selected[group].includes(value);
+}
+
+function toggle(group, value) {
+  const array = selected[group];
+  const index = array.indexOf(value);
+  if (index === -1) {
+    array.push(value);
+  } else {
+    array.splice(index, 1);
+  }
+  emit("search", filters.value);
+}
+
+function reset() {
+  searchQuery.value = "";
+  Object.keys(selected).forEach(function (key) {
+    selected[key] = [];
+  });
+  emit("search", filters.value);
+}
+
+onMounted(function () {
+  scales.value = Scales.all;
+  triads.value = Triads.types;
+  intervals.value = Intervals.romans;
+});
 </script>
 
 <style>
 .cr-advanced-search {
   margin-bottom: unset;
-
 }
 
 .cr-advanced-search kbd.selected {
@@ -223,8 +240,8 @@ export default {
   cursor: pointer;
   user-select: none;
   border: 1px solid var(--pico-muted-border-color, #ccc);
-  padding: .25rem .5rem;
-  border-radius: .5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
   outline: none;
 }
 
@@ -239,6 +256,6 @@ export default {
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: .35rem;
+  gap: 0.35rem;
 }
 </style>
