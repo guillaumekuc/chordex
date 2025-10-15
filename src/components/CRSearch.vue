@@ -148,9 +148,9 @@ import Intervals from "../theory/Intervals.js";
 const emit = defineEmits(["search"]);
 
 const searchQuery = ref("");
-let scales = [];
-let triads = {};
-let intervals = {};
+const scales = Scales.all;
+const triads = Triads.types;
+const intervals = Intervals.romans;
 
 const selected = reactive({
   root: [],
@@ -176,9 +176,9 @@ const filters = computed(function () {
 const filteredScales = computed(function () {
   const offsets = selected.fifthsOffsets;
   if (!offsets || offsets.length === 0) {
-    return scales.value || [];
+    return scales || [];
   }
-  return (scales.value || []).filter(function (scale) {
+  return (scales || []).filter(function (scale) {
     return offsets.includes(scale.fifthsOffset);
   });
 });
@@ -218,9 +218,7 @@ function reset() {
 }
 
 onMounted(function () {
-  scales.value = Scales.all;
-  triads.value = Triads.types;
-  intervals.value = Intervals.romans;
+
 });
 </script>
 
