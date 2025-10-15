@@ -13,24 +13,29 @@
       </p>
     </hgroup>
 
+    <div id="colLayout" class="grid">
+      <div id="left">
+        <CRSearch @search="search" />
 
+        <section id="resultsCount" style="display: flex; justify-content: center; color: var(--pico-muted-color)"><small>{{ `${store.filtered.length} results`}}</small></section>
 
-    <CRSearch @search="search" />
+        <section id="shuffle" style="display: flex; justify-content: start; color: var(--pico-muted-color)"><span role="button" @click="shuffle">
+          <i class="fa-solid fa-arrows-spin"></i> Shuffle!
+        </span></section>
 
-    <section style="display: flex; justify-content: center; color: var(--pico-muted-color)"><small>{{ `${store.filtered.length} results`}}</small></section>
-
-    <section style="display: flex; justify-content: start; color: var(--pico-muted-color)"><span role="button" @click="shuffle">
-      <i class="fa-solid fa-arrows-spin"></i> Shuffle!
-    </span></section>
-
-    <section class="cr-grid">
-      <CRCard
-        v-for="(cr, i) in store.filtered"
-        :key="cr.uid"
-        :cr="cr"
-        :filteredScales="filteredScales"
-      />
-    </section>
+        <section class="cr-grid">
+          <CRCard
+            v-for="(cr, i) in store.filtered"
+            :key="cr.uid"
+            :cr="cr"
+            :filteredScales="filteredScales"
+          />
+        </section>
+      </div><!-- end left -->
+      <div id="right">
+        <InspectorPanel />
+      </div><!-- end right -->
+    </div><!-- end grid -->
   </main>
 </template>
 
@@ -40,6 +45,7 @@ import Scales from "./theory/Scales.js";
 import Search from "./actions/Search.js";
 import Shuffle from "./actions/Shuffle.js";
 import CRCard from "./components/CRCard.vue";
+import InspectorPanel from "./components/InspectorPanel.vue";
 import CRSearch from "./components/CRSearch.vue";
 import ThemeSwitcher from "./components/ThemeSwitcher.vue";
 import { useStore } from "./store";
@@ -68,11 +74,28 @@ function shuffle() {
 
 
 <style>
+  #app {
+   --pico-border-radius: 10px;    
+  }
+
+
+  #colLayout {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  #left {
+    flex-basis: 66.66%;
+  }
+
+  #right {
+    flex-basis: 33.33%;
+  }
+
   /* Global styles for this app */
   [v-cloak] { display: none !important; }
 
-  .container#app { /* keep your width constraints on the main container */
-    width: 85%;
+  #app .container {
+    max-width: 1200px;
     margin: 0 auto;
   }
 

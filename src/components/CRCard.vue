@@ -1,23 +1,26 @@
 <template>
-
-
-  <article class="cr-card" >
+  <article
+    @click="selectCR(cr)"
+    class="cr-card"
+    :class="cr.selected ? 'selected' : null"
+  >
     <hgroup class="cr-hgroup">
       <div class="left">
-      <small class="cr-uid" >{{ cr.uid }}</small>
-      <h3 class="cr-label">{{ cr.label }}</h3>
+        <small class="cr-uid">{{ cr.uid }}</small>
+        <h3 class="cr-label">{{ cr.label }}</h3>
       </div>
       <div class="right">
-        <button @click="playCR(cr, 72, 2)"><i class="fa-solid fa-play"></i></button>
+        <button @click.stop="playCR(cr, 72, 2)"><i class="fa-solid fa-play"></i></button>
       </div>
     </hgroup>
 
     <footer class="cr-card-footer">
-      <div class="cr-common-tones">  <kbd>{{`${cr.commonTones}`}}</kbd> common tones  </div>
+      <div class="cr-common-tones">
+        <kbd>{{ `${cr.commonTones}` }}</kbd> common tones
+      </div>
+
       <div class="tags">
-        <kbd
-          v-for="(scale, s) in (crFilteredScales || [])"
-        >
+        <kbd v-for="(scale, s) in crFilteredScales" :key="s">
           <small>{{ scale }}</small>
         </kbd>
       </div>
@@ -26,91 +29,117 @@
 </template>
 
 <script setup>
-
+import { computed } from "vue";
 import Triads from "../theory/Triads.js";
 import { useStore } from "../store";
 
-const store= useStore();
+defineOptions({ name: "CRCard" });
 
-
-
-defineProps({
+const props = defineProps({
   cr: {
     type: Object,
     required: true
   },
+  // Expecting an array of objects like [{ label: "Ionian" }, ...]
   filteredScales: {
-    type: Object,
-    required:true
+    type: Array,
+    required: true
   }
 });
 
-function playCR(cr, root, inv){
-  root= root || 60;
-  inv= inv || 0; //which inversion to use
+const store = useStore();
 
-  const rootChord={};
-  const targetChord={};
+const crFilteredScales = computed(function () {
+  const inputScales = Array.isArray(props.cr?.scales) ? props.cr.scales : [];
+  const filterList = Array.isArray(props.filteredScales) ? props.filteredScales : [];
+  return inputScales.filter(function (scale) {
+    return filterList.some(function (fs) {
+      return fs.label === scale;
+    });
+  });
+});
+
+function selectCR(entry) {
+  if (store.selected?.uid === entry.uid) {
+    entry.selected = false;
+    store.selected = null;
+  } else {
+    if (store.selected) {
+      store.selected.selected = false;
+    }
+    entry.selected = true;
+    store.selected = entry;
+  }
+  console.log("selectCR", entry.uid);
+}
+
+function playCR(cr, root, inv) {
+  if (typeof root !== "number") {
+    root = 60;
+  }
+  if (typeof inv !== "number") {
+    inv = 0;
+  }
+
+  const rootChord = {};
+  const targetChord = {};
 
   console.log("Root quality:", cr.rootQuality);
 
   rootChord.notes = getRootChordNotes(cr, root, inv);
   targetChord.notes = getTargetChordNotes(cr, root, rootChord);
 
-  playCR(rootChord.notes, targetChord.notes, 1000);
-
+  playSequence(rootChord.notes, targetChord.notes, 1000);
 
   console.log("Notes:", rootChord.notes);
-  async function playCR(rootChordNotes, targetChordNotes, timeMs) {
+
+  async function playSequence(rootChordNotes, targetChordNotes, timeMs) {
     await wait(0);
-      store.audio.playNotes(rootChordNotes);
-    await wait(1000);
-      store.audio.playNotes(targetChordNotes);
+    store.audio.playNotes(rootChordNotes);
+    await wait(timeMs);
+    store.audio.playNotes(targetChordNotes);
   }
 
-  function getTargetChordNotes(cr, root, rootChord){
-    console.log(`getTargetChordNotes`);
-    console.log(`cr:`);
-    console.log(cr);
+  function getTargetChordNotes(cr, root, rootChord) {
+    console.log("getTargetChordNotes");
+    console.log("cr:", cr);
 
-    //get the new root
-    const targetRoot= cr.pitchClass + root;
-    console.log(targetRoot);
-    const triadPitchClasses=Triads.types[cr.targetQuality].pitchClasses;
+    const targetRoot = cr.pitchClass + root;
+    const triadPitchClasses = Triads.types[cr.targetQuality].pitchClasses;
 
-    const triadInversions={};
-    const triadInversionsNearest={};
+    const triadInversions = {};
+    const triadInversionsNearest = {};
 
-    for (let i=0; i < 3; i++) {
-      triadInversions[i]= invert(triadPitchClasses, i).map(pc => pc + targetRoot);
-      triadInversionsNearest[i]= triadInversions[i].map((pc, i ) => nearestPitch(rootChord.notes[i], pc));
-    };
+    for (let i = 0; i < 3; i++) {
+      triadInversions[i] = invert(triadPitchClasses, i).map(function (pc) {
+        return pc + targetRoot;
+      });
+      triadInversionsNearest[i] = triadInversions[i].map(function (pc, index) {
+        return nearestPitch(rootChord.notes[index], pc);
+      });
+    }
 
-     console.log(triadInversions);
-     console.log(triadInversionsNearest);
-
-     const smoothest=pickSmoothest(rootChord.notes, triadInversionsNearest).target;
-
-     console.log(smoothest);
-
+    const smoothest = pickSmoothest(rootChord.notes, triadInversionsNearest).target;
     return smoothest;
-
   }
 
-  function pickSmoothest(rootChordNotes, targetChordInversions){
-    const results=[];
-    Object.values(targetChordInversions).forEach(inv => {
-      const diffs = inv.map((note, i) => Math.abs(rootChordNotes[i] - note));   
-      const sum = diffs.reduce((x, y) => x + y);
-      results.push({root: rootChordNotes, target: inv, diffs: diffs, sum: sum});
+  function pickSmoothest(rootChordNotes, targetChordInversions) {
+    const results = [];
+    Object.values(targetChordInversions).forEach(function (inv) {
+      const diffs = inv.map(function (note, i) {
+        return Math.abs(rootChordNotes[i] - note);
+      });
+      const sum = diffs.reduce(function (x, y) {
+        return x + y;
+      });
+      results.push({ root: rootChordNotes, target: inv, diffs: diffs, sum: sum });
     });
 
-    const smoothest = results.reduce((best, current) => {
-        return current.sum < best.sum ? current : best;
+    const smoothest = results.reduce(function (best, current) {
+      return current.sum < best.sum ? current : best;
     });
 
-    console.log(`smoothest sum: ${smoothest.sum}`);
-
+    console.log("smoothest sum:", smoothest.sum);
     return smoothest;
   }
 
@@ -119,63 +148,40 @@ function playCR(cr, root, inv){
   }
 
   function wait(timeMs) {
-    return new Promise(function(resolve) {
-        setTimeout(resolve, timeMs);
+    return new Promise(function (resolve) {
+      setTimeout(resolve, timeMs);
     });
   }
 
-  function getRootChordNotes(cr, root, inv){
-    const triadPitchClasses=Triads.types[cr.rootQuality].pitchClasses;
-    const notes = invert(triadPitchClasses, inv).map(pc => pc + root);
+  function getRootChordNotes(cr, root, inv) {
+    const triadPitchClasses = Triads.types[cr.rootQuality].pitchClasses;
+    const notes = invert(triadPitchClasses, inv).map(function (pc) {
+      return pc + root;
+    });
     return notes;
   }
 
-  function invert(pitchClasses, n){
-    const m= (n + pitchClasses.length) % pitchClasses.length;
-    if (m === 0) return pitchClasses.slice();
-      const shifted= pitchClasses.map((pc, index) => pitchClasses[(index + n + pitchClasses.length) % pitchClasses.length]);
-      
-      const normalized= shifted.map((pc, index) => {
-        if(index < pitchClasses.length - m){
-          return (pc - 12);
-        } else {
-          return pc
-        }
-      })
-      return normalized;
-  }
-
-}
-
-</script>
-<script>
-export default {
-  name: "CRCard",
-  data() {
-    return {
-      
-    };
-  },
-  computed: {
-    crFilteredScales() {
-      // Filter the cr.scales to only show scales that are in filteredScales
-      return this.cr.scales.filter(scale => 
-        this.filteredScales.some(fs => fs.label === scale)
-      );
+  function invert(pitchClasses, n) {
+    const m = (n + pitchClasses.length) % pitchClasses.length;
+    if (m === 0) {
+      return pitchClasses.slice();
     }
-  },
-  methods: {
-
-    
-  },
-  mounted() {
-
-  },
-};
+    const shifted = pitchClasses.map(function (_pc, index) {
+      return pitchClasses[(index + n + pitchClasses.length) % pitchClasses.length];
+    });
+    const normalized = shifted.map(function (pc, index) {
+      if (index < pitchClasses.length - m) {
+        return pc - 12;
+      } else {
+        return pc;
+      }
+    });
+    return normalized;
+  }
+}
 </script>
 
 <style scoped>
-
 footer {
   font-size: 0.75rem;
 }
@@ -194,37 +200,41 @@ button {
   color: var(--pico-color);
 }
 
-button:hover{
+button:hover {
   color: white;
 }
+
 .cr-hgroup {
-  display:flex;
+  display: flex;
   direction: row;
   align-items: center;
   justify-content: space-between;
   margin-bottom: unset;
 }
 
-.cr-hgroup.left> :not(:first-child):last-child {
+.cr-hgroup.left > :not(:first-child):last-child {
   --pico-color: inherit;
   --pico-font-weight: inherit;
 }
+
 .cr-uid {
   font-size: 0.66rem;
   color: var(--pico-muted-color);
 }
-.cr-uid::before{
-  content:"#";
+
+.cr-uid::before {
+  content: "#";
 }
 
 .cr-common-tones {
   margin-bottom: 0.5rem;
 }
+
 .cr-card {
   height: 100%;
   display: flex;
   flex-direction: column;
-  margin: 0; /* parent grid gap controls spacing */
+  margin: 0;
 }
 
 .cr-card.selected {
@@ -232,7 +242,7 @@ button:hover{
 }
 
 .cr-label {
-  margin: 0 0 .5rem;
+  margin: 0 0 0.5rem;
   font-size: 1rem;
   line-height: 1.25;
   text-overflow: ellipsis;
@@ -249,7 +259,6 @@ button:hover{
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: .35rem;
+  gap: 0.35rem;
 }
-
 </style>
