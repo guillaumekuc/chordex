@@ -4,6 +4,11 @@
     class="cr-card"
     :class="cr.selected ? 'selected' : null"
   >
+
+      <Keyboard 
+        :cr="cr"
+      />
+
     <hgroup class="cr-hgroup">
       <div class="left">
         <small class="cr-uid">{{ cr.uid }}</small>
@@ -19,11 +24,7 @@
         <kbd>{{ `${cr.commonTones}` }}</kbd> common tones
       </div>
 
-      <div class="tags">
-        <kbd v-for="(scale, s) in crFilteredScales" :key="s">
-          <small>{{ scale }}</small>
-        </kbd>
-      </div>
+
     </footer>
   </article>
 </template>
@@ -32,6 +33,7 @@
 import { computed } from "vue";
 import Triads from "../theory/Triads.js";
 import { useStore } from "../store";
+import Keyboard from "./Keyboard.vue";
 
 defineOptions({ name: "CRCard" });
 
@@ -182,6 +184,13 @@ function playCR(cr, root, inv) {
 </script>
 
 <style scoped>
+
+#KeyboardContainer {
+  position: relative;
+  width: 100%;
+  background: red;
+}
+
 footer {
   font-size: 0.75rem;
 }
@@ -202,6 +211,9 @@ button {
 
 button:hover {
   color: white;
+}
+.keyboardContainer {
+
 }
 
 .cr-hgroup {
@@ -231,15 +243,17 @@ button:hover {
 }
 
 .cr-card {
-  height: 100%;
   display: flex;
   flex-direction: column;
   margin: 0;
+  position: relative;
+  margin-top: 75px;
 }
 
 .cr-card.selected {
-  outline: 2px solid red;
+  outline: 2px solid var(--pico-primary);
 }
+
 
 .cr-label {
   margin: 0 0 0.5rem;

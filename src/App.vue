@@ -81,10 +81,14 @@ function shuffle() {
 
   #colLayout {
     grid-template-columns: 2fr 1fr;
+    position: relative;
+    width: 100%;
   }
 
   #left {
+    position: relative;
     flex-basis: 66.66%;
+    width:100%;
   }
 
   #right {
@@ -96,6 +100,7 @@ function shuffle() {
 
   #app .container {
     max-width: 1200px;
+    width: 90%;
     margin: 0 auto;
   }
 
@@ -103,6 +108,9 @@ function shuffle() {
   .cr-grid {
     display: grid;
     gap: 1rem;
+    position: relative;
+    width: 100%;
+      max-width: 100%;
     /* make all implicit rows the same height so cards match within the grid */
     grid-auto-rows: 1fr;
     align-items: stretch; /* stretch items to fill row height */
@@ -110,7 +118,7 @@ function shuffle() {
   @media (min-width: 480px) { .cr-grid { grid-template-columns: repeat(1, 1fr); } }
   @media (min-width: 768px) { .cr-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 992px) { .cr-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (min-width: 1200px){ .cr-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (min-width: 1200px){ .cr-grid { grid-template-columns: repeat(3, 1fr); } }
 
   /* Search */
   .cr-advanced-search{

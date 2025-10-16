@@ -8,5 +8,11 @@ export const useStore = defineStore('main', {
     audio: null,
     activeFilters:null,
     filtered:null,
+    instruments: {},
+    config: {
+      octaveStart: 4,
+      octaveEnd: 5,
+      keymap: 'x66',
+    },
   }),
 })
