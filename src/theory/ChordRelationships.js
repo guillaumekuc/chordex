@@ -161,8 +161,6 @@ export default class ChordRelationships {
 		return {rootChord, targetChord};
 
 		function getTargetChordNotes(cr, root, rootChord) {
-		  console.log("getTargetChordNotes");
-		  console.log("cr:", cr);
 
 		  const targetRoot = cr.pitchClass + root;
 		  const triadPitchClasses = Triads.types[cr.targetQuality].pitchClasses;
@@ -199,7 +197,6 @@ export default class ChordRelationships {
 		    return current.sum < best.sum ? current : best;
 		  });
 
-		  console.log("smoothest sum:", smoothest.sum);
 		  return smoothest;
 		}
 

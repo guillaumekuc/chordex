@@ -1,3 +1,6 @@
+import '@picocss/pico/css/pico.min.css';
+import '@picocss/pico/css/pico.colors.min.css';
+
 import { createApp } from 'vue'
 import { createPinia } from 'pinia';
 import App from './App.vue'
@@ -11,6 +14,7 @@ import AudioEngine from './audio/AudioEngine.js';
 import ChordRelationships from "./theory/ChordRelationships.js";
 import Scales from "./theory/Scales.js";
 import Search from "./actions/Search.js";
+
 
 const store = useStore();
 

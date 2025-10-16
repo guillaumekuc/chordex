@@ -11,6 +11,7 @@
         'key-passive': key.isPassive
       }
     ]"
+    :pc="key.midi"
   >
     <span
       :class="{ hidden: !store.instruments[key.parent].display.keyboardLabels }"
@@ -52,7 +53,8 @@
     --color-light: #fff;
     --color-dark: #333;
     --color-darker: #222;
-    --color-active: orange;
+    --color-overlap: var(--pico-color-pumpkin-500);
+    --color-active: var(--pico-color-pumpkin-300);
     --color-hover: orange;
     --color-passive: grey;
   }
@@ -85,6 +87,11 @@
   .piano-key.key-active {
     background: var(--color-active) !important;
   }
+
+    .piano-key.key-passive.key-active {
+    background: var(--color-overlap) !important;
+  }
+
 
   .key-upper {
     width: var(--upper-key-width);
