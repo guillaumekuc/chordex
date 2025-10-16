@@ -90,7 +90,7 @@
     width: var(--upper-key-width);
     height: 60%;
     position: absolute;
-    left: calc(var(--lower-key-width) + 2px - var(--upper-key-width) / 2) ; /* (lower key width + margins/2) - (upper key width / 2) = 42 - 13 = 29px*/
+    left: calc(var(--lower-key-width) + 2px - var(--upper-key-width) / 2) ;
     z-index: 2;
   }
 

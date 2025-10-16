@@ -30,249 +30,170 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import Triads from "../theory/Triads.js";
-import { useStore } from "../store";
-import Keyboard from "./Keyboard.vue";
+  import { computed } from "vue";
+  import Triads from "../theory/Triads.js";
+  import ChordRelationships from "../theory/ChordRelationships";
+  import { useStore } from "../store";
+  import Keyboard from "./Keyboard.vue";
 
-defineOptions({ name: "CRCard" });
+  defineOptions({ name: "CRCard" });
 
-const props = defineProps({
-  cr: {
-    type: Object,
-    required: true
-  },
-  // Expecting an array of objects like [{ label: "Ionian" }, ...]
-  filteredScales: {
-    type: Array,
-    required: true
-  }
-});
+  const props = defineProps({
+    cr: {
+      type: Object,
+      required: true
+    },
+    // Expecting an array of objects like [{ label: "Ionian" }, ...]
+    filteredScales: {
+      type: Array,
+      required: true
+    }
+  });
 
-const store = useStore();
+  const store = useStore();
 
-const crFilteredScales = computed(function () {
-  const inputScales = Array.isArray(props.cr?.scales) ? props.cr.scales : [];
-  const filterList = Array.isArray(props.filteredScales) ? props.filteredScales : [];
-  return inputScales.filter(function (scale) {
-    return filterList.some(function (fs) {
-      return fs.label === scale;
+  const crFilteredScales = computed(function () {
+    const inputScales = Array.isArray(props.cr?.scales) ? props.cr.scales : [];
+    const filterList = Array.isArray(props.filteredScales) ? props.filteredScales : [];
+    return inputScales.filter(function (scale) {
+      return filterList.some(function (fs) {
+        return fs.label === scale;
+      });
     });
   });
-});
 
-function selectCR(entry) {
-  if (store.selected?.uid === entry.uid) {
-    entry.selected = false;
-    store.selected = null;
-  } else {
-    if (store.selected) {
-      store.selected.selected = false;
-    }
-    entry.selected = true;
-    store.selected = entry;
-  }
-  console.log("selectCR", entry.uid);
-}
-
-function playCR(cr, root, inv) {
-  if (typeof root !== "number") {
-    root = 60;
-  }
-  if (typeof inv !== "number") {
-    inv = 0;
-  }
-
-  const rootChord = {};
-  const targetChord = {};
-
-  console.log("Root quality:", cr.rootQuality);
-
-  rootChord.notes = getRootChordNotes(cr, root, inv);
-  targetChord.notes = getTargetChordNotes(cr, root, rootChord);
-
-  playSequence(rootChord.notes, targetChord.notes, 1000);
-
-  console.log("Notes:", rootChord.notes);
-
-  async function playSequence(rootChordNotes, targetChordNotes, timeMs) {
-    await wait(0);
-    store.audio.playNotes(rootChordNotes);
-    await wait(timeMs);
-    store.audio.playNotes(targetChordNotes);
-  }
-
-  function getTargetChordNotes(cr, root, rootChord) {
-    console.log("getTargetChordNotes");
-    console.log("cr:", cr);
-
-    const targetRoot = cr.pitchClass + root;
-    const triadPitchClasses = Triads.types[cr.targetQuality].pitchClasses;
-
-    const triadInversions = {};
-    const triadInversionsNearest = {};
-
-    for (let i = 0; i < 3; i++) {
-      triadInversions[i] = invert(triadPitchClasses, i).map(function (pc) {
-        return pc + targetRoot;
-      });
-      triadInversionsNearest[i] = triadInversions[i].map(function (pc, index) {
-        return nearestPitch(rootChord.notes[index], pc);
-      });
-    }
-
-    const smoothest = pickSmoothest(rootChord.notes, triadInversionsNearest).target;
-    return smoothest;
-  }
-
-  function pickSmoothest(rootChordNotes, targetChordInversions) {
-    const results = [];
-    Object.values(targetChordInversions).forEach(function (inv) {
-      const diffs = inv.map(function (note, i) {
-        return Math.abs(rootChordNotes[i] - note);
-      });
-      const sum = diffs.reduce(function (x, y) {
-        return x + y;
-      });
-      results.push({ root: rootChordNotes, target: inv, diffs: diffs, sum: sum });
-    });
-
-    const smoothest = results.reduce(function (best, current) {
-      return current.sum < best.sum ? current : best;
-    });
-
-    console.log("smoothest sum:", smoothest.sum);
-    return smoothest;
-  }
-
-  function nearestPitch(target, pc) {
-    return pc + 12 * Math.round((target - pc) / 12);
-  }
-
-  function wait(timeMs) {
-    return new Promise(function (resolve) {
-      setTimeout(resolve, timeMs);
-    });
-  }
-
-  function getRootChordNotes(cr, root, inv) {
-    const triadPitchClasses = Triads.types[cr.rootQuality].pitchClasses;
-    const notes = invert(triadPitchClasses, inv).map(function (pc) {
-      return pc + root;
-    });
-    return notes;
-  }
-
-  function invert(pitchClasses, n) {
-    const m = (n + pitchClasses.length) % pitchClasses.length;
-    if (m === 0) {
-      return pitchClasses.slice();
-    }
-    const shifted = pitchClasses.map(function (_pc, index) {
-      return pitchClasses[(index + n + pitchClasses.length) % pitchClasses.length];
-    });
-    const normalized = shifted.map(function (pc, index) {
-      if (index < pitchClasses.length - m) {
-        return pc - 12;
-      } else {
-        return pc;
+  function selectCR(entry) {
+    if (store.selected?.uid === entry.uid) {
+      entry.selected = false;
+      store.selected = null;
+    } else {
+      if (store.selected) {
+        store.selected.selected = false;
       }
-    });
-    return normalized;
+      entry.selected = true;
+      store.selected = entry;
+    }
+    console.log("selectCR", entry.uid);
   }
-}
+
+  function playCR(cr, root, inv) {
+    if (typeof root !== "number") {
+      root = 60;
+    }
+    if (typeof inv !== "number") {
+      inv = 0;
+    }
+
+    const chords= ChordRelationships.getChordsNotes(cr, root, inv);
+
+    playSequence(chords.rootChord.notes, chords.targetChord.notes, 1000);
+
+    async function playSequence(rootChordNotes, targetChordNotes, timeMs) {
+      await wait(0);
+      store.audio.playNotes(rootChordNotes);
+      await wait(timeMs);
+      store.audio.playNotes(targetChordNotes);
+    }
+
+    function wait(timeMs) {
+      return new Promise(function (resolve) {
+        setTimeout(resolve, timeMs);
+      });
+    }
+
+  }
 </script>
 
 <style scoped>
 
-#KeyboardContainer {
-  position: relative;
-  width: 100%;
-  background: red;
-}
+  #KeyboardContainer {
+    position: relative;
+    width: 100%;
+    background: red;
+  }
 
-footer {
-  font-size: 0.75rem;
-}
+  footer {
+    font-size: 0.75rem;
+  }
 
-button {
-  --pico-color: inherit;
-  background: none;
-  padding: 0.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 2rem;
-  height: 2rem;
-  border: 0px;
-  border-radius: 50%;
-  color: var(--pico-color);
-}
+  button {
+    --pico-color: inherit;
+    background: none;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0px;
+    border-radius: 50%;
+    color: var(--pico-color);
+  }
 
-button:hover {
-  color: white;
-}
-.keyboardContainer {
+  button:hover {
+    color: white;
+  }
+  .keyboardContainer {
 
-}
+  }
 
-.cr-hgroup {
-  display: flex;
-  direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: unset;
-}
+  .cr-hgroup {
+    display: flex;
+    direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: unset;
+  }
 
-.cr-hgroup.left > :not(:first-child):last-child {
-  --pico-color: inherit;
-  --pico-font-weight: inherit;
-}
+  .cr-hgroup.left > :not(:first-child):last-child {
+    --pico-color: inherit;
+    --pico-font-weight: inherit;
+  }
 
-.cr-uid {
-  font-size: 0.66rem;
-  color: var(--pico-muted-color);
-}
+  .cr-uid {
+    font-size: 0.66rem;
+    color: var(--pico-muted-color);
+  }
 
-.cr-uid::before {
-  content: "#";
-}
+  .cr-uid::before {
+    content: "#";
+  }
 
-.cr-common-tones {
-  margin-bottom: 0.5rem;
-}
+  .cr-common-tones {
+    margin-bottom: 0.5rem;
+  }
 
-.cr-card {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  position: relative;
-  margin-top: 75px;
-}
+  .cr-card {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    position: relative;
+    margin-top: 75px;
+  }
 
-.cr-card.selected {
-  outline: 2px solid var(--pico-primary);
-}
+  .cr-card.selected {
+    outline: 2px solid var(--pico-primary);
+  }
 
 
-.cr-label {
-  margin: 0 0 0.5rem;
-  font-size: 1rem;
-  line-height: 1.25;
-  text-overflow: ellipsis;
-  color: var(--pico-color) !important;
-}
+  .cr-label {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    color: var(--pico-color) !important;
+  }
 
-.cr-card-footer {
-  height: 100%;
-  border-top: 1px solid var(--muted-border-color, color-mix(in oklab, currentColor 12%, transparent));
-  display: flex;
-  flex-direction: column;
-}
+  .cr-card-footer {
+    height: 100%;
+    border-top: 1px solid var(--muted-border-color, color-mix(in oklab, currentColor 12%, transparent));
+    display: flex;
+    flex-direction: column;
+  }
 
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
 </style>

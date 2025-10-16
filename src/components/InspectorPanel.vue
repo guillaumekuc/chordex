@@ -1,8 +1,9 @@
 <template>
   <article v-if="store.selected" id="InspectorPanel">
-    <small class="cr-uid">{{ store.selected?.uid }}</small>
-    <h3 class="cr-label">{{ store.selected?.label }}</h3>
-
+    <header class="title">
+      <small class="cr-uid">{{ store.selected?.uid }}</small>
+      <h3 class="cr-label">{{ store.selected?.label }}</h3>
+    </header>
     <details name="aliases" open>
       <summary>Aliases</summary>
  
@@ -108,8 +109,18 @@ function removeTag(index) {
 </script>
 
 <style>
-#InspectorPanel {
-}
+
+  #InspectorPanel{
+    padding-top:0px;
+  }
+
+ .title{
+  position: sticky;
+  top:0px;
+  z-index: 1;
+  margin-top:0px;
+ }
+
 
 .cr-uid {
   font-size: 0.66rem;

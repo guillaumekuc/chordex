@@ -156,8 +156,8 @@ const slots = computed(() => {
   top: -2px;   
   height: calc(var(--offset)); 
   width: calc(100% + 4px);   
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   border-top: 2px var(--pico-primary) solid;
   border-right: 2px var(--pico-primary) solid;
   border-left: 2px var(--pico-primary) solid;

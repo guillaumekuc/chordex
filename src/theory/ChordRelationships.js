@@ -144,6 +144,97 @@ export default class ChordRelationships {
 		return commonTonesCount;
 	}
 
+	static getChordsNotes(cr, root, inv) {
+		if (typeof root !== "number") {
+		  root = 60;
+		}
+		if (typeof inv !== "number") {
+		  inv = 0;
+		}
+
+		const rootChord = {};
+		const targetChord = {};
+
+		rootChord.notes = getRootChordNotes(cr, root, inv);
+		targetChord.notes = getTargetChordNotes(cr, root, rootChord);
+
+		return {rootChord, targetChord};
+
+		function getTargetChordNotes(cr, root, rootChord) {
+		  console.log("getTargetChordNotes");
+		  console.log("cr:", cr);
+
+		  const targetRoot = cr.pitchClass + root;
+		  const triadPitchClasses = Triads.types[cr.targetQuality].pitchClasses;
+
+		  const triadInversions = {};
+		  const triadInversionsNearest = {};
+
+		  for (let i = 0; i < 3; i++) {
+		    triadInversions[i] = invert(triadPitchClasses, i).map(function (pc) {
+		      return pc + targetRoot;
+		    });
+		    triadInversionsNearest[i] = triadInversions[i].map(function (pc, index) {
+		      return nearestPitch(rootChord.notes[index], pc);
+		    });
+		  }
+
+		  const smoothest = pickSmoothest(rootChord.notes, triadInversionsNearest).target;
+		  return smoothest;
+		}
+
+		function pickSmoothest(rootChordNotes, targetChordInversions) {
+		  const results = [];
+		  Object.values(targetChordInversions).forEach(function (inv) {
+		    const diffs = inv.map(function (note, i) {
+		      return Math.abs(rootChordNotes[i] - note);
+		    });
+		    const sum = diffs.reduce(function (x, y) {
+		      return x + y;
+		    });
+		    results.push({ root: rootChordNotes, target: inv, diffs: diffs, sum: sum });
+		  });
+
+		  const smoothest = results.reduce(function (best, current) {
+		    return current.sum < best.sum ? current : best;
+		  });
+
+		  console.log("smoothest sum:", smoothest.sum);
+		  return smoothest;
+		}
+
+		function nearestPitch(target, pc) {
+		  return pc + 12 * Math.round((target - pc) / 12);
+		}
+
+
+		function getRootChordNotes(cr, root, inv) {
+		  const triadPitchClasses = Triads.types[cr.rootQuality].pitchClasses;
+		  const notes = invert(triadPitchClasses, inv).map(function (pc) {
+		    return pc + root;
+		  });
+		  return notes;
+		}
+
+		function invert(pitchClasses, n) {
+		  const m = (n + pitchClasses.length) % pitchClasses.length;
+		  if (m === 0) {
+		    return pitchClasses.slice();
+		  }
+		  const shifted = pitchClasses.map(function (_pc, index) {
+		    return pitchClasses[(index + n + pitchClasses.length) % pitchClasses.length];
+		  });
+		  const normalized = shifted.map(function (pc, index) {
+		    if (index < pitchClasses.length - m) {
+		      return pc - 12;
+		    } else {
+		      return pc;
+		    }
+		  });
+		  return normalized;
+		}
+	} 
+
 }
 
 function initChordRelationships(){
