@@ -15,7 +15,7 @@
         <h3 class="cr-label">{{ cr.label }}</h3>
       </div>
       <div class="right">
-        <button @click.stop="playCR(cr, 72, 2)"><i class="fa-solid fa-play"></i></button>
+        <button @click.stop="playCR(cr, store.config.root, store.config.inversion)"><i class="fa-solid fa-play"></i></button>
       </div>
     </hgroup>
 
