@@ -162,7 +162,7 @@ function initChordRelationships(){
 	      		const interval= Intervals.toName(pitchClass);
 	      		const roman= Intervals.toRoman(pitchClass);
 	      		const label= `${rootQuality} ${roman} ${targetQuality}`;
-	        	chordRelationships.push({label, uid: uid.toString().padStart(3, "0"), rootQuality, targetQuality, interval, pitchClass, roman});
+	        	chordRelationships.push({label, uid: uid.toString().padStart(3, "0"), rootQuality, targetQuality, interval, pitchClass, roman, aliases: null, tags: null, notes: null});
 	      	}
 	    }
 	}
