@@ -1,7 +1,5 @@
 <template>
-  <div class="placeholder">
-    <div class="keyboard-container" :class="store.selected?.uid===cr.uid ? 'selected' : null ">
-      <div class="keyboard" >
+      <div class="keyboard" :class="store.selected?.uid===cr.uid ? 'selected' : null ">
         <div v-for="(slot, idx) in slots" class="slot">
           <Key
             :note="slot.lower.note"
@@ -27,8 +25,6 @@
           />
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <script setup>
@@ -181,23 +177,16 @@
     --upper-key-width: calc(var(--lower-key-width) * 0.75);
     --offset: calc(var(--keyboard-height) * 0.4);
 
-    position: relative;
-    top:-20px;
-    min-height: calc(var(--keyboard-height) - var(--offset));
 
-  }
-
-  .keyboard-container {
-     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: calc(var(--offset) * -1);
-    max-width: 100%;
-    min-width: 0;
-    display: inline-block;
   }
 
   .keyboard {
+    --keyboard-height: 72px;
+    --lower-key-width: calc(var(--keyboard-height)/4.5);
+    --upper-key-width: calc(var(--lower-key-width) * 0.75);
+    --offset: calc(var(--keyboard-height) * 0.4);
+
+
     --color-dark: #333333;
     display: flex;
     user-select: none;
@@ -209,22 +198,7 @@
     height: var(--keyboard-height);
   }
 
-  .keyboard-container.selected::before {
-    content: "";
-    position: absolute;
-    left: -2px;             
-    top: -2px;   
-    height: calc(var(--offset)); 
-    width: calc(100% + 4px);   
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-top: 2px var(--pico-primary) solid;
-    border-right: 2px var(--pico-primary) solid;
-    border-left: 2px var(--pico-primary) solid;
 
-    pointer-events: none;
-    z-index: -2;
-  }
 
 
   .slot {

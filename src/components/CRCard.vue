@@ -5,9 +5,11 @@
     :class="cr.selected ? 'selected' : null"
   >
 
-      <Keyboard 
+    <div class="keyboardContainer">
+      <Keyboard class="Keyboard"
         :cr="cr"
       />
+    </div>
 
     <hgroup class="cr-hgroup">
       <div class="left">
@@ -106,10 +108,42 @@
 
 <style scoped>
 
-  #KeyboardContainer {
+  .keyboardContainer {
+    --keyboard-height: 72px;
+    --lower-key-width: calc(var(--keyboard-height)/4.5);
+    --upper-key-width: calc(var(--lower-key-width) * 0.75);
+    --offset: calc(var(--keyboard-height) * 0.4);
+
+
     position: relative;
-    width: 100%;
-    background: red;
+    min-height: calc(var(--keyboard-height) - var(--offset));
+
+    top: -20px;
+  }
+
+  .Keyboard {
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(var(--offset) * -1);
+  }
+  
+  .keyboard.selected::before {
+    content: "";
+    position: absolute;
+    left: -2px;             
+    top: -2px;   
+    height: calc(var(--offset)); 
+    width: calc(100% + 4px);   
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-top: 2px var(--pico-primary) solid;
+    border-right: 2px var(--pico-primary) solid;
+    border-left: 2px var(--pico-primary) solid;
+
+    pointer-events: none;
+    z-index: -2;
   }
 
   footer {
@@ -133,9 +167,7 @@
   button:hover {
     color: white;
   }
-  .keyboardContainer {
 
-  }
 
   .cr-hgroup {
     display: flex;
@@ -168,7 +200,7 @@
     flex-direction: column;
     margin: 0;
     position: relative;
-    margin-top: 75px;
+    margin-top: 35px;
   }
 
   .cr-card.selected {

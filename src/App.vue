@@ -81,6 +81,7 @@ function shuffle() {
   }
 
 
+
   #colLayout {
     grid-template-columns: 2fr 1fr;
     position: relative;
@@ -136,12 +137,6 @@ function shuffle() {
     height: max-content;
   }
 
-  #InspectorPanel {
-    position: sticky;
-    top:20px;
-    max-height: calc(100vh - 40px);
-    overflow-y: auto;
-    scrollbar-width: none;
-  }
+
 
 </style>
