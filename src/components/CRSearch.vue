@@ -233,7 +233,6 @@ onMounted(function () {
   border-color: var(--pico-primary);
 }
 
-/* Make kbd feel like buttons */
 .cr-advanced-search kbd {
   cursor: pointer;
   user-select: none;

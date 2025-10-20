@@ -10,8 +10,8 @@
             :is-upper="false"
             :is-black="slot.lower.color === 'b'"
             :parent="props.id"
-            :is-passive="passiveNotes.has(slot.lower.midi)"
-            :is-active="activeNotes.has(slot.lower.midi)"
+            :is-passive="passivePitchClasses.has(slot.lower.midi % 12) && slot.lower.midi !== lastNote"
+            :is-active="activePitchClasses.has(slot.lower.midi % 12) && slot.lower.midi !== lastNote"
 
           />
           <Key
@@ -22,8 +22,8 @@
             :is-upper="true"
             :is-black="slot.upper.color === 'b'"
             :parent="props.id"
-            :is-passive="passiveNotes.has(slot.upper.midi)"
-            :is-active="activeNotes.has(slot.upper.midi)"
+            :is-passive="passivePitchClasses.has(slot.upper.midi % 12) && slot.upper.midi !== lastNote"
+            :is-active="activePitchClasses.has(slot.upper.midi % 12) && slot.upper.midi !== lastNote"
           />
         </div>
       </div>
@@ -36,7 +36,6 @@
   import { computed } from 'vue';
   import { useStore } from '../store';
   import Key from './Key.vue';
-  import keymap from '../config/keymap.js';
   import keyboardRowPatterns from '../config/keyboardRowPatterns.js';
   import keyboardColorPatterns from '../config/keyboardColorPatterns.js';
   import ChordRelationships from "../theory/ChordRelationships.js";
@@ -46,7 +45,7 @@
   const props = defineProps({
     layout: { type: String, default: 'x66' },
     colors: { type: String, default: 'x66' },
-    id: { type: String, default: 'something' },
+    id: { type: String, default: 'defaultKeyboard' },
     displayNoteLabels: { type: Boolean, default: false },
     cr: { type: Object, default: null, required: true }
   });
@@ -60,8 +59,8 @@
     }
   };
 
-  const layout = computed(() => store.instruments[props.id].layout);
-  const colors = computed(() => store.instruments[props.id].colors);
+  const layout = computed(() => store.config.keyboardLayout);
+  const colors = computed(() => store.config.keyboardColors);
   const pattern = computed(() => keyboardRowPatterns[layout.value]);
   const colorPattern = computed(() => keyboardColorPatterns[colors.value]);
 
@@ -120,7 +119,10 @@
     props.cr,
     store.config.root,
     store.config.inversion
-  )) ;
+  ));
+
+  const lastNote = computed (() => (store.config.octaveEnd + 1) * 12);
+
 
   const passiveNotes = computed(function () {    
     return new Set(chords.value.rootChord.notes);
@@ -129,6 +131,18 @@
   const activeNotes = computed(function () {
     return new Set(chords.value.targetChord.notes);
   });
+
+  const activePitchClasses = computed(() => {
+    return buildPitchClassSet(activeNotes.value);
+  })
+
+  const passivePitchClasses = computed(() => {
+    return buildPitchClassSet(passiveNotes.value);
+  })
+
+  function isLastNote(note){
+    return (note === (store.config.octaveEnd + 1) * 12)
+  }
 
   function renderAnimatedCR(cr) {
     const chordNotes= computed(() => ChordRelationships.getChordsNotes(cr, store.config.root, store.config.inversion));
@@ -142,6 +156,18 @@
     })
   }
 
+  function mod12(value) {
+    var r = value % 12;
+    return r < 0 ? r + 12 : r;
+  }
+
+  function buildPitchClassSet(midiSet) {
+    console.log('midiSet');
+    console.log(midiSet);
+    var pcs = new Set();
+    midiSet.forEach(function(n) { pcs.add(mod12(n)); });
+    return pcs;
+  }
 
 </script>
 
@@ -152,7 +178,7 @@
 
     --keyboard-height: 72px;
     --lower-key-width: calc(var(--keyboard-height)/4.5);
-    --upper-key-width: calc(var(--lower-key-width) * 0.65);
+    --upper-key-width: calc(var(--lower-key-width) * 0.75);
     --offset: calc(var(--keyboard-height) * 0.4);
 
     position: relative;

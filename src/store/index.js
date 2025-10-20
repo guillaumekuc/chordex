@@ -13,6 +13,8 @@ export const useStore = defineStore('main', {
       octaveStart: 4,
       octaveEnd: 5,
       keymap: 'x66',
+      keyboardLayout: "x75",
+      keyboardColors: "x75",
       root: 64,
       inversion: 0,
     },

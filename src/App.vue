@@ -12,6 +12,7 @@
         192 possible tertian triad CRs.
       </p>
     </hgroup>
+    <ConfigInspector />
 
     <div id="colLayout" class="grid">
       <div id="left">
@@ -45,6 +46,7 @@ import Scales from "./theory/Scales.js";
 import Search from "./actions/Search.js";
 import Shuffle from "./actions/Shuffle.js";
 import CRCard from "./components/CRCard.vue";
+import ConfigInspector from "./components/ConfigInspector.vue";
 import InspectorPanel from "./components/InspectorPanel.vue";
 import CRSearch from "./components/CRSearch.vue";
 import ThemeSwitcher from "./components/ThemeSwitcher.vue";
