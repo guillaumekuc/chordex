@@ -95,6 +95,7 @@ function addAlias(event) {
   const value = event.target.value.trim();
   if (value && !store.selected.aliases.includes(value)) {
     store.selected.aliases.push(value);
+   
   }
   event.target.value = "";
 }
@@ -102,6 +103,7 @@ function addAlias(event) {
 function removeAlias(index) {
   ensureArrays();
   store.selected.aliases.splice(index, 1);
+  
 }
 
 function addTag(event) {

@@ -1,31 +1,26 @@
-import '@picocss/pico/css/pico.min.css';
-import '@picocss/pico/css/pico.colors.min.css';
+import "@picocss/pico/css/pico.min.css";
+import "@picocss/pico/css/pico.colors.min.css";
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia';
-import App from './App.vue'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 
-const app = createApp(App)
+import App from "./App.vue";
+import { useStore } from "./store";
+
+import AudioEngine from "./audio/AudioEngine.js";
+import ChordRelationships from "./theory/ChordRelationships.js";
+import Scales from "./theory/Scales.js";
+
+const app = createApp(App);
 const pinia = createPinia();
 app.use(pinia);
 
-import { useStore } from './store';
-import AudioEngine from './audio/AudioEngine.js';
-import ChordRelationships from "./theory/ChordRelationships.js";
-import Scales from "./theory/Scales.js";
-import Search from "./actions/Search.js";
-
+ChordRelationships.mapScales(Scales.all);
 
 const store = useStore();
 
-store.audio = new AudioEngine()
-ChordRelationships.mapScales(Scales.all);
-store.chordRelationships=ChordRelationships.all;
-store.activeFilters= Search.defaultFilters();
-store.filtered = Search.execute(store.chordRelationships, store.activeFilters);
+store.audio = new AudioEngine();
 
+app.mount("#app");
 
-app.mount('#app');
-
-window.API={};
-window.API.store=store;
+window.API = { store: store };

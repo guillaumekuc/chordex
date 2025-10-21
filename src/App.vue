@@ -51,6 +51,7 @@ import InspectorPanel from "./components/InspectorPanel.vue";
 import CRSearch from "./components/CRSearch.vue";
 import ThemeSwitcher from "./components/ThemeSwitcher.vue";
 import { useStore } from "./store";
+import { useStorage } from '@vueuse/core'
 
 const store = useStore();
 
@@ -113,10 +114,10 @@ function shuffle() {
     gap: 1rem;
     position: relative;
     width: 100%;
-      max-width: 100%;
-    /* make all implicit rows the same height so cards match within the grid */
+    max-width: 100%;
+   
     grid-auto-rows: 1fr;
-    align-items: stretch; /* stretch items to fill row height */
+    align-items: stretch;
   }
   @media (min-width: 480px) { .cr-grid { grid-template-columns: repeat(1, 1fr); } }
   @media (min-width: 768px) { .cr-grid { grid-template-columns: repeat(2, 1fr); } }

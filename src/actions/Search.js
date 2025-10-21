@@ -2,7 +2,7 @@
 import SearchParser from '../utils/SearchParser.js';
 import ChordRelationships from '../theory/ChordRelationships.js';
 import Scales from '../theory/Scales.js';
-
+import { useStore } from '../store';
 
 export default class Search {
   static defaultFilters() {
@@ -10,8 +10,9 @@ export default class Search {
   }
 
   static execute(out, f = this.defaultFilters()) {
+    const store = useStore();
     console.log('Search execute');
-    let results = ChordRelationships.all;
+    let results = store.chordRelationships;
 
     // 1) text query
     if (f.query && f.query.trim()) {

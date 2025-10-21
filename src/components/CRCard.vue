@@ -2,7 +2,7 @@
   <article
     @click="selectCR(cr)"
     class="cr-card"
-    :class="cr.selected ? 'selected' : null"
+    :class="store.selected?.uid===cr.uid ? 'selected' : null"
   >
 
     <div class="keyboardContainer">
