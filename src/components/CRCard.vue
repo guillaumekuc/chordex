@@ -37,6 +37,7 @@
   import ChordRelationships from "../theory/ChordRelationships";
   import { useStore } from "../store";
   import Keyboard from "./Keyboard.vue";
+  import debugLog from "../utils/debugLog.js";
 
   defineOptions({ name: "CRCard" });
 
@@ -75,7 +76,7 @@
       entry.selected = true;
       store.selected = entry;
     }
-    console.log("selectCR", entry.uid);
+    debugLog("CR selected:", entry.label, "UID:", entry.uid);
   }
 
   function playCR(cr, root, inv) {
@@ -86,6 +87,7 @@
       inv = 0;
     }
 
+    debugLog("Playing CR:", cr.label, "root:", root, "inversion:", inv);
     const chords= ChordRelationships.getChordsNotes(cr, root, inv);
 
     playSequence(chords.rootChord.notes, chords.targetChord.notes, 1000);

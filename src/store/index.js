@@ -5,6 +5,8 @@ import { useStorage } from "@vueuse/core";
 
 import ChordRelationships from "../theory/ChordRelationships";
 import Search from "../actions/Search";
+import Shuffle from "../actions/Shuffle";
+import debugLog from "../utils/debugLog.js";
 
 export const useStore = defineStore("main", function() {
     // Persisted state
@@ -17,6 +19,7 @@ export const useStore = defineStore("main", function() {
     var audio = ref(null);
     var activeFilters = ref(Search.defaultFilters());
     var instruments = ref({});
+    var shuffledResults = ref(null);
 
     var config = reactive({
         octaveStart: 4,
@@ -29,8 +32,20 @@ export const useStore = defineStore("main", function() {
     });
 
     var filtered = computed(function() {
-        return Search.execute(chordRelationships.value, activeFilters.value);
+        const searchResults = Search.execute(chordRelationships.value, activeFilters.value);
+        return shuffledResults.value || searchResults;
     });
+
+    function shuffle() {
+        const searchResults = Search.execute(chordRelationships.value, activeFilters.value);
+        debugLog('Shuffling', searchResults.length, 'filtered results');
+        shuffledResults.value = Shuffle.execute(searchResults);
+    }
+
+    function resetShuffle() {
+        debugLog('Resetting shuffle - returning to normal order');
+        shuffledResults.value = null;
+    }
 
     return {
         chordRelationships,
@@ -39,6 +54,8 @@ export const useStore = defineStore("main", function() {
         activeFilters,
         filtered,
         instruments,
-        config
+        config,
+        shuffle,
+        resetShuffle
     };
 });

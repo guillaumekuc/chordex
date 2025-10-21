@@ -32,6 +32,7 @@
 	  	return note;
 	  })
 
+
 	  function switchLayout(){
 	  	switch(store.config.keyboardLayout){
 	  		case "x75":
@@ -61,6 +62,7 @@
 	  			store.config.root = (store.config.octaveEnd + 1) * 12 - 1;
 	  		}
 	  }
+
 
 
 

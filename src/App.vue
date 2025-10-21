@@ -44,7 +44,6 @@
 import { computed } from "vue";
 import Scales from "./theory/Scales.js";
 import Search from "./actions/Search.js";
-import Shuffle from "./actions/Shuffle.js";
 import CRCard from "./components/CRCard.vue";
 import ConfigInspector from "./components/ConfigInspector.vue";
 import InspectorPanel from "./components/InspectorPanel.vue";
@@ -67,11 +66,11 @@ const filteredScales = computed(function () {
 
 function search(filters) {
   store.activeFilters = { ...filters };
-  store.filtered = Search.execute(store.filtered, store.activeFilters);
+  store.resetShuffle(); // Reset shuffle when filters change
 }
 
 function shuffle() {
-  store.filtered = Shuffle.execute(store.filtered);
+  store.shuffle();
 }
 </script>
 

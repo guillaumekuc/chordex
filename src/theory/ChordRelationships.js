@@ -2,6 +2,7 @@ import Triads from "./Triads.js";
 import Intervals from "./Intervals.js";
 import Scales from "./Scales.js";
 import * as Common from "./common.js";
+import debugLog from "../utils/debugLog.js";
 
 export default class ChordRelationships {
 
@@ -255,7 +256,7 @@ function initChordRelationships(){
 	    }
 	}
 
-	console.log(chordRelationships);
+	debugLog('Chord relationships initialized:', chordRelationships.length, 'total CRs');
 
 	return chordRelationships;
 }

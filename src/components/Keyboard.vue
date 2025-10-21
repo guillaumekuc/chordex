@@ -35,6 +35,7 @@
   import keyboardRowPatterns from '../config/keyboardRowPatterns.js';
   import keyboardColorPatterns from '../config/keyboardColorPatterns.js';
   import ChordRelationships from "../theory/ChordRelationships.js";
+  import debugLog from '../utils/debugLog.js';
 
   const store = useStore();
 
@@ -142,11 +143,8 @@
 
   function renderAnimatedCR(cr) {
     const chordNotes= computed(() => ChordRelationships.getChordsNotes(cr, store.config.root, store.config.inversion));
-    console.log(chordNotes.value);
     chordNotes.value.rootChord.notes.forEach(note => {
-      console.log(note);
       document.querySelectorAll(`.piano-key[pc='${note}']`).forEach(element => {
-        console.log(element);
         element.classList.add("key-passive");
       })
     })
@@ -158,8 +156,6 @@
   }
 
   function buildPitchClassSet(midiSet) {
-    console.log('midiSet');
-    console.log(midiSet);
     var pcs = new Set();
     midiSet.forEach(function(n) { pcs.add(mod12(n)); });
     return pcs;

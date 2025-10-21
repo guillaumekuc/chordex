@@ -144,6 +144,7 @@ import { ref, reactive, computed, onMounted } from "vue";
 import Scales from "../theory/Scales.js";
 import Triads from "../theory/Triads.js";
 import Intervals from "../theory/Intervals.js";
+import debugLog from "../utils/debugLog.js";
 
 const emit = defineEmits(["search"]);
 
@@ -189,8 +190,7 @@ function onSearchInput(value) {
 }
 
 function onSubmit() {
-  console.log(filters.value);
-  console.log(selected);
+  debugLog('Search submitted with filters:', Object.keys(filters.value).filter(key => filters.value[key]?.length > 0));
   emit("search", filters.value);
 }
 

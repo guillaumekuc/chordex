@@ -2,17 +2,15 @@
 import SearchParser from '../utils/SearchParser.js';
 import ChordRelationships from '../theory/ChordRelationships.js';
 import Scales from '../theory/Scales.js';
-import { useStore } from '../store';
+import debugLog from '../utils/debugLog.js';
 
 export default class Search {
   static defaultFilters() {
     return { query: '', root: [], intervals: [], target: [], scales: [], commonTones: [], fifthsOffsets: [0], };
   }
 
-  static execute(out, f = this.defaultFilters()) {
-    const store = useStore();
-    console.log('Search execute');
-    let results = store.chordRelationships;
+  static execute(data, f = this.defaultFilters()) {
+    let results = data;
 
     // 1) text query
     if (f.query && f.query.trim()) {
@@ -43,7 +41,7 @@ export default class Search {
 
     
     if (f.fifthsOffsets?.length) {
-      console.log(f.fifthsOffsets);
+      debugLog('Filtering by fifthsOffsets:', f.fifthsOffsets, '→', results.length, 'results');
 
       // filteredScales is an array of objects that have a .label property
       const filteredScales = Scales.all.filter(scale =>
@@ -73,6 +71,7 @@ export default class Search {
 
     // 7) fifths OFfsets
 
+    debugLog('Search complete:', results.length, 'results from', data.length, 'total');
     return results;
   }
 }
