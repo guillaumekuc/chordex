@@ -2,9 +2,9 @@
 	<details class="configInspector">
 		<summary><i class="fa fa-cog" aria-hidden="true"></i> Config</summary>
 		
-			<p>Keyboard layout: <button @click="switchLayout()">{{layout}}</button></p>
+			<p>Keyboard layout: <button @click="SwitchKeyboardLayout.execute(store)">{{layout}}</button></p>
 			<p>Root note: <button @click="UpdateRoot.execute(store, -1)"><</button><kbd>{{root}}</kbd><button @click="UpdateRoot.execute(store, 1)">></button></p>
-			<p><button @click="exportJSON()">Export JSON</button><button @click="importJSON()">Import JSON</button></p>
+			<p><button @click="ExportJSON.execute(store)">Export JSON</button><button @click="ImportJSON.execute(store)">Import JSON</button></p>
 		
 	</details>
 </template>
@@ -36,23 +36,6 @@
 	  	const note= Notes.fromPitchClass(normalizedPc);
 	  	return note;
 	  })
-
-
-	  function switchLayout(){
-	  	SwitchKeyboardLayout.execute(store);
-	  }
-
-	  function exportJSON() {
-	  	ExportJSON.execute(store);
-	  }
-
-	  function importJSON() {
-	  	ImportJSON.execute(store);
-	  }
-
-
-
-
 </script>
 
 <style>
