@@ -3,27 +3,27 @@
     :class="[
       'piano-key',
       {
-        'key-lower': !key.isUpper,
-        'key-upper': key.isUpper,
-        'key-white': !key.isBlack,
-        'key-black': key.isBlack,
-        'key-active': key.isActive,
-        'key-passive': key.isPassive
+        'key-lower': !props.isUpper,
+        'key-upper': props.isUpper,
+        'key-white': !props.isBlack,
+        'key-black': props.isBlack,
+        'key-active': props.isActive,
+        'key-passive': props.isPassive
       }
     ]"
-    :pc="key.midi"
+    :pc="props.midi"
   >
     <span
-      :class="{ hidden: !store.instruments[key.parent].display.keyboardLabels }"
+      :class="{ hidden: !store.instruments[props.parent].display.keyboardLabels }"
       class="keyboard-mapping-label"
     >
-      {{ key.keyboard }}
+      {{ props.keyboard }}
     </span>
     <span
-      :class="{ hidden: !store.instruments[key.parent].display.noteLabels }"
+      :class="{ hidden: !store.instruments[props.parent].display.noteLabels }"
       class="note-label"
     >
-      {{ key.note }}
+      {{ props.note }}
     </span>
   </div>
 </template>
@@ -33,7 +33,7 @@
   const store = useStore()
 
   // Props
-  const key = defineProps({
+  const props = defineProps({
     note: { type: String, required: true },
     midi: { type: Number, required: true },
     keyboard: { type: String },
