@@ -5,9 +5,9 @@
         <details ref="dropdown" class="dropdown">
           <summary role="button" class="secondary">{{ theme }}</summary>
           <ul>
-            <li><a href="#" @click.prevent="setTheme('auto')">auto</a></li>
-            <li><a href="#" @click.prevent="setTheme('light')">light</a></li>
-            <li><a href="#" @click.prevent="setTheme('dark')">dark</a></li>
+            <li><a href="#" @click.prevent="SetTheme.execute(store, 'auto'); dropdown.open = false">auto</a></li>
+            <li><a href="#" @click.prevent="SetTheme.execute(store, 'light'); dropdown.open = false">light</a></li>
+            <li><a href="#" @click.prevent="SetTheme.execute(store, 'dark'); dropdown.open = false">dark</a></li>
           </ul>
         </details>
       </li>
@@ -26,10 +26,6 @@ const dropdown = ref(null);
 
 const theme = computed(() => store.config.currentTheme);
 
-function setTheme(sel) {
-  SetTheme.execute(store, sel);
-  dropdown.value.open = false;
-}
 
 onMounted(() => {
   // Initialize the theme switcher
@@ -37,6 +33,8 @@ onMounted(() => {
   // Set the initial theme in the store
   store.config.currentTheme = themeSwitcher.scheme;
 });
+
+
 </script>
 
 <style>
@@ -51,3 +49,5 @@ onMounted(() => {
 
 
 </style>
+
+
