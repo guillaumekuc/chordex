@@ -3,7 +3,7 @@
 		<summary><i class="fa fa-cog" aria-hidden="true"></i> Config</summary>
 		
 			<p>Keyboard layout: <button @click="switchLayout()">{{layout}}</button></p>
-			<p>Root note: <button @click="decrementRootPc()"><</button><kbd>{{root}}</kbd><button @click="incrementRootPc()">></button></p>
+			<p>Root note: <button @click="UpdateRoot.execute(store, -1)"><</button><kbd>{{root}}</kbd><button @click="UpdateRoot.execute(store, 1)">></button></p>
 			<p><button @click="exportJSON()">Export JSON</button><button @click="importJSON()">Import JSON</button></p>
 		
 	</details>
@@ -18,6 +18,7 @@
 	  import ExportJSON from "../actions/ExportJSON.js"
 	  import ImportJSON from "../actions/ImportJSON.js"
 	  import SwitchKeyboardLayout from "../actions/SwitchKeyboardLayout.js"
+	  import UpdateRoot from "../actions/UpdateRoot.js"
 
 	  const layout = computed(()=> {
 	  	switch(store.config.keyboardLayout){
@@ -39,23 +40,6 @@
 
 	  function switchLayout(){
 	  	SwitchKeyboardLayout.execute(store);
-	  }
-
-	  function incrementRootPc() {
-	  		if (store.config.root < (store.config.octaveEnd + 1) * 12 - 1){
-	  			store.config.root = store.config.root + 1;
-	  		} else {
-	  			store.config.root = (store.config.octaveStart + 1) * 12;
-	  		}
-	  	  	
-	  }
-
-  	  function decrementRootPc() {
-	  		if (store.config.root > (store.config.octaveStart + 1) * 12){
-	  			store.config.root = store.config.root - 1;
-	  		} else {
-	  			store.config.root = (store.config.octaveEnd + 1) * 12 - 1;
-	  		}
 	  }
 
 	  function exportJSON() {
