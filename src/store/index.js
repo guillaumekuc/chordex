@@ -26,7 +26,8 @@ export const useStore = defineStore("main", function() {
         keyboardLayout: "x75",
         keyboardColors: "x75",
         root: 64,
-        inversion: 0
+        inversion: 0,
+        currentTheme: "auto"
     });
 
     var filtered = computed(function() {

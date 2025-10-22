@@ -35,7 +35,6 @@
   import keyboardRowPatterns from '../config/keyboardRowPatterns.js';
   import keyboardColorPatterns from '../config/keyboardColorPatterns.js';
   import ChordRelationships from "../theory/ChordRelationships.js";
-  import debugLog from '../utils/debugLog.js';
 
   const store = useStore();
 

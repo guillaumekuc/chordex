@@ -17,6 +17,7 @@
 	  import Notes from "../theory/Notes.js"
 	  import ExportJSON from "../actions/ExportJSON.js"
 	  import ImportJSON from "../actions/ImportJSON.js"
+	  import SwitchKeyboardLayout from "../actions/SwitchKeyboardLayout.js"
 
 	  const layout = computed(()=> {
 	  	switch(store.config.keyboardLayout){
@@ -37,16 +38,7 @@
 
 
 	  function switchLayout(){
-	  	switch(store.config.keyboardLayout){
-	  		case "x75":
-	  			store.config.keyboardLayout="x66";
-	  			store.config.keyboardColors="x66";
-	  			break
-  			case "x66":
-  				store.config.keyboardLayout="x75";
-  				store.config.keyboardColors="x75";
-  				break
-	  	}
+	  	SwitchKeyboardLayout.execute(store);
 	  }
 
 	  function incrementRootPc() {

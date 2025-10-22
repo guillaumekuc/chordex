@@ -144,9 +144,11 @@ import { ref, reactive, computed, onMounted } from "vue";
 import Scales from "../theory/Scales.js";
 import Triads from "../theory/Triads.js";
 import Intervals from "../theory/Intervals.js";
-import debugLog from "../utils/debugLog.js";
+import ResetFilters from "../actions/ResetFilters.js";
+import Shuffle from "../actions/Shuffle.js";
+import { useStore } from "../store";
 
-const emit = defineEmits(["search"]);
+const store = useStore();
 
 const searchQuery = ref("");
 const scales = Scales.all;
@@ -186,12 +188,14 @@ const filteredScales = computed(function () {
 
 function onSearchInput(value) {
   searchQuery.value = value;
-  emit("search", filters.value);
+  store.activeFilters = { ...filters.value };
+  Shuffle.reset(store); // Reset shuffle when filters change
 }
 
 function onSubmit() {
   debugLog('Search submitted with filters:', Object.keys(filters.value).filter(key => filters.value[key]?.length > 0));
-  emit("search", filters.value);
+  store.activeFilters = { ...filters.value };
+  Shuffle.reset(store); // Reset shuffle when filters change
 }
 
 function isSelected(group, value) {
@@ -206,15 +210,18 @@ function toggle(group, value) {
   } else {
     array.splice(index, 1);
   }
-  emit("search", filters.value);
+  store.activeFilters = { ...filters.value };
+  Shuffle.reset(store); // Reset shuffle when filters change
 }
 
 function reset() {
+  ResetFilters.execute(store);
   searchQuery.value = "";
   Object.keys(selected).forEach(function (key) {
     selected[key] = [];
   });
-  emit("search", filters.value);
+  store.activeFilters = { ...filters.value };
+  Shuffle.reset(store); // Reset shuffle when filters change
 }
 
 onMounted(function () {

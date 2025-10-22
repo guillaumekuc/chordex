@@ -66,7 +66,8 @@
           name="userNotes"
           placeholder="Write some notes about this Chord Relationship"
           aria-label="User notes"
-          v-model="store.selected.notes"
+          :value="store.selected.notes"
+          @input="updateNotes($event.target.value)"
         ></textarea>
       </details>
     </div>
@@ -76,12 +77,12 @@
 
 <script setup>
 import { useStore } from "../store";
-import { nextTick } from "vue";
 import Keyboard from "./Keyboard.vue";
 import AddAlias from "../actions/AddAlias.js";
 import RemoveAlias from "../actions/RemoveAlias.js";
 import AddTag from "../actions/AddTag.js";
 import RemoveTag from "../actions/RemoveTag.js";
+import UpdateNotes from "../actions/UpdateNotes.js";
 
 const store = useStore();
 
@@ -103,6 +104,10 @@ function addTag(event) {
 
 function removeTag(index) {
   RemoveTag.execute(store, index);
+}
+
+function updateNotes(value) {
+  UpdateNotes.execute(store, value);
 }
 </script>
 

@@ -33,11 +33,8 @@
 
 <script setup>
   import { computed } from "vue";
-  import Triads from "../theory/Triads.js";
-  import ChordRelationships from "../theory/ChordRelationships";
   import { useStore } from "../store";
   import Keyboard from "./Keyboard.vue";
-  import debugLog from "../utils/debugLog.js";
   import SelectCR from "../actions/SelectCR.js";
   import PlayCR from "../actions/PlayCR.js";
 

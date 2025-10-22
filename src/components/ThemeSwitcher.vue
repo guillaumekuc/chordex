@@ -16,28 +16,32 @@
 </template>
 
 <script>
+import SetTheme from "../actions/SetTheme.js";
+import { useStore } from "../store";
 import themeSwitcher from "../utils/minimal-theme-switcher.js";
 
 export default {
   name: "ThemeSwitcher",
-  data() {
-    return {
-      theme: "auto",
-    };
+  setup() {
+    const store = useStore();
+    return { store };
+  },
+  computed: {
+    theme() {
+      return this.store.config.currentTheme;
+    }
   },
   methods: {
     setTheme(sel) {
-      themeSwitcher.scheme = sel;
-      this.theme = sel;
+      SetTheme.execute(this.store, sel);
       this.$refs.dropdown.open = false;
-
     },
   },
   mounted() {
+    // Initialize the theme switcher
     themeSwitcher.init();
-    this.theme = themeSwitcher.scheme;
-    
-
+    // Set the initial theme in the store
+    this.store.config.currentTheme = themeSwitcher.scheme;
   },
 };
 </script>

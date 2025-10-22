@@ -16,7 +16,7 @@
 
     <div id="colLayout" class="grid">
       <div id="left">
-        <CRSearch @search="search" />
+        <CRSearch />
 
         <section id="resultsCount" style="display: flex; justify-content: center; color: var(--pico-muted-color)"><small>{{ `${store.filtered.length} results`}}</small></section>
 
@@ -51,7 +51,6 @@ import InspectorPanel from "./components/InspectorPanel.vue";
 import CRSearch from "./components/CRSearch.vue";
 import ThemeSwitcher from "./components/ThemeSwitcher.vue";
 import { useStore } from "./store";
-import { useStorage } from '@vueuse/core'
 
 const store = useStore();
 
@@ -65,10 +64,6 @@ const filteredScales = computed(function () {
   });
 });
 
-function search(filters) {
-  store.activeFilters = { ...filters };
-  Shuffle.reset(store); // Reset shuffle when filters change
-}
 
 function shuffle() {
   Shuffle.execute(store);
