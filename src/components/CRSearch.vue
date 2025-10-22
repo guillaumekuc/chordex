@@ -1,122 +1,64 @@
 <template>
   <article class="cr-search">
-    <header class="cr-search-header">
-      <h3>Search CRs</h3>
-      <div class="search-container">
-        <form class="search-form" role="search" @submit.prevent="onSubmit">
-          <input
-            id="search"
-            class="search-input"
-            type="search"
-            :value="searchQuery"
-            @input="onSearchInput($event.target.value)"
-            placeholder='By label, intervals, qualities, scales… Operators: + | - | , | ""'
-          />
-          <button class="search-btn" type="submit" aria-label="Submit search">
-            OK
-          </button>
-        </form>
-      </div>
-    </header>
+    <SearchInput 
+      :search-query="searchQuery"
+      @input="onSearchInput"
+      @submit="onSubmit"
+    />
 
     <main>
       <details class="cr-advanced-search">
         <summary>Advanced Search</summary>
 
-        <!-- Root -->
-        <section>
-          <label>Root</label>
-          <div class="tags">
-            <kbd
-              v-for="(type, key) in triads"
-              :key="'root-' + key"
-              :class="{ selected: isSelected('root', key) }"
-              @click="toggle('root', key)"
-            >
-              <small>{{ key }}</small>
-            </kbd>
-          </div>
-        </section>
+        <FilterSection
+          label="Root"
+          filter-key="root"
+          :items="triads"
+          :selected-values="selected.root"
+          :display-value="(type, key) => key"
+          @toggle="(key) => toggle('root', key)"
+        />
 
-        <!-- Interval -->
-        <section>
-          <label>Interval</label>
-          <div class="tags">
-            <kbd
-              v-for="(interval, key) in intervals"
-              :key="'int-' + key"
-              :class="{ selected: isSelected('intervals', key) }"
-              @click="toggle('intervals', key)"
-            >
-              <small>{{ interval }}</small>
-            </kbd>
-          </div>
-        </section>
+        <FilterSection
+          label="Interval"
+          filter-key="intervals"
+          :items="intervals"
+          :selected-values="selected.intervals"
+          :display-value="(interval) => interval"
+          @toggle="(key) => toggle('intervals', key)"
+        />
 
-        <!-- Target -->
-        <section>
-          <label>Target</label>
-          <div class="tags">
-            <kbd
-              v-for="(type, key) in triads"
-              :key="'target-' + key"
-              :class="{ selected: isSelected('target', key) }"
-              @click="toggle('target', key)"
-            >
-              <small>{{ key }}</small>
-            </kbd>
-          </div>
-        </section>
+        <FilterSection
+          label="Target"
+          filter-key="target"
+          :items="triads"
+          :selected-values="selected.target"
+          :display-value="(type, key) => key"
+          @toggle="(key) => toggle('target', key)"
+        />
 
-        <!-- Fifths Modulation Level -->
-        <section>
-          <label>Fifths Level</label>
-          <div class="tags">
-            <kbd
-              v-for="n in 13"
-              :key="'fifths-' + (n - 7)"
-              :class="{ selected: isSelected('fifthsOffsets', n - 7) }"
-              @click="toggle('fifthsOffsets', n - 7)"
-            >
-              <small>{{ n - 7 > 0 ? '+' + (n - 7) : n - 7 }}</small>
-            </kbd>
-          </div>
-        </section>
+        <FifthsLevelFilterSection
+          :selected-values="selected.fifthsOffsets"
+          @toggle="(value) => toggle('fifthsOffsets', value)"
+        />
 
-        <!-- Scales -->
-        <section>
-          <label>Scales</label>
-          <div class="tags">
-            <kbd
-              v-for="(scale, s) in filteredScales"
-              :key="'scale-' + s"
-              :class="{ selected: isSelected('scales', scale.label) }"
-              @click="toggle('scales', scale.label)"
-            >
-              <small>{{ scale.label }}</small>
-            </kbd>
-          </div>
-        </section>
+        <FilterSection
+          label="Scales"
+          filter-key="scales"
+          :items="filteredScales"
+          :selected-values="selected.scales"
+          :display-value="(scale) => scale.label"
+          @toggle="(key) => toggle('scales', key)"
+        />
 
-        <!-- Common Tones -->
-        <section>
-          <label>Common Tones</label>
-          <div class="tags">
-            <kbd
-              v-for="n in 4"
-              :key="'ct-' + (n - 1)"
-              :class="{ selected: isSelected('commonTones', n - 1) }"
-              @click="toggle('commonTones', n - 1)"
-            >
-              <small>{{ n - 1 }}</small>
-            </kbd>
-          </div>
-        </section>
+        <CommonTonesFilterSection
+          :selected-values="selected.commonTones"
+          @toggle="(value) => toggle('commonTones', value)"
+        />
 
         <!-- Submit -->
-        <div style="display: flex; flex-direction: column; align-items: end;">
+        <div class="filter-actions">
           <button
-            style="width: fit-content; margin-bottom: 0.5rem;"
             type="submit"
             class="cr-advanced-search-submit"
             @click.prevent="onSubmit"
@@ -124,9 +66,8 @@
             <i class="fa-solid fa-magnifying-glass"></i> Search
           </button>
 
-        <!-- Reset -->
+          <!-- Reset -->
           <button
-            style="width: fit-content; padding: 0.25rem;"
             type="reset"
             class="cr-advanced-search-reset"
             @click.prevent="reset"
@@ -148,6 +89,10 @@ import ResetFilters from "../actions/ResetFilters.js";
 import Shuffle from "../actions/Shuffle.js";
 import debugLog from "../utils/debugLog.js";
 import { useStore } from "../store";
+import SearchInput from "./SearchInput.vue";
+import FilterSection from "./FilterSection.vue";
+import FifthsLevelFilterSection from "./FifthsLevelFilterSection.vue";
+import CommonTonesFilterSection from "./CommonTonesFilterSection.vue";
 
 const store = useStore();
 
@@ -187,15 +132,25 @@ const filteredScales = computed(() => {
   });
 });
 
+function updateActiveFilters() {
+  store.activeFilters.query = filters.value.query;
+  store.activeFilters.root = [...filters.value.root];
+  store.activeFilters.intervals = [...filters.value.intervals];
+  store.activeFilters.target = [...filters.value.target];
+  store.activeFilters.scales = [...filters.value.scales];
+  store.activeFilters.commonTones = [...filters.value.commonTones];
+  store.activeFilters.fifthsOffsets = [...filters.value.fifthsOffsets];
+}
+
 function onSearchInput(value) {
   searchQuery.value = value;
-  store.activeFilters = { ...filters.value };
+  updateActiveFilters();
   Shuffle.reset(store); // Reset shuffle when filters change
 }
 
 function onSubmit() {
   debugLog('Search submitted with filters:', Object.keys(filters.value).filter(key => filters.value[key]?.length > 0));
-  store.activeFilters = { ...filters.value };
+  updateActiveFilters();
   Shuffle.reset(store); // Reset shuffle when filters change
 }
 
@@ -211,7 +166,7 @@ function toggle(group, value) {
   } else {
     array.splice(index, 1);
   }
-  store.activeFilters = { ...filters.value };
+  updateActiveFilters();
   Shuffle.reset(store); // Reset shuffle when filters change
 }
 
@@ -221,7 +176,7 @@ function reset() {
   Object.keys(selected).forEach(key => {
     selected[key] = [];
   });
-  store.activeFilters = { ...filters.value };
+  updateActiveFilters();
   Shuffle.reset(store); // Reset shuffle when filters change
 }
 
@@ -259,5 +214,21 @@ function reset() {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
+}
+
+.filter-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.cr-advanced-search-submit {
+  width: fit-content;
+  margin-bottom: 0.5rem;
+}
+
+.cr-advanced-search-reset {
+  width: fit-content;
+  padding: 0.25rem;
 }
 </style>
