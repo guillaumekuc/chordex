@@ -5,6 +5,9 @@
     <p>
       Keyboard layout:
       <button @click="SwitchKeyboardLayout.execute(store)">{{ layout }}</button>
+      <button @click="showKeyboardLayoutHelp = true" class="help-button" title="Help">
+        <i class="fa fa-question-circle"></i>
+      </button>
     </p>
     <p>
       Root note: <button @click="UpdateRoot.execute(store, -1)"><</button
@@ -30,44 +33,16 @@
     title="Extended Scales Help"
     @close="showExtendedScalesHelp = false"
   >
-    <div class="extended-scales-help">
-      <p>
-        <strong>Extended Scales</strong> represent diatonic scales (Major scale modes) that modulate between chord changes in a chord relationship. 
-        They help you find scalar movements that work across the root chord and the target chord.
-      </p>
-      
-      <p>
-        <strong>How it works:</strong> If you have a minor root chord, a Dorian scale might fit perfectly. 
-        But when the chord changes to the target chord, that same Dorian scale might not work anymore. 
-        You might, however, be able to modulate the scale to make it fit both chords. This is what Extended Scales are for.
-      </p>
-      
-      <p>
-        <strong>Example:</strong> Start with Dorian, then modulate up the circle of fifths two steps [+2]. 
-        This would be notated <strong>Dorian[+2]</strong> - a move that fits both your root and target chords.
-      </p>
-      
-      <p>
-        <strong>Musical Application:</strong> When playing, you'd start in Dorian and modulate up 2 steps 
-        on the circle of fifths when the chord changes. Note: this movement is enharmonically equivalent to playing 
-        Root Dorian, then Root Ionian.
-      </p>
-      
-      <p>
-        <strong>When Extended Scales are disabled:</strong> Only basic scales (level 0) are available. 
-        This gives you a simpler, more straightforward approach without modulation complexity.
-      </p>
-      
-      <p>
-        <strong>When Extended Scales are enabled:</strong> You get access to modulated diatonic scales like 
-        Dorian[+2], Phrygian[-1], Ionian[+3], etc. This opens up the analysis for more dynamic scalar movements but adds complexity that may not always be necessary.
-      </p>
-      
-      <p class="note">
-        <strong>Note:</strong> Extended scales are more complex and not strictly needed for basic 
-        chord relationship use cases. They're useful for further harmonic exploration.
-      </p>
-    </div>
+    <ExtendedScalesHelp />
+  </Modal>
+
+  <!-- Keyboard Layout Help Modal -->
+  <Modal 
+    :is-open="showKeyboardLayoutHelp" 
+    title="Keyboard Layout Help"
+    @close="showKeyboardLayoutHelp = false"
+  >
+    <KeyboardLayoutHelp />
   </Modal>
 </template>
 
@@ -82,8 +57,11 @@ import ImportJSON from "../actions/ImportJSON.js";
 import SwitchKeyboardLayout from "../actions/SwitchKeyboardLayout.js";
 import UpdateRoot from "../actions/UpdateRoot.js";
 import Modal from "./Modal.vue";
+import ExtendedScalesHelp from "./ExtendedScalesHelp.vue";
+import KeyboardLayoutHelp from "./KeyboardLayoutHelp.vue";
 
 const showExtendedScalesHelp = ref(false);
+const showKeyboardLayoutHelp = ref(false);
 
 const layout = computed(() => {
   switch (store.config.keyboardLayout) {
