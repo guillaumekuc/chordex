@@ -146,6 +146,7 @@ import Triads from "../theory/Triads.js";
 import Intervals from "../theory/Intervals.js";
 import ResetFilters from "../actions/ResetFilters.js";
 import Shuffle from "../actions/Shuffle.js";
+import debugLog from "../utils/debugLog.js";
 import { useStore } from "../store";
 
 const store = useStore();
