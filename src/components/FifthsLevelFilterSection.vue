@@ -15,13 +15,13 @@
 </template>
 
 <script setup>
-const props = defineProps({
-  selectedValues: Array
-});
+  const props = defineProps({
+    selectedValues: Array
+  });
 
-const emit = defineEmits(['toggle']);
+  const emit = defineEmits(['toggle']);
 
-function isSelected(value) {
-  return props.selectedValues.includes(value);
-}
+  function isSelected(value) {
+    return props.selectedValues.includes(value);
+  }
 </script>
