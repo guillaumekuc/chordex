@@ -65,6 +65,38 @@ const filtered = computed(() => {
 @keydown.enter="(event) => { submitForm(event); }"
 ```
 
+### CSS and Styling
+- **Avoid inline CSS**: Never use `style` attributes in templates
+- **Use proper style sections**: Place all styles in dedicated `<style>` sections
+- **Use semantic class names**: Choose descriptive class names that indicate purpose
+- **Keep styles organized**: Group related styles together
+
+```vue
+<!-- ❌ Bad: Inline styles -->
+<div style="display: flex; flex-direction: column;">
+  <button style="width: fit-content; margin-bottom: 0.5rem;">Submit</button>
+</div>
+
+<!-- ✅ Good: Proper style section -->
+<template>
+  <div class="filter-actions">
+    <button class="submit-button">Submit</button>
+  </div>
+</template>
+
+<style>
+.filter-actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.submit-button {
+  width: fit-content;
+  margin-bottom: 0.5rem;
+}
+</style>
+```
+
 ## Consistency Rules
 
 1. **Be consistent within use cases**: If you use arrow functions for array methods in one place, use them everywhere for array methods.

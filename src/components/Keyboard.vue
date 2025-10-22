@@ -60,56 +60,71 @@
   const pattern = computed(() => keyboardRowPatterns[layout.value]);
   const colorPattern = computed(() => keyboardColorPatterns[colors.value]);
 
+  function createKeySlot(patternItem, octave, octaveMidi, currentOffset) {
+    const lowerMidi = octaveMidi + currentOffset;
+    const lowerKey = {
+      note: `${patternItem.l}${octave}`,
+      midi: Number(lowerMidi),
+      color: colorPattern.value[currentOffset]
+    };
+    currentOffset++;
+
+    let upperKey = null;
+    if (patternItem.u) {
+      const upperMidi = octaveMidi + currentOffset;
+      upperKey = {
+        note: `${patternItem.u}${octave}`,
+        midi: Number(upperMidi),
+        color: colorPattern.value[currentOffset]
+      };
+      currentOffset++;
+    }
+
+    return { slot: { lower: lowerKey, upper: upperKey }, newOffset: currentOffset };
+  }
+
+  function processOctave(octaveStart, octaveIndex) {
+    const octaveMidi = 12 * (octaveStart + octaveIndex + 1);
+    let currentOffset = 0;
+    const octaveKeySlots = [];
+
+    for (let patternIndex = 0; patternIndex < pattern.value.length; patternIndex++) {
+      const { slot, newOffset } = createKeySlot(pattern.value[patternIndex], octaveStart + octaveIndex, octaveMidi, currentOffset);
+      octaveKeySlots.push(slot);
+      currentOffset = newOffset;
+    }
+
+    return octaveKeySlots;
+  }
+
+  function addEndSlot(octaveEnd) {
+    const octaveEndMidi = 12 * (octaveEnd + 1);
+    const lastNote = `${pattern.value[0].l}${octaveEnd}`;
+    return {
+      lower: { note: lastNote, midi: octaveEndMidi },
+      upper: null
+    };
+  }
+
   const slots = computed(() => {
-    const slots = [];
     const octaveStart = store.config.octaveStart;
     const octaveEnd = store.config.octaveEnd;
-
     const octaves = octaveEnd - octaveStart;
+
     if (!(octaves > 0)) {
       console.error('invalid range');
-      return;
+      return [];
     }
 
+    const slots = [];
     for (let o = 0; o < octaves; o++) {
-      const octave = octaveStart + o;
-      let offset = 0;
-
-      for (let i = 0; i < pattern.value.length; i++) {
-        const octaveMidi = 12 * (octaveStart + o + 1);
-
-        const lMidi = octaveMidi + offset;
-        const lower = {
-          note: `${pattern.value[i].l}${octave}`,
-          midi: Number(lMidi),
-          color: colorPattern.value[offset]
-        };
-        offset++;
-
-        let upper = null;
-        if (pattern.value[i].u) {
-          const uMidi = octaveMidi + offset;
-          upper = {
-            note: `${pattern.value[i].u}${octave}`,
-            midi: Number(uMidi),
-            color: colorPattern.value[offset]
-          };
-          offset++;
-        }
-
-        slots.push({ lower, upper });
-      }
+      slots.push(...processOctave(octaveStart, o));
     }
 
-    const octaveEndMidi = 12 * (octaveEnd + 1);
-    const last = `${pattern.value[0].l}${octaveEnd}`;
-    slots.push({
-      lower: { note: last, midi: octaveEndMidi },
-      upper: null
-    });
-
+    slots.push(addEndSlot(octaveEnd));
     return slots;
   });
+
 
   const chords = computed(()=> ChordRelationships.getChordsNotes(
     props.cr,
@@ -140,14 +155,6 @@
     return (note === (store.config.octaveEnd + 1) * 12)
   }
 
-  function renderAnimatedCR(cr) {
-    const chordNotes= computed(() => ChordRelationships.getChordsNotes(cr, store.config.root, store.config.inversion));
-    chordNotes.value.rootChord.notes.forEach(note => {
-      document.querySelectorAll(`.piano-key[pc='${note}']`).forEach(element => {
-        element.classList.add("key-passive");
-      })
-    })
-  }
 
   function mod12(value) {
     var remainder = value % 12;
