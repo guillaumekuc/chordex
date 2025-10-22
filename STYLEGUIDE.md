@@ -72,12 +72,12 @@ const filtered = computed(() => {
 - **Keep styles organized**: Group related styles together
 
 ```vue
-<!-- ❌ Bad: Inline styles -->
+<!-- Bad: Inline styles -->
 <div style="display: flex; flex-direction: column;">
   <button style="width: fit-content; margin-bottom: 0.5rem;">Submit</button>
 </div>
 
-<!-- ✅ Good: Proper style section -->
+<!--Good: Proper style section -->
 <template>
   <div class="filter-actions">
     <button class="submit-button">Submit</button>

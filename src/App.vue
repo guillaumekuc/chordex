@@ -76,8 +76,6 @@ function shuffle() {
    --pico-border-radius: 10px;    
   }
 
-
-
   .col-layout {
     grid-template-columns: 2fr 1fr;
     position: relative;
