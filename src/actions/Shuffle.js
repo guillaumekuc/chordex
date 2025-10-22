@@ -5,12 +5,12 @@ export default class Shuffle {
   static execute(store) {
     debugLog('Shuffling', store.filtered.length, 'filtered results');
     const shuffled = this.shuffleArray(store.filtered);
-    store.shuffledResults = shuffled;
+    store.shuffled = shuffled;
   }
 
   static reset(store) {
     debugLog('Resetting shuffle - returning to normal order');
-    store.shuffledResults = null;
+    store.shuffled = null;
   }
 
   static shuffleArray(arr) {

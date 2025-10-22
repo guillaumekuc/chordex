@@ -17,7 +17,7 @@ export const useStore = defineStore("main", function() {
     var audio = ref(null);
     var activeFilters = ref(Search.defaultFilters());
     var instruments = ref({});
-    var shuffledResults = ref(null);
+    var shuffled = ref(null);
 
     var config = reactive({
         octaveStart: 4,
@@ -31,7 +31,7 @@ export const useStore = defineStore("main", function() {
 
     var filtered = computed(function() {
         const searchResults = Search.execute(chordRelationships.value, activeFilters.value);
-        return shuffledResults.value || searchResults;
+        return shuffled.value || searchResults;
     });
 
 
@@ -43,6 +43,6 @@ export const useStore = defineStore("main", function() {
         filtered,
         instruments,
         config,
-        shuffledResults
+        shuffled
     };
 });
