@@ -17,6 +17,11 @@ export default class PlayCR {
 
   static #playSequence(store, rootChordNotes, targetChordNotes, timeMs = 1000) {
     return new Promise(async (resolve) => {
+      // Stop any existing audio before starting new sequence
+      if (store.audio && typeof store.audio.stopAll === 'function') {
+        store.audio.stopAll();
+      }
+      
       await this.#wait(0);
       store.audio.playNotes(rootChordNotes);
       await this.#wait(timeMs);

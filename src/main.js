@@ -20,8 +20,28 @@ ChordRelationships.mapScales(Scales.all);
 
 const store = useStore();
 
-store.audio = new AudioEngine();
+// Initialize AudioEngine with error handling
+try {
+  store.audio = new AudioEngine();
+} catch (error) {
+  console.warn('AudioEngine initialization failed:', error.message);
+  // Create a mock audio engine for graceful degradation
+  store.audio = {
+    playNotes: () => console.warn('Audio not available'),
+    playNote: () => console.warn('Audio not available'),
+    playTone: () => console.warn('Audio not available'),
+    stopAll: () => {},
+    destroy: () => {}
+  };
+}
 
 app.mount("#app");
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+  if (store.audio && typeof store.audio.destroy === 'function') {
+    store.audio.destroy();
+  }
+});
 
 window.API = { store: store };
