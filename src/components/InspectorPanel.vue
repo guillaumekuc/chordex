@@ -19,7 +19,7 @@
         <ul>
           <kbd class="chip" v-for="(alias, index) in store.selected.aliases" :key="index">
             {{ alias }}
-            <span @click="removeAlias(alias)">✕</span>
+            <span @click="RemoveAlias.execute(store, alias)">✕</span>
           </kbd>
         </ul>
 
@@ -27,7 +27,7 @@
         <input
           type="text"
           placeholder="+ Add an alias and press Enter"
-          @keydown.enter.prevent="addAlias"
+          @keydown.enter.prevent="(event) => { AddAlias.execute(store, event.target.value); event.target.value = ''; }"
         />
 
       </details>
@@ -38,14 +38,14 @@
         <ul>
   	      <kbd v-for="(tag, index) in store.selected.tags" :key="index">
   	        {{ tag }}
-  	        <span @click="removeTag(tag)">✕</span>
+  	        <span @click="RemoveTag.execute(store, tag)">✕</span>
   	      </kbd>
   	  </ul>
 
         <input
           type="text"
           placeholder="+ Add a tag and press Enter"
-          @keydown.enter.prevent="addTag"
+          @keydown.enter.prevent="(event) => { AddTag.execute(store, event.target.value); event.target.value = ''; }"
         />
         
       </details>
@@ -67,7 +67,7 @@
           placeholder="Write some notes about this Chord Relationship"
           aria-label="User notes"
           :value="store.selected.notes"
-          @input="updateNotes($event.target.value)"
+          @input="UpdateNotes.execute(store, $event.target.value)"
         ></textarea>
       </details>
     </div>
@@ -86,29 +86,6 @@ import UpdateNotes from "../actions/UpdateNotes.js";
 
 const store = useStore();
 
-function addAlias(event) {
-  const value = event.target.value;
-  AddAlias.execute(store, value);
-  event.target.value = ""; // Clear the input
-}
-
-function removeAlias(index) {
-  RemoveAlias.execute(store, index);
-}
-
-function addTag(event) {
-  const value = event.target.value;
-  AddTag.execute(store, value);
-  event.target.value = ""; // Clear the input
-}
-
-function removeTag(index) {
-  RemoveTag.execute(store, index);
-}
-
-function updateNotes(value) {
-  UpdateNotes.execute(store, value);
-}
 </script>
 
 <style>

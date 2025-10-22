@@ -8,18 +8,21 @@ import Search from "../actions/Search";
 
 export const useStore = defineStore("main", function() {
     // Persisted state
-    var chordRelationships = useStorage(
+    const chordRelationships = useStorage(
         "chordRelationships",
         structuredClone(ChordRelationships.all)
     );
 
-    var selected = ref(null);
-    var audio = ref(null);
-    var activeFilters = ref(Search.defaultFilters());
-    var instruments = ref({});
-    var shuffled = ref(null);
+    // UI state
+    const selected = ref(null);
+    const audio = ref(null);
+    const shuffled = ref(null);
 
-    var config = reactive({
+    // Complex objects
+    const activeFilters = reactive(Search.defaultFilters());
+    const instruments = reactive({});
+    
+    const config = reactive({
         octaveStart: 4,
         octaveEnd: 5,
         keymap: "x66",
@@ -30,11 +33,10 @@ export const useStore = defineStore("main", function() {
         currentTheme: "auto"
     });
 
-    var filtered = computed(function() {
-        const searchResults = Search.execute(chordRelationships.value, activeFilters.value);
+    const filtered = computed(() => {
+        const searchResults = Search.execute(chordRelationships.value, activeFilters);
         return shuffled.value || searchResults;
     });
-
 
     return {
         chordRelationships,

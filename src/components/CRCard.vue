@@ -1,6 +1,6 @@
 <template>
   <article
-    @click="selectCR(cr)"
+    @click="SelectCR.execute(store, cr)"
     class="cr-card"
     :class="store.selected?.uid===cr.uid ? 'selected' : null"
   >
@@ -17,7 +17,7 @@
         <h3 class="cr-label">{{ cr.label }}</h3>
       </div>
       <div class="right">
-        <button @click.stop="playCR(cr, store.config.root, store.config.inversion)"><i class="fa-solid fa-play"></i></button>
+        <button @click.stop="PlayCR.execute(store, { cr, root: store.config.root, inv: store.config.inversion })"><i class="fa-solid fa-play"></i></button>
       </div>
     </hgroup>
 
@@ -64,13 +64,6 @@
     });
   });
 
-  function selectCR(entry) {
-    SelectCR.execute(store, entry);
-  }
-
-  function playCR(cr, root, inv) {
-    PlayCR.execute(store, { cr, root, inv });
-  }
 </script>
 
 <style scoped>

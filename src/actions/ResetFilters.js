@@ -1,18 +1,10 @@
 import debugLog from '../utils/debugLog.js';
+import Search from './Search.js';
 
 export default class ResetFilters {
   static execute(store) {
-    // Reset search query
-    store.activeFilters.query = "";
-    
-    // Reset all filter arrays
-    store.activeFilters.root = [];
-    store.activeFilters.intervals = [];
-    store.activeFilters.target = [];
-    store.activeFilters.scales = [];
-    store.activeFilters.commonTones = [];
-    store.activeFilters.fifthsOffsets = [0]; // Default to 0
-    
+    const defaultFilters = Search.defaultFilters();
+    Object.assign(store.activeFilters, defaultFilters);
     debugLog("Reset all search filters");
   }
 }
