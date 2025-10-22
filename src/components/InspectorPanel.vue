@@ -19,7 +19,7 @@
         <ul>
           <kbd class="chip" v-for="(alias, index) in store.selected.aliases" :key="index">
             {{ alias }}
-            <span @click="removeAlias(index)">✕</span>
+            <span @click="removeAlias(alias)">✕</span>
           </kbd>
         </ul>
 
@@ -38,7 +38,7 @@
         <ul>
   	      <kbd v-for="(tag, index) in store.selected.tags" :key="index">
   	        {{ tag }}
-  	        <span @click="removeTag(index)">✕</span>
+  	        <span @click="removeTag(tag)">✕</span>
   	      </kbd>
   	  </ul>
 
@@ -78,46 +78,31 @@
 import { useStore } from "../store";
 import { nextTick } from "vue";
 import Keyboard from "./Keyboard.vue";
+import AddAlias from "../actions/AddAlias.js";
+import RemoveAlias from "../actions/RemoveAlias.js";
+import AddTag from "../actions/AddTag.js";
+import RemoveTag from "../actions/RemoveTag.js";
 
 const store = useStore();
 
-function ensureArrays() {
-  if (!store.selected.aliases) {
-    store.selected.aliases = [];
-  }
-  if (!store.selected.tags) {
-    store.selected.tags = [];
-  }
-}
-
 function addAlias(event) {
-  ensureArrays();
-  const value = event.target.value.trim();
-  if (value && !store.selected.aliases.includes(value)) {
-    store.selected.aliases.push(value);
-   
-  }
-  event.target.value = "";
+  const value = event.target.value;
+  AddAlias.execute(store, value);
+  event.target.value = ""; // Clear the input
 }
 
 function removeAlias(index) {
-  ensureArrays();
-  store.selected.aliases.splice(index, 1);
-  
+  RemoveAlias.execute(store, index);
 }
 
 function addTag(event) {
-  ensureArrays();
-  const value = event.target.value.trim();
-  if (value && !store.selected.tags.includes(value)) {
-    store.selected.tags.push(value);
-  }
-  event.target.value = "";
+  const value = event.target.value;
+  AddTag.execute(store, value);
+  event.target.value = ""; // Clear the input
 }
 
 function removeTag(index) {
-  ensureArrays();
-  store.selected.tags.splice(index, 1);
+  RemoveTag.execute(store, index);
 }
 </script>
 

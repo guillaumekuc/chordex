@@ -49,7 +49,7 @@ export default class ImportJSON {
 					});
 					
 					// Show success message with count of updated items
-					alert(`Chord relationships imported successfully! Updated ${updatedCount} items.`);
+					alert(`Chord relationships imported successfully!`);
 					
 				} catch (error) {
 					alert('Error parsing JSON file: ' + error.message);

@@ -38,6 +38,8 @@
   import { useStore } from "../store";
   import Keyboard from "./Keyboard.vue";
   import debugLog from "../utils/debugLog.js";
+  import SelectCR from "../actions/SelectCR.js";
+  import PlayCR from "../actions/PlayCR.js";
 
   defineOptions({ name: "CRCard" });
 
@@ -66,45 +68,11 @@
   });
 
   function selectCR(entry) {
-    if (store.selected?.uid === entry.uid) {
-      entry.selected = false;
-      store.selected = null;
-    } else {
-      if (store.selected) {
-        store.selected.selected = false;
-      }
-      entry.selected = true;
-      store.selected = entry;
-    }
-    debugLog("CR selected:", entry.label, "UID:", entry.uid);
+    SelectCR.execute(store, entry);
   }
 
   function playCR(cr, root, inv) {
-    if (typeof root !== "number") {
-      root = 60;
-    }
-    if (typeof inv !== "number") {
-      inv = 0;
-    }
-
-    debugLog("Playing CR:", cr.label, "root:", root, "inversion:", inv);
-    const chords= ChordRelationships.getChordsNotes(cr, root, inv);
-
-    playSequence(chords.rootChord.notes, chords.targetChord.notes, 1000);
-
-    async function playSequence(rootChordNotes, targetChordNotes, timeMs) {
-      await wait(0);
-      store.audio.playNotes(rootChordNotes);
-      await wait(timeMs);
-      store.audio.playNotes(targetChordNotes);
-    }
-
-    function wait(timeMs) {
-      return new Promise(function (resolve) {
-        setTimeout(resolve, timeMs);
-      });
-    }
-
+    PlayCR.execute(store, { cr, root, inv });
   }
 </script>
 
