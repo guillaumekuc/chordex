@@ -1,4 +1,4 @@
-import debugLog from '../utils/debugLog.js';
+import debugLog from "../utils/debugLog.js";
 
 export default class AddTag {
   static execute(store, value) {
@@ -18,5 +18,4 @@ export default class AddTag {
       debugLog("Added tag:", trimmedValue, "to CR:", store.selected.label);
     }
   }
-
 }

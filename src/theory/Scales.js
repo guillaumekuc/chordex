@@ -119,5 +119,6 @@ export default class Scales {
 		const rootScale=scale; //scale at level 0 of Fifths rotation. Used to calculate root quality before modulation
 		return {label: alteredLabel, pitchClasses: alteredPitchClasses, parent: parent, fifthsOffset: fifthsOffset, rootScale: scale };
 	}
+
 	
 }

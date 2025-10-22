@@ -7,7 +7,6 @@ export default class RemoveTag {
       return;
     }
 
-    // Ensure tags array exists
     if (!store.selected.tags) {
       store.selected.tags = [];
       return;
