@@ -1,6 +1,6 @@
 <template>
       <div class="keyboard" :class="store.selected?.uid===cr.uid ? 'selected' : null ">
-        <div v-for="(slot, idx) in slots" class="slot">
+        <div v-for="(slot, idx) in slots" :key="idx" class="slot">
           <Key
             :note="slot.lower.note"
             :keyboard="slot.lower.keyboard"
