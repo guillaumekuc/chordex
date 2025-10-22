@@ -12,10 +12,10 @@ export default class ImportJSON {
 			
 			// Read the file
 			const reader = new FileReader();
-			reader.onload = (e) => {
+			reader.onload = (event) => {
 				try {
 					// Parse the JSON data
-					const importedData = JSON.parse(e.target.result);
+					const importedData = JSON.parse(event.target.result);
 					
 					// Validate that it's an array
 					if (!Array.isArray(importedData)) {

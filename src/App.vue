@@ -54,12 +54,12 @@ import { useStore } from "./store";
 
 const store = useStore();
 
-const filteredScales = computed(function () {
+const filteredScales = computed(() => {
   const offset = store.activeFilters.fifthsOffsets;
   if (!offset || offset.length === 0) {
     return Scales.all || [];
   }
-  return (Scales.all || []).filter(function (scale) {
+  return (Scales.all || []).filter(scale => {
     return offset.includes(scale.fifthsOffset);
   });
 });

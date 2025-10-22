@@ -3,13 +3,13 @@
  * Example: modulo(-1, 12) === 11
  */
 
-export function modulo(n, m) {
-  return ((n % m) + m) % m;
+export function modulo(number, modulus) {
+  return ((number % modulus) + modulus) % modulus;
 }
 
 
 // Constrain any integer into the range [0, 11].
 
-export function modulo12(n) {
-  return modulo(n, 12);
+export function modulo12(number) {
+  return modulo(number, 12);
 }

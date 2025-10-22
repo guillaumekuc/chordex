@@ -8,12 +8,12 @@ export default class Shuffle {
     store.shuffled = shuffled;
 
     function shuffleArray(arr) {
-      const a = [...arr];
-      for (let i = a.length - 1; i > 0; i--) {
+      const array = [...arr];
+      for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
+        [array[i], array[j]] = [array[j], array[i]];
       }
-      return a;
+      return array;
     }
   }
 

@@ -165,7 +165,7 @@ const selected = reactive({
   fifthsOffsets: [0]
 });
 
-const filters = computed(function () {
+const filters = computed(() => {
   return {
     query: searchQuery.value || "",
     root: [...selected.root],
@@ -177,12 +177,12 @@ const filters = computed(function () {
   };
 });
 
-const filteredScales = computed(function () {
+const filteredScales = computed(() => {
   const offsets = selected.fifthsOffsets;
   if (!offsets || offsets.length === 0) {
     return scales || [];
   }
-  return (scales || []).filter(function (scale) {
+  return (scales || []).filter(scale => {
     return offsets.includes(scale.fifthsOffset);
   });
 });
@@ -218,7 +218,7 @@ function toggle(group, value) {
 function reset() {
   ResetFilters.execute(store);
   searchQuery.value = "";
-  Object.keys(selected).forEach(function (key) {
+  Object.keys(selected).forEach(key => {
     selected[key] = [];
   });
   store.activeFilters = { ...filters.value };

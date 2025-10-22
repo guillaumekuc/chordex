@@ -14,12 +14,12 @@ export default class Search {
 
     // 1) text query
     if (f.query && f.query.trim()) {
-      const queries = f.query.split(',').map(s => s.trim()).filter(Boolean);
+      const queries = f.query.split(',').map(query => query.trim()).filter(Boolean);
       results = results.filter(cr =>
-        queries.some(q =>
-          (q.includes('+') || q.includes('-'))
-            ? SearchParser.matchComplexQuery(cr, q)
-            : SearchParser.matchSingleTerm(cr, q)
+        queries.some(query =>
+          (query.includes('+') || query.includes('-'))
+            ? SearchParser.matchComplexQuery(cr, query)
+            : SearchParser.matchSingleTerm(cr, query)
         )
       );
     }
@@ -50,8 +50,8 @@ export default class Search {
       if (filteredScales.length) {
         results = results.filter(cr => {
           // cr.scales is an array of strings; filteredScales is array of objects with .label
-          const hasMatch = cr.scales.some(s =>
-            filteredScales.some(fs => fs.label === s)
+          const hasMatch = cr.scales.some(scale =>
+            filteredScales.some(filteredScale => filteredScale.label === scale)
           );
           return hasMatch;
         });
@@ -61,7 +61,7 @@ export default class Search {
     // 5) scales
     if (f.scales?.length) {
       results = results.filter(cr =>
-        Array.isArray(cr.scales) && cr.scales.some(s => f.scales.includes(s))
+        Array.isArray(cr.scales) && cr.scales.some(scale => f.scales.includes(scale))
       );
     }
     

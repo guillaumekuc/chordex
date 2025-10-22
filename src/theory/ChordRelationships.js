@@ -170,11 +170,11 @@ export default class ChordRelationships {
 		  const triadInversionsNearest = {};
 
 		  for (let i = 0; i < 3; i++) {
-		    triadInversions[i] = invert(triadPitchClasses, i).map(function (pc) {
-		      return pc + targetRoot;
+		    triadInversions[i] = invert(triadPitchClasses, i).map(pitchClass => {
+		      return pitchClass + targetRoot;
 		    });
-		    triadInversionsNearest[i] = triadInversions[i].map(function (pc, index) {
-		      return nearestPitch(rootChord.notes[index], pc);
+		    triadInversionsNearest[i] = triadInversions[i].map((pitchClass, index) => {
+		      return nearestPitch(rootChord.notes[index], pitchClass);
 		    });
 		  }
 
@@ -184,17 +184,17 @@ export default class ChordRelationships {
 
 		function pickSmoothest(rootChordNotes, targetChordInversions) {
 		  const results = [];
-		  Object.values(targetChordInversions).forEach(function (inv) {
-		    const diffs = inv.map(function (note, i) {
-		      return Math.abs(rootChordNotes[i] - note);
+		  Object.values(targetChordInversions).forEach(inv => {
+		    const diffs = inv.map((note, index) => {
+		      return Math.abs(rootChordNotes[index] - note);
 		    });
-		    const sum = diffs.reduce(function (x, y) {
-		      return x + y;
+		    const sum = diffs.reduce((accumulator, current) => {
+		      return accumulator + current;
 		    });
 		    results.push({ root: rootChordNotes, target: inv, diffs: diffs, sum: sum });
 		  });
 
-		  const smoothest = results.reduce(function (best, current) {
+		  const smoothest = results.reduce((best, current) => {
 		    return current.sum < best.sum ? current : best;
 		  });
 
@@ -208,7 +208,7 @@ export default class ChordRelationships {
 
 		function getRootChordNotes(cr, root, inv) {
 		  const triadPitchClasses = Triads.types[cr.rootQuality].pitchClasses;
-		  const notes = invert(triadPitchClasses, inv).map(function (pc) {
+		  const notes = invert(triadPitchClasses, inv).map(pc => {
 		    return pc + root;
 		  });
 		  return notes;
@@ -219,14 +219,14 @@ export default class ChordRelationships {
 		  if (m === 0) {
 		    return pitchClasses.slice();
 		  }
-		  const shifted = pitchClasses.map(function (_pc, index) {
+		  const shifted = pitchClasses.map((_pitchClass, index) => {
 		    return pitchClasses[(index + n + pitchClasses.length) % pitchClasses.length];
 		  });
-		  const normalized = shifted.map(function (pc, index) {
+		  const normalized = shifted.map((pitchClass, index) => {
 		    if (index < pitchClasses.length - m) {
-		      return pc - 12;
+		      return pitchClass - 12;
 		    } else {
-		      return pc;
+		      return pitchClass;
 		    }
 		  });
 		  return normalized;

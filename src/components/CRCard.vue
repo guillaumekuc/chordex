@@ -54,11 +54,11 @@
 
   const store = useStore();
 
-  const crFilteredScales = computed(function () {
+  const crFilteredScales = computed(() => {
     const inputScales = Array.isArray(props.cr?.scales) ? props.cr.scales : [];
     const filterList = Array.isArray(props.filteredScales) ? props.filteredScales : [];
-    return inputScales.filter(function (scale) {
-      return filterList.some(function (fs) {
+    return inputScales.filter(scale => {
+      return filterList.some(fs => {
         return fs.label === scale;
       });
     });

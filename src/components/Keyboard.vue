@@ -120,11 +120,11 @@
   const lastNote = computed (() => (store.config.octaveEnd + 1) * 12);
 
 
-  const passiveNotes = computed(function () {    
+  const passiveNotes = computed(() => {    
     return new Set(chords.value.rootChord.notes);
   });
 
-  const activeNotes = computed(function () {
+  const activeNotes = computed(() => {
     return new Set(chords.value.targetChord.notes);
   });
 
@@ -150,13 +150,13 @@
   }
 
   function mod12(value) {
-    var r = value % 12;
-    return r < 0 ? r + 12 : r;
+    var remainder = value % 12;
+    return remainder < 0 ? remainder + 12 : remainder;
   }
 
   function buildPitchClassSet(midiSet) {
     var pcs = new Set();
-    midiSet.forEach(function(n) { pcs.add(mod12(n)); });
+    midiSet.forEach(note => { pcs.add(mod12(note)); });
     return pcs;
   }
 

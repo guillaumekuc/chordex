@@ -68,7 +68,9 @@ export default class SearchParser {
     const scales = Array.isArray(cr.scales) ? cr.scales.map(this.normalizeUnicode) : [];
 
     // Case-insensitive helpers
-    const toLower = (s) => s.toLowerCase();
+    function toLower(string) {
+      return string.toLowerCase();
+    }
 
 
     // LABEL: case-sensitive
@@ -78,16 +80,16 @@ export default class SearchParser {
 
     //ALIASES: case-insensitive, do not mutate letters
     const aliasMatch = isExactMatch
-      ? aliases.some((a) => toLower(a) === toLower(textQuery))
-      : aliases.some((a) => toLower(a).includes(lowerTextQuery));
+      ? aliases.some(alias => toLower(alias) === toLower(textQuery))
+      : aliases.some(alias => toLower(alias).includes(lowerTextQuery));
 
     // SCALES: case-insensitive with ♭/♯ handling; also try ASCII fallback (b/#)
     const scalesLower = scales.map(toLower);
     const scaleQueryAscii = scaleQuery.replace(/♭/g, "b").replace(/♯/g, "#");
 
     const scaleMatch = isExactMatch
-      ? scalesLower.some((s) => s === scaleQuery || s === scaleQueryAscii)
-      : scalesLower.some((s) => s.includes(scaleQuery) || s.includes(scaleQueryAscii));
+      ? scalesLower.some(scale => scale === scaleQuery || scale === scaleQueryAscii)
+      : scalesLower.some(scale => scale.includes(scaleQuery) || scale.includes(scaleQueryAscii));
 
     return nameMatch || aliasMatch || scaleMatch;
   }
@@ -98,15 +100,15 @@ export default class SearchParser {
 
   static matchComplexQuery(cr, query) {
     const terms = this.parseComplexQuery(query);
-    const includeTerms = terms.filter((t) => t.operator === "include");
-    const excludeTerms = terms.filter((t) => t.operator === "exclude");
+    const includeTerms = terms.filter(term => term.operator === "include");
+    const excludeTerms = terms.filter(term => term.operator === "exclude");
 
     const includeMatch =
       includeTerms.length === 0 ||
-      includeTerms.every((t) => this.matchesItem(cr, this.parseSearchTerm(t.term)));
+      includeTerms.every(term => this.matchesItem(cr, this.parseSearchTerm(term.term)));
 
     const excludeMatch =
-      excludeTerms.some((t) => this.matchesItem(cr, this.parseSearchTerm(t.term)));
+      excludeTerms.some(term => this.matchesItem(cr, this.parseSearchTerm(term.term)));
 
     return includeMatch && !excludeMatch;
   }
