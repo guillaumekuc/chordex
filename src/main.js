@@ -1,5 +1,6 @@
 import "@picocss/pico/css/pico.min.css";
 import "@picocss/pico/css/pico.colors.min.css";
+import "./styles/keyboard-vars.css";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";

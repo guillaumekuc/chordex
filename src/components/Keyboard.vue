@@ -163,25 +163,7 @@
 </script>
 
 <style scoped>
-
-
-  .placeholder {
-
-    --keyboard-height: 72px;
-    --lower-key-width: calc(var(--keyboard-height)/4.5);
-    --upper-key-width: calc(var(--lower-key-width) * 0.75);
-    --offset: calc(var(--keyboard-height) * 0.4);
-
-
-  }
-
   .keyboard {
-    --keyboard-height: 72px;
-    --lower-key-width: calc(var(--keyboard-height)/4.5);
-    --upper-key-width: calc(var(--lower-key-width) * 0.75);
-    --offset: calc(var(--keyboard-height) * 0.4);
-
-
     --color-dark: #333333;
     display: flex;
     user-select: none;
@@ -192,9 +174,6 @@
     max-width: 100%;
     height: var(--keyboard-height);
   }
-
-
-
 
   .slot {
     position: relative;

@@ -64,7 +64,7 @@
 
   .piano-key {
     display: inline-block;
-    width: var(--lower-key-width);
+    width: var(--keyboard-lower-width);
     height: 100%;
     margin: 0 2px;
     background: var(--color-light);
@@ -93,10 +93,10 @@
 
 
   .key-upper {
-    width: var(--upper-key-width);
+    width: var(--keyboard-upper-width);
     height: 60%;
     position: absolute;
-    left: calc(var(--lower-key-width) + 2px - var(--upper-key-width) / 2) ;
+    left: calc(var(--keyboard-lower-width) + 2px - var(--keyboard-upper-width) / 2) ;
     z-index: 2;
   }
 

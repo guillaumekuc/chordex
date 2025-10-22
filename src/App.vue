@@ -14,13 +14,13 @@
     </hgroup>
     <ConfigInspector />
 
-    <div id="colLayout" class="grid">
-      <div id="left">
+    <div class="col-layout grid">
+      <div class="left-column">
         <CRSearch />
 
-        <section id="resultsCount" style="display: flex; justify-content: center; color: var(--pico-muted-color)"><small>{{ `${store.filtered.length} results`}}</small></section>
+        <section class="results-count"><small>{{ `${store.filtered.length} results`}}</small></section>
 
-        <section id="shuffle" style="display: flex; justify-content: start; color: var(--pico-muted-color)"><span role="button" @click="shuffle">
+        <section class="shuffle-section"><span role="button" @click="shuffle">
           <i class="fa-solid fa-arrows-spin"></i> Shuffle!
         </span></section>
 
@@ -33,7 +33,7 @@
           />
         </section>
       </div><!-- end left -->
-      <div id="right">
+      <div class="right-column">
         <InspectorPanel />
       </div><!-- end right -->
     </div><!-- end grid -->
@@ -78,19 +78,19 @@ function shuffle() {
 
 
 
-  #colLayout {
+  .col-layout {
     grid-template-columns: 2fr 1fr;
     position: relative;
     width: 100%;
   }
 
-  #left {
+  .left-column {
     position: relative;
     flex-basis: 66.66%;
-    width:100%;
+    width: 100%;
   }
 
-  #right {
+  .right-column {
     flex-basis: 33.33%;
   }
 
@@ -120,8 +120,21 @@ function shuffle() {
   @media (min-width: 1200px){ .cr-grid { grid-template-columns: repeat(3, 1fr); } }
 
   /* Search */
-  .cr-advanced-search{
-    margin-bottom:unset;
+  .cr-advanced-search {
+    margin-bottom: unset;
+  }
+
+  /* Inline style replacements */
+  .results-count {
+    display: flex;
+    justify-content: center;
+    color: var(--pico-muted-color);
+  }
+
+  .shuffle-section {
+    display: flex;
+    justify-content: start;
+    color: var(--pico-muted-color);
   }
 
   kbd {
@@ -132,7 +145,4 @@ function shuffle() {
     border-radius: .5rem;
     height: max-content;
   }
-
-
-
 </style>

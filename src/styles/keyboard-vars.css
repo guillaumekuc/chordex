@@ -1,0 +1,12 @@
+/* Keyboard-related CSS variables shared across components */
+:root {
+
+  --keyboard-height: 72px;
+  --keyboard-key-ratio: 4.5;   
+  --keyboard-upper-ratio: 0.75;
+  --keyboard-offset-ratio: 0.4; 
+  
+  --keyboard-lower-width: calc(var(--keyboard-height) / var(--keyboard-key-ratio));
+  --keyboard-upper-width: calc(var(--keyboard-lower-width) * var(--keyboard-upper-ratio));
+  --keyboard-offset: calc(var(--keyboard-height) * var(--keyboard-offset-ratio));
+}

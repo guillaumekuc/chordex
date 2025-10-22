@@ -5,8 +5,8 @@
     :class="store.selected?.uid===cr.uid ? 'selected' : null"
   >
 
-    <div class="keyboardContainer">
-      <Keyboard class="Keyboard"
+    <div class="keyboard-container">
+      <Keyboard class="keyboard"
         :cr="cr"
       />
     </div>
@@ -68,25 +68,17 @@
 
 <style scoped>
 
-  .keyboardContainer {
-    --keyboard-height: 72px;
-    --lower-key-width: calc(var(--keyboard-height)/4.5);
-    --upper-key-width: calc(var(--lower-key-width) * 0.75);
-    --offset: calc(var(--keyboard-height) * 0.4);
-
-
+  .keyboard-container {
     position: relative;
-    min-height: calc(var(--keyboard-height) - var(--offset));
-
+    min-height: calc(var(--keyboard-height) - var(--keyboard-offset));
     top: -20px;
   }
 
-  .Keyboard {
-
+  .keyboard {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: calc(var(--offset) * -1);
+    top: calc(var(--keyboard-offset) * -1);
   }
   
   .keyboard.selected::before {
@@ -94,7 +86,7 @@
     position: absolute;
     left: -2px;             
     top: -2px;   
-    height: calc(var(--offset)); 
+    height: var(--keyboard-offset); 
     width: calc(100% + 4px);   
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;

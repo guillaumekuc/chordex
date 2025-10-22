@@ -1,6 +1,6 @@
 <template>
-  <article class="cr-filter">
-    <header class="cr-filter-header">
+  <article class="cr-search">
+    <header class="cr-search-header">
       <h3>Search CRs</h3>
       <div class="search-container">
         <form class="search-form" role="search" @submit.prevent="onSubmit">

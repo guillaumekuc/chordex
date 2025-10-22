@@ -1,9 +1,9 @@
 <template>
-  <article v-if="store.selected" id="InspectorPanel">
+  <article v-if="store.selected" class="inspector-panel">
 
     <header class="title">
       <div class="keyboard-container">
-        <Keyboard class="Keyboard"
+        <Keyboard class="keyboard"
           :cr="store.selected"
         />
       </div>
@@ -88,45 +88,34 @@ const store = useStore();
 
 </script>
 
-<style>
-  #InspectorPanel {
-
-    --keyboard-height: 72px;
-    --lower-key-width: calc(var(--keyboard-height)/4.5);
-    --upper-key-width: calc(var(--lower-key-width) * 0.75);
-    --offset: calc(var(--keyboard-height) * 0.4);
-    
+<style scoped>
+  .inspector-panel {
     position: sticky;
-    top: calc(var(--pico-block-spacing-vertical) + var(--offset));
+    top: calc(var(--pico-block-spacing-vertical) + var(--keyboard-offset));
     /* Use device-stable viewport units so mobile address bar changes do not jump */
-    max-height: calc(100dvh - 2 * var(--pico-block-spacing-vertical) - var(--offset));
+    max-height: calc(100dvh - 2 * var(--pico-block-spacing-vertical) - var(--keyboard-offset));
     background: transparent;
     /* Make this the scroll container and lay it out as header + content */
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: visible;           /* vertical scroll here */
     scrollbar-width: none;    /* optional; was none before */
-    padding-top:0px;
-
+    padding-top: 0;
   }
 
-  .keyboard-container{
-
-
+  .keyboard-container {
     margin-top: calc(var(--pico-block-spacing-vertical) * 0.66 * -1);
-
     position: relative;
-
     background: transparent;
-    min-height: calc(var(--keyboard-height) - var(--offset));
-    width:100%;
+    min-height: calc(var(--keyboard-height) - var(--keyboard-offset));
+    width: 100%;
   }
 
-  .Keyboard {
+  .keyboard {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: calc(var(--offset) * -1);
+    top: calc(var(--keyboard-offset) * -1);
     z-index: 2;
   }
 
