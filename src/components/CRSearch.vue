@@ -38,6 +38,7 @@
         />
 
         <FifthsLevelFilterSection
+          v-if="store.config.extendedScales"
           :selected-values="selected.fifthsOffsets"
           @toggle="(value) => toggle('fifthsOffsets', value)"
         />
@@ -123,6 +124,10 @@ const filters = computed(() => {
 });
 
 const filteredScales = computed(() => {
+  if (!store.config.extendedScales) {
+    // Only show level 0 scales when extended scales are disabled
+    return (scales || []).filter(scale => scale.fifthsOffset === 0);
+  }
   const offsets = selected.fifthsOffsets;
   if (!offsets || offsets.length === 0) {
     return scales || [];

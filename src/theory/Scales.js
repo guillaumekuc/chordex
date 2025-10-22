@@ -70,20 +70,26 @@ export default class Scales {
 			}
 		}
 
-		//positive modulations
+		//positive modulations - only for diatonic scales (Major scale modes)
 		for (let i=1; i <= 6; i++){
 			for (let scale of this['0']){
-				const modScale=this.modulateByFifths(scale, i);
-				this[`${i}`].push(modScale);
-				this.all.push(modScale);
+				// Only create extended scales for diatonic scales (Major scale modes)
+				if (scale.parent === 'Major') {
+					const modScale=this.modulateByFifths(scale, i);
+					this[`${i}`].push(modScale);
+					this.all.push(modScale);
+				}
 			}
 		}
 
 		for (let i=-1; i >= -6; i--){
 			for (let scale of this['0']){
-				const modScale=this.modulateByFifths(scale, i);
-				this[`${i}`].push(modScale);
-				this.all.push(modScale);
+				// Only create extended scales for diatonic scales (Major scale modes)
+				if (scale.parent === 'Major') {
+					const modScale=this.modulateByFifths(scale, i);
+					this[`${i}`].push(modScale);
+					this.all.push(modScale);
+				}
 			}
 		}
 

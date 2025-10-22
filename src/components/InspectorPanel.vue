@@ -54,7 +54,7 @@
         <summary>Scales</summary>
       
         <ul>
-          <kbd class="chip" v-for="(scale, index) in store.selected.scales" :key="index">
+          <kbd class="chip" v-for="(scale, index) in filteredScales" :key="index">
             {{ scale }}
           </kbd>
         </ul>
@@ -76,6 +76,7 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useStore } from "../store";
 import Keyboard from "./Keyboard.vue";
 import AddAlias from "../actions/AddAlias.js";
@@ -85,6 +86,13 @@ import RemoveTag from "../actions/RemoveTag.js";
 import UpdateNotes from "../actions/UpdateNotes.js";
 
 const store = useStore();
+
+const filteredScales = computed(() => {
+  if (!store.config.extendedScales) {
+    return store.selected.scales.filter(scale => !scale.includes('['));
+  }
+  return store.selected.scales;
+});
 
 </script>
 

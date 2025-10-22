@@ -16,10 +16,10 @@
 
 <script setup>
 const props = defineProps({
-  selectedValues: Array
+  selectedValues: Array,
 });
 
-const emit = defineEmits(['toggle']);
+const emit = defineEmits(["toggle"]);
 
 function isSelected(value) {
   return props.selectedValues.includes(value);

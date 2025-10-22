@@ -5,8 +5,16 @@ import Scales from '../theory/Scales.js';
 import debugLog from '../utils/debugLog.js';
 
 export default class Search {
-  static defaultFilters() {
-    return { query: '', root: [], intervals: [], target: [], scales: [], commonTones: [], fifthsOffsets: [0], };
+  static defaultFilters(store = null) {
+    return { 
+      query: '', 
+      root: [], 
+      intervals: [], 
+      target: [], 
+      scales: [], 
+      commonTones: [], 
+      fifthsOffsets: store?.config?.extendedScales ? [0] : [0]
+    };
   }
 
   static execute(data, f = this.defaultFilters()) {
