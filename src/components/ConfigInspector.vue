@@ -104,19 +104,25 @@ function toggleExtendedScales() {
 
 .help-button {
   background: none;
-  border: 1px solid var(--pico-muted-border-color);
-  color: var(--pico-muted-color);
-  padding: 4px 8px;
+  border: none;
+  padding: 0;
   margin-left: 8px;
-  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  color: var(--pico-muted-color);
+  transition: color 0.2s ease;
 }
 
-.help-button:hover {
-  background-color: var(--pico-primary-background);
+.help-button:hover i {
   color: var(--pico-primary);
-  border-color: var(--pico-primary);
+}
+
+.help-button:focus {
+  border: none;
+}
+
+.help-button i {
+  font-size: 1em;
+  transition: color 0.2s ease;
 }
 
 .extended-scales-help {
