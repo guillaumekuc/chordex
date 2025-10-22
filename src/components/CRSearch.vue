@@ -140,7 +140,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed } from "vue";
 import Scales from "../theory/Scales.js";
 import Triads from "../theory/Triads.js";
 import Intervals from "../theory/Intervals.js";
@@ -224,9 +224,6 @@ function reset() {
   Shuffle.reset(store); // Reset shuffle when filters change
 }
 
-onMounted(function () {
-
-});
 </script>
 
 <style>

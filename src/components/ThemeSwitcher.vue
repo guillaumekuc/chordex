@@ -15,35 +15,28 @@
   </nav>
 </template>
 
-<script>
+<script setup>
+import { computed, ref, onMounted } from 'vue';
 import SetTheme from "../actions/SetTheme.js";
 import { useStore } from "../store";
 import themeSwitcher from "../utils/minimal-theme-switcher.js";
 
-export default {
-  name: "ThemeSwitcher",
-  setup() {
-    const store = useStore();
-    return { store };
-  },
-  computed: {
-    theme() {
-      return this.store.config.currentTheme;
-    }
-  },
-  methods: {
-    setTheme(sel) {
-      SetTheme.execute(this.store, sel);
-      this.$refs.dropdown.open = false;
-    },
-  },
-  mounted() {
-    // Initialize the theme switcher
-    themeSwitcher.init();
-    // Set the initial theme in the store
-    this.store.config.currentTheme = themeSwitcher.scheme;
-  },
-};
+const store = useStore();
+const dropdown = ref(null);
+
+const theme = computed(() => store.config.currentTheme);
+
+function setTheme(sel) {
+  SetTheme.execute(store, sel);
+  dropdown.value.open = false;
+}
+
+onMounted(() => {
+  // Initialize the theme switcher
+  themeSwitcher.init();
+  // Set the initial theme in the store
+  store.config.currentTheme = themeSwitcher.scheme;
+});
 </script>
 
 <style>
