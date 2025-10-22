@@ -4,6 +4,7 @@
 		
 			<p>Keyboard layout: <button @click="switchLayout()">{{layout}}</button></p>
 			<p>Root note: <button @click="decrementRootPc()"><</button><kbd>{{root}}</kbd><button @click="incrementRootPc()">></button></p>
+			<p><button @click="exportJSON()">Export JSON</button><button @click="importJSON()">Import JSON</button></p>
 		
 	</details>
 </template>
@@ -14,6 +15,8 @@
 	  const store= useStore();
 
 	  import Notes from "../theory/Notes.js"
+	  import ExportJSON from "../actions/ExportJSON.js"
+	  import ImportJSON from "../actions/ImportJSON.js"
 
 	  const layout = computed(()=> {
 	  	switch(store.config.keyboardLayout){
@@ -61,6 +64,14 @@
 	  		} else {
 	  			store.config.root = (store.config.octaveEnd + 1) * 12 - 1;
 	  		}
+	  }
+
+	  function exportJSON() {
+	  	ExportJSON.execute(store);
+	  }
+
+	  function importJSON() {
+	  	ImportJSON.execute(store);
 	  }
 
 
