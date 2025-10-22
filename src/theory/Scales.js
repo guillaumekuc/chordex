@@ -87,9 +87,8 @@ export default class Scales {
 			}
 		}
 
-		for (let scale of this.all){
-			scale.chordRelationships=ChordRelationships.fromScale(scale);
-		}
+		// Note: chordRelationships will be populated later in mapScales method
+		// to avoid circular dependency
 			
 	}
 

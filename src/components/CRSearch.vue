@@ -45,7 +45,7 @@
         <FilterSection
           label="Scales"
           filter-key="scales"
-          :items="filteredScales"
+          :items="Object.fromEntries(filteredScales.map(scale => [scale.label, scale]))"
           :selected-values="selected.scales"
           :display-value="(scale) => scale.label"
           @toggle="(key) => toggle('scales', key)"
@@ -131,6 +131,7 @@ const filteredScales = computed(() => {
     return offsets.includes(scale.fifthsOffset);
   });
 });
+
 
 function updateActiveFilters() {
   store.activeFilters.query = filters.value.query;

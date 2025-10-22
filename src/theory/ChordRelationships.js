@@ -106,9 +106,10 @@ export default class ChordRelationships {
 
 		// Walk all scales → their CRs → attach the scale label to the matching global CR
 		for (const scale of scales) {
+		  	// Generate chord relationships for this scale if not already done
 		  	if (!Array.isArray(scale.chordRelationships)) {
-		   		continue; 
-			}
+		  		scale.chordRelationships = this.fromScale(scale);
+		  	}
 
 		  	const scaleLabel = `${scale.label}`;
 
