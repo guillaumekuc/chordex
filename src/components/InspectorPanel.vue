@@ -23,7 +23,6 @@
           </kbd>
         </ul>
 
-
         <input
           type="text"
           placeholder="+ Add an alias and press Enter"
@@ -32,12 +31,23 @@
 
       </details>
 
+      <details name="userNotes" open>
+        <summary>Notes</summary>
+        <textarea
+          name="userNotes"
+          placeholder="Write some notes about this Chord Relationship"
+          aria-label="User notes"
+          :value="store.selected.notes"
+          @input="UpdateNotes.execute(store, $event.target.value)"
+        ></textarea>
+      </details>
+
       <details name="tags" open>
         <summary>Tags</summary>
         
         <ul>
   	      <kbd v-for="(tag, index) in store.selected.tags" :key="index">
-  	        {{ tag }}
+  	        #{{ tag }}
   	        <span @click="RemoveTag.execute(store, tag)">✕</span>
   	      </kbd>
   	  </ul>
@@ -60,15 +70,13 @@
         </ul>
       </details>
 
-      <details name="userNotes" open>
-        <summary>Notes</summary>
-        <textarea
-          name="userNotes"
-          placeholder="Write some notes about this Chord Relationship"
-          aria-label="User notes"
-          :value="store.selected.notes"
-          @input="UpdateNotes.execute(store, $event.target.value)"
-        ></textarea>
+      <details name="stats" open>
+        <summary>Stats</summary>
+        <div class="stats-content">
+          <div class="stat-item">
+            <kbd>{{ store.selected?.commonTones || 0 }}</kbd> common tones
+          </div>
+        </div>
       </details>
     </div>
     
@@ -176,5 +184,18 @@ button {
 
 ul kbd {
 	margin-right: 1em;
+}
+
+.stats-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
 }
 </style>

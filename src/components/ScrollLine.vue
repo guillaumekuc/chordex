@@ -3,7 +3,7 @@
     ref="scrollContainer"
     class="scroll-line"
     :class="{ 'can-scroll': canScroll, 'dragging': isDragging }"
-    :style="{ height: height }"
+    :style="{ height: 'fit-content' }"
     @wheel="handleWheel"
     @mousedown="handleMouseDown"
     @mousemove="handleMouseMove"
@@ -154,8 +154,10 @@ onUnmounted(() => {
 .scroll-line-content {
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 100%;
   width: max-content;
+  min-width: 100%;
   user-select: none;
 }
 
