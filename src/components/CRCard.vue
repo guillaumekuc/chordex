@@ -22,6 +22,13 @@
     </hgroup>
 
     <footer class="cr-card-footer">
+      <span>Aliases</span>
+      <ScrollLine v-if="cr.aliases && cr.aliases.length > 0" height="1.75rem" class="cr-aliases">
+        <kbd v-for="(alias, index) in cr.aliases" :key="index" class="alias-chip">
+          {{ alias }}
+        </kbd>
+      </ScrollLine>
+      
       <div class="cr-common-tones">
         <kbd>{{ `${cr.commonTones}` }}</kbd> common tones
       </div>
@@ -35,6 +42,7 @@
   import { computed } from "vue";
   import { useStore } from "../store";
   import Keyboard from "./Keyboard.vue";
+  import ScrollLine from "./ScrollLine.vue";
   import SelectCR from "../actions/SelectCR.js";
   import PlayCR from "../actions/PlayCR.js";
 
@@ -143,6 +151,27 @@
     content: "#";
   }
 
+  .cr-aliases {
+    margin-bottom: 0.5rem;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .cr-aliases :deep(.scroll-line-content) {
+    gap: 0.35rem;
+    padding: 0 0.25rem;
+  }
+
+  .alias-chip {
+    white-space: nowrap;
+    flex-shrink: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
   .cr-common-tones {
     margin-bottom: 0.5rem;
   }
@@ -153,6 +182,10 @@
     margin: 0;
     position: relative;
     margin-top: 35px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .cr-card.selected {
@@ -173,6 +206,13 @@
     border-top: 1px solid var(--muted-border-color, color-mix(in oklab, currentColor 12%, transparent));
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-left:0px;
+    padding-right:0px;
+    margin-left:0px;
+    margin-right: 0px;
   }
 
   .tags {
