@@ -110,7 +110,8 @@ function generateChordProgression() {
   #app .container {
     max-width: 1200px;
     width: 90%;
-    margin: 0 auto;
+    margin: auto;
+    margin-top: 1rem;
   }
 
   /* Grid layout */
