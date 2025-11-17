@@ -1,9 +1,10 @@
 
 import { defineStore } from "pinia";
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, watch } from "vue";
 import { useStorage } from "@vueuse/core";
 
 import ChordRelationships from "../theory/ChordRelationships";
+import ChordProgressions from "../theory/ChordProgressions";
 import Search from "../actions/Search";
 
 export const useStore = defineStore("main", function() {
@@ -39,12 +40,25 @@ export const useStore = defineStore("main", function() {
         root: 64,
         progression: [],
         showModal: false,
+        unaccessible: [],
+        leadsToNowhere: [],
     });
 
     const filtered = computed(() => {
         const searchResults = Search.execute(chordRelationships.value, activeFilters);
         return shuffled.value || searchResults;
     });
+
+    // Reactively analyze selection whenever it changes
+    const selectionAnalysis = computed(() => {
+        return ChordProgressions.analyzeSelectionConnectivity(selected.value);
+    });
+
+    // Watch selectionAnalysis and update generator state
+    watch(selectionAnalysis, (analysis) => {
+        generator.unaccessible = analysis.unaccessible || [];
+        generator.leadsToNowhere = analysis.leadsToNowhere || [];
+    }, { immediate: true });
 
     return {
         chordRelationships,
@@ -55,6 +69,7 @@ export const useStore = defineStore("main", function() {
         instruments,
         config,
         shuffled,
-        generator
+        generator,
+        selectionAnalysis
     };
 });

@@ -9,7 +9,7 @@
         <div class="progression-config-content">
             <div class="progression-config-item">
                 <label for="progression-slots">Slots:</label>
-                <div class="slots-control">
+                <div class="slots-control progression-control">
                     <button @click="decreaseSlots">-</button>
                     <kbd>{{ store.generator.slots }}</kbd>
                     <button @click="increaseSlots">+</button>
@@ -17,23 +17,30 @@
             </div>
             <div class="progression-config-item">
                 <label for="progression-root">Root note:</label>
-                <div class="root-control">
-                    <button @click="decreaseRoot">&lt;</button>
+                <div class="progression-control">
+                    <button @click="decreaseRoot">-</button>
                     <kbd>{{ rootNote }}</kbd>
-                    <button @click="increaseRoot">&gt;</button>
+                    <button @click="increaseRoot">+</button>
                 </div>
             </div>
         </div>
 
     </details>
 
-    <details name="progression-selection" v-if="store.selected && store.selected.length > 0" class="progression-selection" closed>
+    <details name="progression-selection" v-if="store.selected && store.selected.length > 0" class="progression-selection" open>
         <summary>
             Selected Chord Relationships
         </summary>
         <div class="progression-selected-cr-list">
-            <div v-for="(cr, index) in store.selected" :key="index" class="progression-selected-cr">
-                
+            <div 
+                v-for="(cr, index) in store.selected" 
+                :key="index" 
+                class="progression-selected-cr"
+                :class="{
+                    'unaccessible': isUnaccessible(cr),
+                    'leads-to-nowhere': leadsToNowhere(cr)
+                }"
+            >
                 <div>{{ cr.label }}</div>
             </div>
         </div>
@@ -119,6 +126,14 @@ function increaseRoot() {
 function generateProgression() {
   GenerateChordProgression.execute(store);
 }
+
+function isUnaccessible(cr) {
+  return store.generator.unaccessible.some(u => u.uid === cr.uid);
+}
+
+function leadsToNowhere(cr) {
+  return store.generator.leadsToNowhere.some(l => l.uid === cr.uid);
+}
 </script>
 
 <style scoped>
@@ -139,7 +154,13 @@ function generateProgression() {
     padding: 0.5rem;
     border-radius: 16px;
     background-color: var(--pico-primary-background);
-    color: var(--pico-color);
+    color: var(--pico-primary-inverse);
+  }
+
+  .progression-selected-cr.unaccessible,
+  .progression-selected-cr.leads-to-nowhere {
+    opacity: 0.4;
+    filter: grayscale(100%);
   }
 
   .progression-content {
@@ -205,36 +226,32 @@ function generateProgression() {
     gap: 0.5rem;
   }
 
-  .slots-control button {
-    padding: 0.25rem 0.75rem;
-    min-width: 2rem;
-    cursor: pointer;
-  }
-
-  .slots-control kbd {
-    min-width: 3rem;
-    text-align: center;
-    display: inline-block;
-  }
-
-  .root-control {
+  .progression-control {
     display: flex;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
   }
 
-  .root-control button {
-    padding: 0.25rem 0.75rem;
-    min-width: 2rem;
+  .progression-control button {
+    width: 1.33rem;
+    height: 1.33rem;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
   }
 
-  .root-control kbd {
-    min-width: 3rem;
-    text-align: center;
-    display: inline-block;
+  .progression-control kbd {
+    height: 1.33rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    user-select: none;
   }
 
+ 
   .progression-generate-button {
     display: flex;
     justify-content: center;

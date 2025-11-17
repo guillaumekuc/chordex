@@ -43,7 +43,7 @@
       </div><!-- end right -->
     </div><!-- end grid -->
 
-    <ProgressionModal />
+    <ChordProgressionModal />
   </main>
 </template>
 
@@ -57,7 +57,7 @@ import ConfigInspector from "./components/ConfigInspector.vue";
 import InspectorPanel from "./components/InspectorPanel.vue";
 import CRSearch from "./components/CRSearch.vue";
 import ThemeSwitcher from "./components/ThemeSwitcher.vue";
-import ProgressionModal from "./components/ProgressionModal.vue";
+import ChordProgressionModal from "./components/ChordProgressionModal.vue";
 import { useStore } from "./store";
 
 const store = useStore();

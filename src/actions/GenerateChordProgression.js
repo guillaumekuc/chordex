@@ -4,8 +4,9 @@ import * as Common from '../theory/common.js';
 export default class GenerateChordProgression {
 
 	static execute(store) {
-		const selection=store.selected;
-		const filteredSelection = analyzeSelection(selection);
+		// Use the reactively computed analysis from the store
+		const analysisResult = store.selectionAnalysis;
+		const filteredSelection = analysisResult.valids;
 		const chordsCount= store.generator.slots; //number
 		
 		// Clear progression array first to ensure fresh start
@@ -44,60 +45,6 @@ export default class GenerateChordProgression {
 		// Assign new array to ensure Vue reactivity picks it up
 		store.generator.progression = [...results];
 		console.log(results);
-
-		function analyzeSelection(selection){
-			if (!Array.isArray(selection) || selection.length === 0) {
-				return null;
-			}
-
-			const leadsToNowhere=[];
-			const unaccessible=[];
-			const valids=[];
-
-			//goal = to figure out before hand if we need more CR.
-
-			const rootQualities = new Set();
-			const targetQualities = new Set();
-
-			for (const cr of selection) {
-				if (cr && cr.rootQuality) {
-					rootQualities.add(cr.rootQuality);
-				}
-				if (cr && cr.targetQuality) {
-					targetQualities.add(cr.targetQuality);
-				}
-			}
-
-			for (const cr of selection) {
-				if (cr && cr.rootQuality && !targetQualities.has(cr.rootQuality)) {
-					unaccessible.push(cr);
-				}
-			}
-
-			for (const cr of selection) {
-				if (cr && cr.targetQuality && !rootQualities.has(cr.targetQuality)) {
-					leadsToNowhere.push(cr);
-				}
-			}
-			for (const cr of selection) {
-				const isUnaccessible = unaccessible.some(u => u.uid === cr.uid);
-				const leadsNowhere = leadsToNowhere.some(l => l.uid === cr.uid);
-				if (!isUnaccessible && !leadsNowhere) {
-					valids.push(cr);
-				}
-			}
-
-			if (leadsToNowhere.length > 0) {
-				console.log('CRs that lead to nowhere:', leadsToNowhere.map(cr => cr.label || cr.uid));
-			}
-			if (unaccessible.length > 0) {
-				console.log('Unaccessible CRs:', unaccessible.map(cr => cr.label || cr.uid));
-			}
-			if (valids.length === 0) {
-				return null;
-			}
-			return valids;
-		}
 
 		function pickRandomCRFromSelection(selection, rootQuality, targetQuality){
 			if (rootQuality !== null && rootQuality !== undefined && !Triads.types[rootQuality]) {
