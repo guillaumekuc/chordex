@@ -4,26 +4,39 @@
     class="cr-card"
     :class="store.selected?.uid===cr.uid ? 'selected' : null"
   >
-    <div v-if="cr.aliases && cr.aliases.length > 0" class="cr-card-star">
+    <div v-if="cr.aliases && cr.aliases.length > 0 || cr.notes || cr.tags && cr.tags.length > 0" class="cr-card-star">
       <i class="fa-solid fa-star"></i>
     </div>
 
+
+
     <div class="keyboard-container">
+
       <Keyboard class="keyboard"
         :cr="cr"
       />
+
     </div>
 
+
     <hgroup class="cr-hgroup">
+
+
+    <div class="cr-title">
      
+
+      <div class="cr-identifier">
         <small class="cr-uid">{{ cr.uid }}</small>
         <h3 class="cr-label">
-          {{ cr.label }}
-          <!--
-          <button class="play-button" @click.stop="PlayCR.execute(store, { cr, root: store.config.root, inv: store.config.inversion })"><i class="fa-solid fa-play"></i></button>
-          -->
+          {{ cr.label }}             
         </h3>
-        <div class="cr-header-aliases">
+      </div>
+
+      <button class="play-button" @click.stop="PlayCR.execute(store, { cr, root: store.config.root, inv: store.config.inversion })"><i class="fa-solid fa-play"></i></button>
+    </div>
+
+
+    <div class="cr-header-aliases">
       <ScrollLine height="1.75rem" class="cr-aliases">
         <template v-if="cr.aliases && cr.aliases.length > 0">
           <button 
@@ -46,9 +59,6 @@
     <footer class="cr-card-footer">
       <ScrollLine v-if="!cr.aliases || cr.aliases.length === 0" height="1.75rem" class="cr-aliases-footer">
         <span class="empty-text">No aliases</span>
-        <button class="add-button" @click.stop>
-          <i class="fa-solid fa-plus"></i>
-        </button>
       </ScrollLine>
 
       <ScrollLine height="1.75rem" class="cr-tags">
@@ -60,23 +70,17 @@
         <template v-else>
           <span class="empty-text">No tags</span>
         </template>
-        <button v-if="!cr.tags || cr.tags.length === 0" class="add-button" @click.stop>
-          <i class="fa-solid fa-plus"></i>
-        </button>
       </ScrollLine>
 
       <ScrollLine height="1.75rem" class="cr-notes">
         <template v-if="cr.notes && typeof cr.notes === 'string' && cr.notes.trim().length > 0">
           <button class="notes-button" @click.stop="handleNotesClick">
-            <i class="fa-solid fa-sticky-note"></i> Notes
+            <i class="fa-solid fa-sticky-note"></i> Notes available
           </button>
         </template>
         <template v-else>
           <span class="empty-text">No notes</span>
         </template>
-        <button v-if="!cr.notes || typeof cr.notes !== 'string' || cr.notes.trim().length === 0" class="add-button" @click.stop>
-          <i class="fa-solid fa-plus"></i>
-        </button>
       </ScrollLine>
     </footer>
   </article>
@@ -184,6 +188,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: unset;
+    gap: 6px;
   }
 
   .cr-hgroup.left > :not(:first-child):last-child {
@@ -210,7 +215,6 @@
   .cr-aliases-footer,
   .cr-tags,
   .cr-notes {
-    margin-bottom: 0.5rem;
     min-width: 0;
     width: 100%;
     max-width: 100%;
@@ -251,18 +255,46 @@
     -ms-user-select: none;
   }
 
+  .cr-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+
+    width: center;
+  }
+
+  .cr-identifier {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
   .play-button {
-    display: inline-flex;
-    background: none;
-    border: none;
+
+    display: flex;
     color: var(--pico-color);
-    cursor: pointer;
-    width: 2rem;
-    height: 2rem;
+    background: none;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    border-radius:50%
+    vertical-align: middle;
+    padding: 0px;
+    margin: 0px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    border-radius: 999px;
+
   }
+
+  .play-button:hover {
+    color: var(--pico-primary);
+    border-color: var(--pico-primary);
+  }
+
 
   .notes-button {
 
@@ -343,7 +375,7 @@
 
 
   .cr-label {
-    margin: 0 0 0.5rem;
+    margin: 0;
     font-size: 1rem;
     line-height: 1.25;
     text-overflow: ellipsis;
@@ -355,14 +387,7 @@
     border-top: 1px solid var(--muted-border-color, color-mix(in oklab, currentColor 12%, transparent));
     display: flex;
     flex-direction: column;
-    min-width: 0;
-    width: 100%;
-    max-width: 100%;
-    padding-left:0px;
-    padding-right:0px;
-    margin-left:0px;
-    margin-right: 0px;
-    gap: 4px;
+    gap: 12px;
   }
 
   .tags {
