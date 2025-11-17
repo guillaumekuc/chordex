@@ -69,17 +69,8 @@
           </label>
         </section>
 
-        <!-- Submit -->
+        <!-- Reset -->
         <div class="filter-actions">
-          <button
-            type="submit"
-            class="cr-advanced-search-submit"
-            @click.prevent="onSubmit"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i> Search
-          </button>
-
-          <!-- Reset -->
           <button
             type="reset"
             class="cr-advanced-search-reset"
@@ -279,11 +270,6 @@ function reset() {
   display: flex;
   flex-direction: column;
   align-items: end;
-}
-
-.cr-advanced-search-submit {
-  width: fit-content;
-  margin-bottom: 0.5rem;
 }
 
 .cr-advanced-search-reset {
