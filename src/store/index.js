@@ -45,7 +45,7 @@ export const useStore = defineStore("main", function() {
     });
 
     const filtered = computed(() => {
-        const searchResults = Search.execute(chordRelationships.value, activeFilters);
+        const searchResults = Search.execute(chordRelationships.value, activeFilters, selected.value);
         return shuffled.value || searchResults;
     });
 

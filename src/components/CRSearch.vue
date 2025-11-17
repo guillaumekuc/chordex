@@ -57,6 +57,18 @@
           @toggle="(value) => toggle('commonTones', value)"
         />
 
+        <!-- Selected Filter -->
+        <section>
+          <label>
+            <input
+              type="checkbox"
+              :checked="selected.selected"
+              @change="toggleSelected"
+            />
+            Selected
+          </label>
+        </section>
+
         <!-- Submit -->
         <div class="filter-actions">
           <button
@@ -108,18 +120,45 @@ const selected = reactive({
   target: [],
   scales: [],
   commonTones: [],
-  fifthsOffsets: [0]
+  fifthsOffsets: [0],
+  tags: [],
+  selected: false
 });
 
+// Extract tags from query string (words starting with #)
+function extractTags(query) {
+  if (!query) return [];
+  // Match words starting with # followed by alphanumeric characters
+  const tagMatches = query.match(/#[\w]+/g);
+  if (!tagMatches) return [];
+  // Remove the # prefix and return unique tags
+  return [...new Set(tagMatches.map(tag => tag.substring(1)))];
+}
+
+// Remove tags from query string
+function removeTagsFromQuery(query) {
+  if (!query) return "";
+  // Replace #tag patterns with empty string, then clean up extra spaces
+  return query.replace(/#[\w]+/g, '').replace(/\s+/g, ' ').trim();
+}
+
 const filters = computed(() => {
+  const queryWithoutTags = removeTagsFromQuery(searchQuery.value || "");
+  const extractedTags = extractTags(searchQuery.value || "");
+  
+  // Merge extracted tags from query with manually selected tags
+  const allTags = [...new Set([...extractedTags, ...selected.tags])];
+  
   return {
-    query: searchQuery.value || "",
+    query: queryWithoutTags,
     root: [...selected.root],
     intervals: [...selected.intervals],
     target: [...selected.target],
     scales: [...selected.scales],
     commonTones: [...selected.commonTones],
-    fifthsOffsets: [...selected.fifthsOffsets]
+    fifthsOffsets: [...selected.fifthsOffsets],
+    tags: allTags,
+    selected: selected.selected
   };
 });
 
@@ -146,6 +185,8 @@ function updateActiveFilters() {
   store.activeFilters.scales = [...filters.value.scales];
   store.activeFilters.commonTones = [...filters.value.commonTones];
   store.activeFilters.fifthsOffsets = [...filters.value.fifthsOffsets];
+  store.activeFilters.tags = [...filters.value.tags];
+  store.activeFilters.selected = filters.value.selected;
 }
 
 function onSearchInput(value) {
@@ -176,11 +217,23 @@ function toggle(group, value) {
   Shuffle.reset(store); // Reset shuffle when filters change
 }
 
+function toggleSelected(event) {
+  selected.selected = event.target.checked;
+  updateActiveFilters();
+  Shuffle.reset(store); // Reset shuffle when filters change
+}
+
 function reset() {
   ResetFilters.execute(store);
   searchQuery.value = "";
   Object.keys(selected).forEach(key => {
-    selected[key] = [];
+    if (key === 'selected') {
+      selected[key] = false;
+    } else if (key === 'fifthsOffsets') {
+      selected[key] = [0];
+    } else {
+      selected[key] = [];
+    }
   });
   updateActiveFilters();
   Shuffle.reset(store); // Reset shuffle when filters change

@@ -13,14 +13,16 @@ export default class Search {
       target: [], 
       scales: [], 
       commonTones: [], 
-      fifthsOffsets: store?.config?.extendedScales ? [0] : [0]
+      fifthsOffsets: store?.config?.extendedScales ? [0] : [0],
+      tags: [],
+      selected: false
     };
   }
 
-  static execute(data, f = this.defaultFilters()) {
+  static execute(data, f = this.defaultFilters(), selectedItems = []) {
     let results = data;
 
-    // 1) text query
+    // 1) text query (tags are extracted separately, so query here excludes tags)
     if (f.query && f.query.trim()) {
       const queries = f.query.split(',').map(query => query.trim()).filter(Boolean);
       results = results.filter(cr =>
@@ -77,7 +79,25 @@ export default class Search {
     // 6) common tones
     if (f.commonTones?.length) results = results.filter(cr => f.commonTones.includes(cr.commonTones));
 
-    // 7) fifths OFfsets
+    // 7) tags - partial match (case-insensitive)
+    if (f.tags?.length) {
+      results = results.filter(cr => {
+        const crTags = Array.isArray(cr.tags) ? cr.tags : [];
+        if (crTags.length === 0) return false;
+        // Convert to lowercase for case-insensitive partial matching
+        const crTagsLower = crTags.map(tag => tag.toLowerCase());
+        return f.tags.some(filterTag => {
+          const filterTagLower = filterTag.toLowerCase();
+          return crTagsLower.some(crTag => crTag.includes(filterTagLower));
+        });
+      });
+    }
+
+    // 8) selected filter
+    if (f.selected === true && Array.isArray(selectedItems)) {
+      const selectedUids = new Set(selectedItems.map(item => item.uid));
+      results = results.filter(cr => selectedUids.has(cr.uid));
+    }
 
     debugLog('Search complete:', results.length, 'results from', data.length, 'total');
     return results;
