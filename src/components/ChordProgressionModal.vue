@@ -32,17 +32,29 @@
             Selected Chord Relationships
         </summary>
         <div class="progression-selected-cr-list">
-            <div 
-                v-for="(cr, index) in store.selected" 
-                :key="index" 
-                class="progression-selected-cr"
-                :class="{
-                    'unaccessible': isUnaccessible(cr),
-                    'leads-to-nowhere': leadsToNowhere(cr)
-                }"
-            >
-                <div>{{ cr.label }}</div>
-            </div>
+            <template v-for="(cr, index) in store.selected" :key="index">
+                <Tooltip 
+                    v-if="isUnaccessible(cr) || leadsToNowhere(cr)"
+                    :text="getTooltipMessage(cr)"
+                    position="top"
+                >
+                    <div 
+                        class="progression-selected-cr"
+                        :class="{
+                            'unaccessible': isUnaccessible(cr),
+                            'leads-to-nowhere': leadsToNowhere(cr)
+                        }"
+                    >
+                        <div>{{ cr.label }}</div>
+                    </div>
+                </Tooltip>
+                <div 
+                    v-else
+                    class="progression-selected-cr"
+                >
+                    <div>{{ cr.label }}</div>
+                </div>
+            </template>
         </div>
     </details>
 
@@ -68,6 +80,7 @@
 import { computed } from "vue";
 import { useStore } from "../store";
 import Modal from "./Modal.vue";
+import Tooltip from "./Tooltip.vue";
 import Notes from "../theory/Notes.js";
 import Triads from "../theory/Triads.js";
 import * as Common from "../theory/common.js";
@@ -134,17 +147,25 @@ function isUnaccessible(cr) {
 function leadsToNowhere(cr) {
   return store.generator.leadsToNowhere.some(l => l.uid === cr.uid);
 }
+
+function getTooltipMessage(cr) {
+  if (isUnaccessible(cr)) {
+    return "This chord relationship is unaccessible: its root quality cannot be reached from any other chord relationship in the selection.";
+  }
+  if (leadsToNowhere(cr)) {
+    return "This chord relationship can't connect to any other chord relationship in the selection: it targets a quality that is not present as a root in the set";
+  }
+  return "";
+}
 </script>
 
 <style scoped>
 
   .progression-selected-cr-list {
     display: flex;
-    display: row;
     align-content: center;
     justify-content: center;
     gap: 5px;
-
   }
   .progression-selected-cr {
     display: flex;
@@ -251,7 +272,6 @@ function leadsToNowhere(cr) {
     user-select: none;
   }
 
- 
   .progression-generate-button {
     display: flex;
     justify-content: center;

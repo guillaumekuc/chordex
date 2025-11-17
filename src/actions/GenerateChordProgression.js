@@ -44,7 +44,6 @@ export default class GenerateChordProgression {
 
 		// Assign new array to ensure Vue reactivity picks it up
 		store.generator.progression = [...results];
-		console.log(results);
 
 		function pickRandomCRFromSelection(selection, rootQuality, targetQuality){
 			if (rootQuality !== null && rootQuality !== undefined && !Triads.types[rootQuality]) {
