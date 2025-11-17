@@ -1,5 +1,5 @@
 <template>
-      <div class="keyboard" :class="store.selected?.uid===cr.uid ? 'selected' : null ">
+      <div class="keyboard" :class="isSelected ? 'selected' : null ">
         <div v-for="(slot, idx) in slots" :key="idx" class="slot">
           <Key
             :note="slot.lower.note"
@@ -44,6 +44,10 @@
     id: { type: String, default: 'defaultKeyboard' },
     displayNoteLabels: { type: Boolean, default: false },
     cr: { type: Object, default: null, required: true }
+  });
+
+  const isSelected = computed(() => {
+    return Array.isArray(store.selected) && store.selected.some(cr => cr.uid === props.cr.uid);
   });
 
   store.instruments[props.id] = {

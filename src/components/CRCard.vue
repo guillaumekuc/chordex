@@ -2,7 +2,7 @@
   <article
     @click="SelectCR.execute(store, cr)"
     class="cr-card"
-    :class="store.selected?.uid===cr.uid ? 'selected' : null"
+    :class="isSelected ? 'selected' : null"
   >
     <div v-if="cr.aliases && cr.aliases.length > 0 || cr.notes || cr.tags && cr.tags.length > 0" class="cr-card-star">
       <i class="fa-solid fa-star"></i>
@@ -110,6 +110,10 @@
 
   const store = useStore();
 
+  const isSelected = computed(() => {
+    return Array.isArray(store.selected) && store.selected.some(cr => cr.uid === props.cr.uid);
+  });
+
   const crFilteredScales = computed(() => {
     const inputScales = Array.isArray(props.cr?.scales) ? props.cr.scales : [];
     const filterList = Array.isArray(props.filteredScales) ? props.filteredScales : [];
@@ -121,7 +125,7 @@
   });
 
   function handleNotesClick() {
-    if (store.selected?.uid !== props.cr.uid) {
+    if (!isSelected.value) {
       SelectCR.execute(store, props.cr);
     }
   }

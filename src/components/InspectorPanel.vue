@@ -1,14 +1,14 @@
 <template>
-  <article v-if="store.selected" class="inspector-panel">
+  <article v-if="currentSelected" class="inspector-panel">
 
     <header class="title">
       <div class="keyboard-container">
         <Keyboard class="keyboard"
-          :cr="store.selected"
+          :cr="currentSelected"
         />
       </div>
-      <small class="cr-uid">{{ store.selected?.uid }}</small>
-      <h3 class="cr-label">{{ store.selected?.label }}</h3>
+      <small class="cr-uid">{{ currentSelected?.uid }}</small>
+      <h3 class="cr-label">{{ currentSelected?.label }}</h3>
     </header>
 
 
@@ -17,7 +17,7 @@
         <summary>Aliases</summary>
    
         <ul>
-          <kbd class="chip" v-for="(alias, index) in store.selected.aliases" :key="index">
+          <kbd class="chip" v-for="(alias, index) in currentSelected.aliases" :key="index">
             {{ alias }}
             <span @click="RemoveAlias.execute(store, alias)">✕</span>
           </kbd>
@@ -37,7 +37,7 @@
           name="userNotes"
           placeholder="Write some notes about this Chord Relationship"
           aria-label="User notes"
-          :value="store.selected.notes"
+          :value="currentSelected.notes"
           @input="UpdateNotes.execute(store, $event.target.value)"
         ></textarea>
       </details>
@@ -46,7 +46,7 @@
         <summary>Tags</summary>
         
         <ul>
-  	      <kbd v-for="(tag, index) in store.selected.tags" :key="index">
+  	      <kbd v-for="(tag, index) in currentSelected.tags" :key="index">
   	        #{{ tag }}
   	        <span @click="RemoveTag.execute(store, tag)">✕</span>
   	      </kbd>
@@ -74,7 +74,7 @@
         <summary>Stats</summary>
         <div class="stats-content">
           <div class="stat-item">
-            <kbd>{{ store.selected?.commonTones || 0 }}</kbd> common tones
+            <kbd>{{ currentSelected?.commonTones || 0 }}</kbd> common tones
           </div>
         </div>
       </details>
@@ -95,11 +95,19 @@ import UpdateNotes from "../actions/UpdateNotes.js";
 
 const store = useStore();
 
-const filteredScales = computed(() => {
-  if (!store.config.extendedScales) {
-    return store.selected.scales.filter(scale => !scale.includes('['));
+const currentSelected = computed(() => {
+  if (Array.isArray(store.selected) && store.selected.length > 0) {
+    return store.selected[store.selected.length - 1];
   }
-  return store.selected.scales;
+  return null;
+});
+
+const filteredScales = computed(() => {
+  if (!currentSelected.value) return [];
+  if (!store.config.extendedScales) {
+    return currentSelected.value.scales.filter(scale => !scale.includes('['));
+  }
+  return currentSelected.value.scales;
 });
 
 </script>

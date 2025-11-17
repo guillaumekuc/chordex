@@ -14,7 +14,7 @@ export const useStore = defineStore("main", function() {
     );
 
     // UI state
-    const selected = ref(null);
+    const selected = ref([]);
     const audio = ref(null);
     const shuffled = ref(null);
 
