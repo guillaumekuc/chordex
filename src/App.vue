@@ -20,13 +20,18 @@
 
         <section class="results-count"><small>{{ `${store.filtered.length} results`}}</small></section>
 
-        <section class="shuffle-section"><span role="button" @click="shuffle">
-          <i class="fa-solid fa-arrows-spin"></i> Shuffle!
-        </span></section>
+        <section class="shuffle-section">
+          <span role="button" @click="shuffle">
+            <i class="fa-solid fa-arrows-spin"></i> Shuffle!
+          </span>
+          <span role="button" @click="generateChordProgression">
+            <i class="fa-solid fa-music"></i> GenerateChordProgression
+          </span>
+        </section>
 
         <section class="cr-grid">
           <CRCard
-            v-for="(cr, i) in store.filtered"
+            v-for="cr in store.filtered"
             :key="cr.uid"
             :cr="cr"
             :filteredScales="filteredScales"
@@ -45,6 +50,7 @@ import { computed } from "vue";
 import Scales from "./theory/Scales.js";
 import Search from "./actions/Search.js";
 import Shuffle from "./actions/Shuffle.js";
+import GenerateChordProgression from "./actions/GenerateChordProgression.js";
 import CRCard from "./components/CRCard.vue";
 import ConfigInspector from "./components/ConfigInspector.vue";
 import InspectorPanel from "./components/InspectorPanel.vue";
@@ -67,6 +73,11 @@ const filteredScales = computed(() => {
 
 function shuffle() {
   Shuffle.execute(store);
+}
+
+function generateChordProgression() {
+  console.log('generateChordProgression called');
+  GenerateChordProgression.execute(store);
 }
 </script>
 
@@ -132,7 +143,16 @@ function shuffle() {
   .shuffle-section {
     display: flex;
     justify-content: start;
+    gap: 1rem;
     color: var(--pico-muted-color);
+  }
+
+  .shuffle-section span[role="button"] {
+    cursor: pointer;
+  }
+
+  .shuffle-section span[role="button"]:hover {
+    color: var(--pico-primary);
   }
 
   kbd {

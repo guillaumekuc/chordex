@@ -34,6 +34,12 @@ export const useStore = defineStore("main", function() {
         extendedScales: false
     });
 
+    const generator = reactive({
+        slots: 8,
+        root: 64,
+        progression: [],
+    });
+
     const filtered = computed(() => {
         const searchResults = Search.execute(chordRelationships.value, activeFilters);
         return shuffled.value || searchResults;
@@ -47,6 +53,7 @@ export const useStore = defineStore("main", function() {
         filtered,
         instruments,
         config,
-        shuffled
+        shuffled,
+        generator
     };
 });
