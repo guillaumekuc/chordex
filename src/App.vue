@@ -1,7 +1,7 @@
 <template>
   <main class="container" v-cloak>
     
-    <ThemeSwitcher />
+    <!-- <ThemeSwitcher /> -->
 
     <hgroup>
       <h1>Chordex</h1>
@@ -56,7 +56,7 @@ import CRCard from "./components/CRCard.vue";
 import ConfigInspector from "./components/ConfigInspector.vue";
 import InspectorPanel from "./components/InspectorPanel.vue";
 import CRSearch from "./components/CRSearch.vue";
-import ThemeSwitcher from "./components/ThemeSwitcher.vue";
+// import ThemeSwitcher from "./components/ThemeSwitcher.vue";
 import ChordProgressionModal from "./components/ChordProgressionModal.vue";
 import { useStore } from "./store";
 

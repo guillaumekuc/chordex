@@ -31,7 +31,7 @@ export const useStore = defineStore("main", function() {
         keyboardColors: "x75",
         root: 64,
         inversion: 0,
-        currentTheme: "auto",
+        currentTheme: "dark",
         extendedScales: false
     });
 

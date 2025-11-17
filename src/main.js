@@ -11,6 +11,7 @@ import { useStore } from "./store";
 import AudioEngine from "./audio/AudioEngine.js";
 import ChordRelationships from "./theory/ChordRelationships.js";
 import Scales from "./theory/Scales.js";
+import themeSwitcher from "./utils/minimal-theme-switcher.js";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -19,6 +20,10 @@ app.use(pinia);
 ChordRelationships.mapScales(Scales.all);
 
 const store = useStore();
+
+// Initialize theme to dark
+themeSwitcher.scheme = "dark";
+store.config.currentTheme = "dark";
 
 // Initialize AudioEngine with error handling
 try {
