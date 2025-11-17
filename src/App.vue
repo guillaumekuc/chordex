@@ -25,7 +25,7 @@
             <i class="fa-solid fa-arrows-spin"></i> Shuffle!
           </span>
           <span role="button" @click="generateChordProgression">
-            <i class="fa-solid fa-music"></i> GenerateChordProgression
+            <i class="fa-solid fa-music"></i> Chord Progression Generator
           </span>
         </section>
 
@@ -42,6 +42,8 @@
         <InspectorPanel />
       </div><!-- end right -->
     </div><!-- end grid -->
+
+    <ProgressionModal />
   </main>
 </template>
 
@@ -50,12 +52,12 @@ import { computed } from "vue";
 import Scales from "./theory/Scales.js";
 import Search from "./actions/Search.js";
 import Shuffle from "./actions/Shuffle.js";
-import GenerateChordProgression from "./actions/GenerateChordProgression.js";
 import CRCard from "./components/CRCard.vue";
 import ConfigInspector from "./components/ConfigInspector.vue";
 import InspectorPanel from "./components/InspectorPanel.vue";
 import CRSearch from "./components/CRSearch.vue";
 import ThemeSwitcher from "./components/ThemeSwitcher.vue";
+import ProgressionModal from "./components/ProgressionModal.vue";
 import { useStore } from "./store";
 
 const store = useStore();
@@ -76,8 +78,7 @@ function shuffle() {
 }
 
 function generateChordProgression() {
-  console.log('generateChordProgression called');
-  GenerateChordProgression.execute(store);
+  store.generator.showModal = true;
 }
 </script>
 

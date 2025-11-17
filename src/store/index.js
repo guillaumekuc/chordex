@@ -38,6 +38,7 @@ export const useStore = defineStore("main", function() {
         slots: 8,
         root: 64,
         progression: [],
+        showModal: false,
     });
 
     const filtered = computed(() => {

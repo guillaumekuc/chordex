@@ -1,4 +1,5 @@
 import Triads from '../theory/Triads.js';
+import * as Common from '../theory/common.js';
 
 export default class GenerateChordProgression {
 
@@ -6,27 +7,42 @@ export default class GenerateChordProgression {
 		const selection=store.selected;
 		const filteredSelection = analyzeSelection(selection);
 		const chordsCount= store.generator.slots; //number
-		const results=[];
-
+		
+		// Clear progression array first to ensure fresh start
+		store.generator.progression = [];
+		
 		if (filteredSelection === null) {
 			console.log('invalid selection');
 			return;
 		}
 
+		const results=[];
 		//forward direction, fill from first chord to last chord
 		let rootQuality=null;
+		let currentRootPitchClass = store.generator.root % 12; // Start with root note from config
+		
 		for (let i=0; i < chordsCount; i++){
-			const newChord=pickRandomCRFromSelection(filteredSelection, rootQuality);
-			if (newChord === null) {
+			const chordRelationship=pickRandomCRFromSelection(filteredSelection, rootQuality);
+			if (chordRelationship === null) {
 				console.log('invalid selection');
 				break;
 			}
-			results.push(newChord);
 			
-			rootQuality=newChord.targetQuality;
+			// Create chord object using helper method
+			const chord = Triads.fromChordRelationship(currentRootPitchClass, chordRelationship);
+			
+			results.push({
+				chord: chord,
+				chordRelationship: chordRelationship
+			});
+			
+			// Calculate next root pitch class: current root + interval (pitchClass) of the CR
+			currentRootPitchClass = Common.modulo12(currentRootPitchClass + chordRelationship.pitchClass);
+			rootQuality=chordRelationship.targetQuality;
 		}
 
-		store.generator.progression = results;
+		// Assign new array to ensure Vue reactivity picks it up
+		store.generator.progression = [...results];
 		console.log(results);
 
 		function analyzeSelection(selection){

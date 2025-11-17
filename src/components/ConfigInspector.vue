@@ -10,9 +10,9 @@
       </button>
     </p>
     <p>
-      Root note: <button @click="UpdateRoot.execute(store, -1)"><</button
+      Root note: <button @click="UpdateChordProgressionRoot.execute(store, -1)"><</button
       ><kbd>{{ root }}</kbd
-      ><button @click="UpdateRoot.execute(store, 1)">></button>
+      ><button @click="UpdateChordProgressionRoot.execute(store, 1)">></button>
     </p>
     <p>
       Extended scales: 
@@ -55,7 +55,7 @@ import Notes from "../theory/Notes.js";
 import ExportJSON from "../actions/ExportJSON.js";
 import ImportJSON from "../actions/ImportJSON.js";
 import SwitchKeyboardLayout from "../actions/SwitchKeyboardLayout.js";
-import UpdateRoot from "../actions/UpdateRoot.js";
+import UpdateChordProgressionRoot from "../actions/UpdateChordProgressionRoot.js";
 import Modal from "./Modal.vue";
 import ExtendedScalesHelp from "./ExtendedScalesHelp.vue";
 import KeyboardLayoutHelp from "./KeyboardLayoutHelp.vue";

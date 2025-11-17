@@ -1,12 +1,13 @@
 import * as Common from "./common.js";
+import Notes from "./Notes.js";
 
 export default class Triads {
 
 	static types = {
-	  M: {pitchClasses: [0, 4, 7], rootPriority: 1},
-	  m: {pitchClasses: [0, 3, 7], rootPriority: 2},
-	  d: {pitchClasses: [0, 3, 6], rootPriority: 3},
-	  A: {pitchClasses: [0, 4, 8], rootPriority: 4}
+	  M: {pitchClasses: [0, 4, 7], rootPriority: 1, symbol: ""},
+	  m: {pitchClasses: [0, 3, 7], rootPriority: 2, symbol: "m"},
+	  d: {pitchClasses: [0, 3, 6], rootPriority: 3, symbol: "<sup>o</sup>"},
+	  A: {pitchClasses: [0, 4, 8], rootPriority: 4, symbol: "+"}
 	}
 
 	static fromScale(scale){
@@ -44,6 +45,19 @@ export default class Triads {
 		}// end for i
 
 		return triads;		
+	}
+
+	static fromChordRelationship(rootPitchClass, chordRelationship) {
+		const quality = chordRelationship.rootQuality;
+		const rootNote = Notes.fromPitchClass(rootPitchClass);
+		const symbol = this.types[quality].symbol;
+		const label = rootNote + symbol;
+		
+		return {
+			rootNote: rootNote,
+			quality: quality,
+			label: label
+		};
 	}
 
 }
