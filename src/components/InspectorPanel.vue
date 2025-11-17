@@ -117,7 +117,8 @@ const filteredScales = computed(() => {
     position: sticky;
     top: calc(var(--pico-block-spacing-vertical) + var(--keyboard-offset));
     /* Use device-stable viewport units so mobile address bar changes do not jump */
-    max-height: calc(100dvh - 2 * var(--pico-block-spacing-vertical) - var(--keyboard-offset));
+    /* Subtract footer height to prevent inspector from going below footer */
+    max-height: calc(100dvh - 2 * var(--pico-block-spacing-vertical) - var(--keyboard-offset) - var(--footer-height, 65px));
     background: transparent;
     /* Make this the scroll container and lay it out as header + content */
     display: grid;

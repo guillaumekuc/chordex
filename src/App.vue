@@ -45,6 +45,8 @@
 
     <ChordProgressionModal />
   </main>
+  
+  <Footer />
 </template>
 
 <script setup>
@@ -58,6 +60,7 @@ import InspectorPanel from "./components/InspectorPanel.vue";
 import CRSearch from "./components/CRSearch.vue";
 // import ThemeSwitcher from "./components/ThemeSwitcher.vue";
 import ChordProgressionModal from "./components/ChordProgressionModal.vue";
+import Footer from "./components/Footer.vue";
 import { useStore } from "./store";
 
 const store = useStore();
@@ -85,7 +88,12 @@ function generateChordProgression() {
 
 <style>
   #app {
-   --pico-border-radius: 10px;    
+   --pico-border-radius: 10px;
+   --footer-height: 65px;
+  }
+
+  #app.has-footer {
+    padding-bottom: var(--footer-height);
   }
 
   .col-layout {
@@ -165,4 +173,5 @@ function generateChordProgression() {
     border-radius: .5rem;
     height: max-content;
   }
+
 </style>

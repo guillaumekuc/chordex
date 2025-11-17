@@ -62,7 +62,7 @@
           <label>
             <input
               type="checkbox"
-              :checked="selected.selected"
+              :checked="store.activeFilters.selected"
               @change="toggleSelected"
             />
             Selected
@@ -112,8 +112,8 @@ const selected = reactive({
   scales: [],
   commonTones: [],
   fifthsOffsets: [0],
-  tags: [],
-  selected: false
+  tags: []
+  // Note: 'selected' is now managed directly in store.activeFilters.selected
 });
 
 // Extract tags from query string (words starting with #)
@@ -149,7 +149,7 @@ const filters = computed(() => {
     commonTones: [...selected.commonTones],
     fifthsOffsets: [...selected.fifthsOffsets],
     tags: allTags,
-    selected: selected.selected
+    selected: store.activeFilters.selected
   };
 });
 
@@ -209,7 +209,7 @@ function toggle(group, value) {
 }
 
 function toggleSelected(event) {
-  selected.selected = event.target.checked;
+  store.activeFilters.selected = event.target.checked;
   updateActiveFilters();
   Shuffle.reset(store); // Reset shuffle when filters change
 }
@@ -218,14 +218,13 @@ function reset() {
   ResetFilters.execute(store);
   searchQuery.value = "";
   Object.keys(selected).forEach(key => {
-    if (key === 'selected') {
-      selected[key] = false;
-    } else if (key === 'fifthsOffsets') {
+    if (key === 'fifthsOffsets') {
       selected[key] = [0];
     } else {
       selected[key] = [];
     }
   });
+  // Note: store.activeFilters.selected is reset by ResetFilters.execute()
   updateActiveFilters();
   Shuffle.reset(store); // Reset shuffle when filters change
 }
