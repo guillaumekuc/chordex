@@ -5,6 +5,7 @@
       <div class="keyboard-container">
         <Keyboard class="keyboard"
           :cr="currentSelected"
+          :animated="true"
         />
       </div>
       <small class="cr-uid">{{ currentSelected?.uid }}</small>

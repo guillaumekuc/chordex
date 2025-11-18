@@ -1,6 +1,8 @@
 <template>
   <article
     @click="SelectCR.execute(store, cr)"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
     class="cr-card"
     :class="isSelected ? 'selected' : null"
   >
@@ -14,6 +16,7 @@
 
       <Keyboard class="keyboard"
         :cr="cr"
+        :animated="isHovered || isSelected"
       />
 
     </div>
@@ -85,7 +88,7 @@
 </template>
 
 <script setup>
-  import { computed } from "vue";
+  import { computed, ref } from "vue";
   import { useStore } from "../store";
   import Keyboard from "./Keyboard.vue";
   import ScrollLine from "./ScrollLine.vue";
@@ -93,6 +96,8 @@
   import PlayCR from "../actions/PlayCR.js";
 
   defineOptions({ name: "CRCard" });
+
+  const isHovered = ref(false);
 
   const props = defineProps({
     cr: {

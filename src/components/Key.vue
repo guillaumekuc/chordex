@@ -8,7 +8,10 @@
         'key-white': !props.isBlack,
         'key-black': props.isBlack,
         'key-active': props.isActive,
-        'key-passive': props.isPassive
+        'key-passive': props.isPassive,
+        'anim-passive': props.animated && store.animationPhase === 0,
+        'anim-overlap': props.animated && store.animationPhase === 1,
+        'anim-active': props.animated && store.animationPhase === 2
       }
     ]"
     :pc="props.midi"
@@ -41,9 +44,9 @@
     isBlack: { type: Boolean, default: false, required: true },
     isActive: { type: Boolean, default: false },
     isPassive: { type: Boolean, default: false },
-    parent: { type: String, required: true }
+    parent: { type: String, required: true },
+    animated: { type: Boolean, default: false }
   })
-
 
 </script>
 
@@ -87,8 +90,39 @@
     background: var(--color-active) !important;
   }
 
-    .piano-key.key-passive.key-active {
+  .piano-key.key-passive.key-active {
     background: var(--color-overlap) !important;
+  }
+
+  /* Animation Passive: If passive, show passive color (even if also active); reset active-only to default */
+  .piano-key.anim-passive.key-passive {
+    background: var(--color-passive) !important;
+  }
+
+  .piano-key.anim-passive.key-active:not(.key-passive) {
+    background: var(--color-light) !important;
+  }
+
+  .piano-key.anim-passive.key-black.key-active:not(.key-passive) {
+    background: var(--color-darker) !important;
+  }
+
+  /* Animation Overlap: If both passive and active, show combined; if only active, show active */
+  .piano-key.anim-overlap.key-passive.key-active {
+    background: var(--color-overlap) !important;
+  }
+
+  .piano-key.anim-overlap.key-active:not(.key-passive) {
+    background: var(--color-active) !important;
+  }
+
+  /* Animation Active: Override passive color; if active, show active color */
+  .piano-key.anim-active.key-passive {
+    background: var(--color-light) !important;
+  }
+
+  .piano-key.anim-active.key-active {
+    background: var(--color-active) !important;
   }
 
 

@@ -10,7 +10,7 @@
             :parent="props.id"
             :is-passive="passivePitchClasses.has(slot.lower.midi % 12) && slot.lower.midi !== lastNote"
             :is-active="activePitchClasses.has(slot.lower.midi % 12) && slot.lower.midi !== lastNote"
-
+            :animated="props.animated"
           />
           <Key
             v-if="slot.upper"
@@ -22,6 +22,7 @@
             :parent="props.id"
             :is-passive="passivePitchClasses.has(slot.upper.midi % 12) && slot.upper.midi !== lastNote"
             :is-active="activePitchClasses.has(slot.upper.midi % 12) && slot.upper.midi !== lastNote"
+            :animated="props.animated"
           />
         </div>
       </div>
@@ -43,7 +44,8 @@
     colors: { type: String, default: 'x66' },
     id: { type: String, default: 'defaultKeyboard' },
     displayNoteLabels: { type: Boolean, default: false },
-    cr: { type: Object, default: null, required: true }
+    cr: { type: Object, default: null, required: true },
+    animated: { type: Boolean, default: false }
   });
 
   const isSelected = computed(() => {

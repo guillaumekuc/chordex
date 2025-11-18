@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import Scales from "./theory/Scales.js";
 import Search from "./actions/Search.js";
 import Shuffle from "./actions/Shuffle.js";
@@ -62,8 +62,17 @@ import CRSearch from "./components/CRSearch.vue";
 import ChordProgressionModal from "./components/ChordProgressionModal.vue";
 import Footer from "./components/Footer.vue";
 import { useStore } from "./store";
+import animation from "./utils/animation.js";
 
 const store = useStore();
+
+onMounted(() => {
+  animation.start(store);
+});
+
+onUnmounted(() => {
+  animation.stop();
+});
 
 const filteredScales = computed(() => {
   const offset = store.activeFilters.fifthsOffsets;

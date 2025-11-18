@@ -18,6 +18,7 @@ export const useStore = defineStore("main", function() {
     const selected = ref([]);
     const audio = ref(null);
     const shuffled = ref(null);
+    const animationPhase = ref(0); // 0: anim-passive, 1: anim-overlap, 2: anim-active
 
     // Complex objects
     const activeFilters = reactive(Search.defaultFilters());
@@ -87,6 +88,7 @@ export const useStore = defineStore("main", function() {
         shuffled,
         generator,
         selectionAnalysis,
-        allTags
+        allTags,
+        animationPhase
     };
 });
