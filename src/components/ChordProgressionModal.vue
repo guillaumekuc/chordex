@@ -74,6 +74,12 @@
     <div v-else class="progression-empty">
       <p>The progression is empty.</p>
     </div>
+
+    <div v-if="store.generator.progression && store.generator.progression.length > 0" class="progression-listen-button">
+      <button @click="playProgression" class="listen-button">
+        <i class="fa-solid fa-play"></i> Listen
+      </button>
+    </div>
   </Modal>
 </template>
 
@@ -87,6 +93,7 @@ import Triads from "../theory/Triads.js";
 import * as Common from "../theory/common.js";
 import GenerateChordProgression from "../actions/GenerateChordProgression.js";
 import RerollChord from "../actions/RerollChord.js";
+import PlayChordProgression from "../actions/PlayChordProgression.js";
 
 const store = useStore();
 
@@ -144,6 +151,10 @@ function generateProgression() {
 
 function rerollChord(index) {
   RerollChord.execute(store, index);
+}
+
+function playProgression() {
+  PlayChordProgression.execute(store);
 }
 
 function isUnaccessible(cr) {
@@ -311,6 +322,21 @@ function getTooltipMessage(cr) {
   }
 
   .generate-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .progression-listen-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .listen-button {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     cursor: pointer;
