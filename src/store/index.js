@@ -54,6 +54,22 @@ export const useStore = defineStore("main", function() {
         return ChordProgressions.analyzeSelectionConnectivity(selected.value);
     });
 
+    // Extract all unique tags from all chord relationships
+    const allTags = computed(() => {
+        const tagSet = new Set();
+        chordRelationships.value.forEach(cr => {
+            if (Array.isArray(cr.tags) && cr.tags.length > 0) {
+                cr.tags.forEach(tag => {
+                    if (tag && tag.trim()) {
+                        tagSet.add(tag.trim());
+                    }
+                });
+            }
+        });
+        // Return sorted array of unique tags
+        return Array.from(tagSet).sort();
+    });
+
     // Watch selectionAnalysis and update generator state
     watch(selectionAnalysis, (analysis) => {
         generator.unaccessible = analysis.unaccessible || [];
@@ -70,6 +86,7 @@ export const useStore = defineStore("main", function() {
         config,
         shuffled,
         generator,
-        selectionAnalysis
+        selectionAnalysis,
+        allTags
     };
 });

@@ -36,7 +36,16 @@
           :display-value="(type, key) => key"
           @toggle="(key) => toggle('target', key)"
         />
-
+        <FilterSection
+          v-if="store.allTags.length > 0"
+          label="Tags"
+          filter-key="tags"
+          :items="Object.fromEntries(store.allTags.map(tag => [tag, tag]))"
+          :selected-values="selected.tags"
+          :display-value="(tag) => `#${tag}`"
+          @toggle="(key) => toggle('tags', key)"
+        />
+        
         <FifthsLevelFilterSection
           v-if="store.config.extendedScales"
           :selected-values="selected.fifthsOffsets"
@@ -56,6 +65,8 @@
           :selected-values="selected.commonTones"
           @toggle="(value) => toggle('commonTones', value)"
         />
+
+
 
         <!-- Selected Filter -->
         <section>
