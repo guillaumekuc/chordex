@@ -206,14 +206,14 @@ function confirmResetMetadata() {
 }
 
 .danger-button {
-  background-color: var(--pico-del-color, #c33);
-  color: var(--pico-del-inverse, #fff);
-  border-color: var(--pico-del-color, #c33);
+  background-color: var(--pico-del-color);
+  color: var(--pico-primary-inverse);
+  border-color: var(--pico-del-color);
 }
 
 .danger-button:hover {
-  background-color: var(--pico-del-color-hover, #a22);
-  border-color: var(--pico-del-color-hover, #a22);
+  background-color: hsl(from var(--pico-del-color) h calc(s * 2) calc(l * 1.1));
+  border-color: var(--pico-del-color);
 }
 
 .reset-metadata-warning {

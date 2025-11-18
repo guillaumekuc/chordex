@@ -68,6 +68,7 @@
       <div v-for="(item, index) in store.generator.progression" :key="index" class="progression-generated-cr">
         <div class="chord-label" v-html="item.chord.label"></div>
         <div class="chord-relationship-label">{{ item.chordRelationship.label }}</div>
+        <i class="fa-solid fa-arrows-spin shuffle-icon" @click.stop="rerollChord(index)"></i>
       </div>
     </div>
     <div v-else class="progression-empty">
@@ -85,6 +86,7 @@ import Notes from "../theory/Notes.js";
 import Triads from "../theory/Triads.js";
 import * as Common from "../theory/common.js";
 import GenerateChordProgression from "../actions/GenerateChordProgression.js";
+import RerollChord from "../actions/RerollChord.js";
 
 const store = useStore();
 
@@ -138,6 +140,10 @@ function increaseRoot() {
 
 function generateProgression() {
   GenerateChordProgression.execute(store);
+}
+
+function rerollChord(index) {
+  RerollChord.execute(store, index);
 }
 
 function isUnaccessible(cr) {
@@ -211,12 +217,38 @@ function getTooltipMessage(cr) {
     padding: 0.5rem;
     border-radius: 16px;
     background-color: var(--pico-muted-background);
+    position: relative;
+    cursor: pointer;
   }
 
   .chord-label {
     font-size: 1.25rem;
     font-weight: bold;
     color: var(--pico-primary);
+  }
+
+  .shuffle-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    color: var(--pico-primary-inverse);
+    background-color: transparent;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .progression-generated-cr:hover .shuffle-icon {
+    opacity: 1;
   }
 
   .chord-relationship-label {
