@@ -23,7 +23,7 @@
 
 
     <div class="cr-title">
-     
+      <button class="play-button" @click.stop="PlayCR.execute(store, { cr, root: store.config.root, inv: store.config.inversion })"><i class="fa-solid fa-play"></i></button>
 
       <div class="cr-identifier">
         <small class="cr-uid">{{ cr.uid }}</small>
@@ -31,8 +31,6 @@
           {{ cr.label }}             
         </h3>
       </div>
-
-      <button class="play-button" @click.stop="PlayCR.execute(store, { cr, root: store.config.root, inv: store.config.inversion })"><i class="fa-solid fa-play"></i></button>
     </div>
 
 
@@ -260,38 +258,43 @@
   }
 
   .cr-title {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
 
-    width: center;
+  /* Flexible right spacer to create empty space on the right */
+  .cr-title::after {
+    content: "";
+    flex-shrink: 0;
+    width: 36px;
   }
 
   .cr-identifier {
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    flex: 1;
+    width: fit-content;
   }
 
   .play-button {
-
+    flex-shrink: 0;
     display: flex;
-    color: var(--pico-color);
-    background: none;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     vertical-align: middle;
     padding: 0px;
-    margin: 0px;
+
+    color: var(--pico-color);
+    background: none;
+
     width: 36px;
     height: 36px;
     cursor: pointer;
     border-radius: 999px;
-
   }
 
   .play-button:hover {

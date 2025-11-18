@@ -193,6 +193,11 @@ button {
 
 ul kbd {
 	margin-right: 1em;
+	user-select: none;
+}
+
+ul kbd span {
+	cursor: pointer;
 }
 
 .stats-content {
