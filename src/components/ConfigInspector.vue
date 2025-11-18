@@ -10,9 +10,9 @@
       </button>
     </p>
     <p>
-      Root note: <button @click="UpdateChordProgressionRoot.execute(store, -1)"><</button
+      Root note: <button @click="UpdateChordProgressionRoot.execute(store, -1)">&lt;</button
       ><kbd>{{ root }}</kbd
-      ><button @click="UpdateChordProgressionRoot.execute(store, 1)">></button>
+      ><button @click="UpdateChordProgressionRoot.execute(store, 1)">&gt;</button>
     </p>
     <p>
       Extended scales: 
@@ -24,6 +24,9 @@
     <p>
       <button @click="ExportJSON.execute(store)">Export JSON</button
       ><button @click="ImportJSON.execute(store)">Import JSON</button>
+    </p>
+    <p>
+      <button @click="showResetMetadataWarning = true" class="danger-button">Reset Metadata</button>
     </p>
   </details>
 
@@ -44,6 +47,28 @@
   >
     <KeyboardLayoutHelp />
   </Modal>
+
+  <!-- Reset Metadata Warning Modal -->
+  <Modal 
+    :is-open="showResetMetadataWarning" 
+    title="Reset Metadata - Warning"
+    @close="showResetMetadataWarning = false"
+  >
+    <div class="reset-metadata-warning">
+      <p><strong>⚠️ This action cannot be undone!</strong></p>
+      <p>This will permanently delete:</p>
+      <ul>
+        <li>All custom tags</li>
+        <li>All personal notes</li>
+        <li>All aliases</li>
+      </ul>
+      <p>Automatic tags (like "diatonic") will be restored after the reset.</p>
+      <div class="modal-actions">
+        <button @click="showResetMetadataWarning = false" class="cancel-button">Cancel</button>
+        <button @click="confirmResetMetadata" class="danger-button">Confirm Reset</button>
+      </div>
+    </div>
+  </Modal>
 </template>
 
 <script setup>
@@ -56,6 +81,7 @@ import ExportJSON from "../actions/ExportJSON.js";
 import ImportJSON from "../actions/ImportJSON.js";
 import SwitchKeyboardLayout from "../actions/SwitchKeyboardLayout.js";
 import UpdateChordProgressionRoot from "../actions/UpdateChordProgressionRoot.js";
+import ResetMetadata from "../actions/ResetMetadata.js";
 import Shuffle from "../actions/Shuffle.js";
 import Modal from "./Modal.vue";
 import ExtendedScalesHelp from "./ExtendedScalesHelp.vue";
@@ -63,6 +89,7 @@ import KeyboardLayoutHelp from "./KeyboardLayoutHelp.vue";
 
 const showExtendedScalesHelp = ref(false);
 const showKeyboardLayoutHelp = ref(false);
+const showResetMetadataWarning = ref(false);
 
 const layout = computed(() => {
   switch (store.config.keyboardLayout) {
@@ -102,6 +129,11 @@ function toggleExtendedScales() {
   if (store.shuffled) {
     Shuffle.reset(store);
   }
+}
+
+function confirmResetMetadata() {
+  ResetMetadata.execute(store);
+  showResetMetadataWarning.value = false;
 }
 </script>
 
@@ -171,5 +203,49 @@ function toggleExtendedScales() {
   margin: 1.5rem 0;
   border-radius: 4px;
   font-style: italic;
+}
+
+.danger-button {
+  background-color: var(--pico-del-color, #c33);
+  color: var(--pico-del-inverse, #fff);
+  border-color: var(--pico-del-color, #c33);
+}
+
+.danger-button:hover {
+  background-color: var(--pico-del-color-hover, #a22);
+  border-color: var(--pico-del-color-hover, #a22);
+}
+
+.reset-metadata-warning {
+  line-height: 1.6;
+}
+
+.reset-metadata-warning p {
+  margin: 1rem 0;
+}
+
+.reset-metadata-warning ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.reset-metadata-warning li {
+  margin: 0.25rem 0;
+}
+
+.reset-metadata-warning strong {
+  color: var(--pico-del-color, #c33);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.cancel-button {
+  background-color: var(--pico-secondary-background);
+  color: var(--pico-secondary-inverse);
 }
 </style>

@@ -12,6 +12,7 @@ import AudioEngine from "./audio/AudioEngine.js";
 import ChordRelationships from "./theory/ChordRelationships.js";
 import Scales from "./theory/Scales.js";
 import themeSwitcher from "./utils/minimal-theme-switcher.js";
+import AutoTagger from "./utils/AutoTagger.js";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -20,6 +21,7 @@ app.use(pinia);
 ChordRelationships.mapScales(Scales.all);
 
 const store = useStore();
+AutoTagger.execute(store);
 
 // Initialize theme to dark
 themeSwitcher.scheme = "dark";

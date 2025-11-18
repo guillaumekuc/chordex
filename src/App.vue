@@ -62,16 +62,16 @@ import CRSearch from "./components/CRSearch.vue";
 import ChordProgressionModal from "./components/ChordProgressionModal.vue";
 import Footer from "./components/Footer.vue";
 import { useStore } from "./store";
-import animation from "./utils/animation.js";
+import Animation from "./utils/Animation.js";
 
 const store = useStore();
 
 onMounted(() => {
-  animation.start(store);
+  Animation.start(store);
 });
 
 onUnmounted(() => {
-  animation.stop();
+  Animation.stop();
 });
 
 const filteredScales = computed(() => {
