@@ -56,6 +56,7 @@ import ExportJSON from "../actions/ExportJSON.js";
 import ImportJSON from "../actions/ImportJSON.js";
 import SwitchKeyboardLayout from "../actions/SwitchKeyboardLayout.js";
 import UpdateChordProgressionRoot from "../actions/UpdateChordProgressionRoot.js";
+import Shuffle from "../actions/Shuffle.js";
 import Modal from "./Modal.vue";
 import ExtendedScalesHelp from "./ExtendedScalesHelp.vue";
 import KeyboardLayoutHelp from "./KeyboardLayoutHelp.vue";
@@ -84,6 +85,23 @@ const extendedScales = computed(() => store.config.extendedScales);
 
 function toggleExtendedScales() {
   store.config.extendedScales = !store.config.extendedScales;
+  
+  // Update fifthsOffsets filter based on extended scales state
+  if (store.config.extendedScales) {
+    // When enabling extended scales, set default fifthsOffsets to [0] if not already set
+    if (!store.activeFilters.fifthsOffsets || store.activeFilters.fifthsOffsets.length === 0) {
+      store.activeFilters.fifthsOffsets = [0];
+    }
+  } else {
+    // When disabling extended scales, clear fifthsOffsets to null so search doesn't filter by it
+    store.activeFilters.fifthsOffsets = null;
+  }
+  
+  // The filtered computed property will automatically rerun because it depends on activeFilters
+  // Reset shuffle only if it's active, so new search results are shown instead of old shuffled results
+  if (store.shuffled) {
+    Shuffle.reset(store);
+  }
 }
 </script>
 

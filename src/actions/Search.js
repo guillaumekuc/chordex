@@ -13,7 +13,7 @@ export default class Search {
       target: [], 
       scales: [], 
       commonTones: [], 
-      fifthsOffsets: store?.config?.extendedScales ? [0] : [0],
+      fifthsOffsets: store?.config?.extendedScales ? [0] : null,
       queryTags: [], // Tags from query (OR logic with query)
       filterTags: [], // Tags from filter panel (AND logic)
       selected: false
