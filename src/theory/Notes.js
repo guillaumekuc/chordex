@@ -4,22 +4,22 @@ export default class Notes {
 
 	static letters = [
 		"C",
-		"Db", 
+		"D♭", 
 		"D",
-		"Eb",
+		"E♭",
 		"E",
 		"F",
-		"Gb",
+		"G♭",
 		"G",
-		"Ab",
+		"A♭",
 		"A",
-		"Bb",
+		"B♭",
 		"B"
 	]
 	
 
 	static fromPitchClass(pc){
-		return this.letters[pc]
+		return this.letters[Common.modulo12(pc)]
 	}
 
 }

@@ -1,3 +1,5 @@
+import * as Common from "./common.js";
+
 export default class Intervals {
 
   static integers = [
@@ -65,15 +67,15 @@ export default class Intervals {
   //LOOKUPS
 
   static toDegree(semitone) {
-    return this.degrees[semitone % 12];
+    return this.degrees[Common.modulo12(semitone)];
   }
 
   static toRoman(semitone) {
-    return this.romans[semitone % 12];
+    return this.romans[Common.modulo12(semitone)];
   }
 
   static toName(semitone) {
-    return this.names[semitone % 12];
+    return this.names[Common.modulo12(semitone)];
   }
 
 
