@@ -208,6 +208,7 @@ export default class AutoTagger {
 
 		let lighterCount = 0;
 		let darkerCount = 0;
+		let ambiguousCount = 0;
 
 		// Get chord relationships - handle both .value (ref) and direct access
 		const chordRelationships = store.chordRelationships?.value ?? store.chordRelationships;
@@ -236,36 +237,65 @@ export default class AutoTagger {
 					const fifthsOffsets = majorScales.map(scale => scale.fifthsOffset);
 					const hasPlus6 = fifthsOffsets.includes(6);
 					const hasMinus6 = fifthsOffsets.includes(-6);
+					const uniqueOffsets = [...new Set(fifthsOffsets)];
 
-					// Handle the +6/-6 equivalence (they're the same due to the looping circle of fifths)
-					// For "lighter": if -6 is present, exclude it and check if all others are >= 0
-					// (treating -6 as equivalent to +6 in a lighter context)
-					let allLighter = false;
-					if (hasMinus6) {
-						const offsetsWithoutMinus6 = fifthsOffsets.filter(offset => offset !== -6);
-						allLighter = offsetsWithoutMinus6.length > 0 && offsetsWithoutMinus6.every(offset => offset >= 0);
+					// Special case: if only +6 and -6 are present (and possibly 0), tag as ambiguous
+					// Since they're equivalent, this represents ambiguity, not lighter or darker
+					const only6AndMinus6 = uniqueOffsets.every(offset => offset === 6 || offset === -6 || offset === 0);
+					
+					if (only6AndMinus6) {
+						// Special case: only +6 and -6 (equivalent scales) - tag as ambiguous only
+						if (!cr.tags.includes('ambiguous')) {
+							cr.tags.push('ambiguous');
+							ambiguousCount++;
+						}
 					} else {
-						allLighter = fifthsOffsets.every(offset => offset >= 0);
-					}
+						// Normal case: handle lighter/darker/ambiguous logic
+						// Handle the +6/-6 equivalence (they're the same due to the looping circle of fifths)
+						// For "lighter": if -6 is present, exclude it and check if all others are >= 0
+						// (treating -6 as equivalent to +6 in a lighter context)
+						let allLighter = false;
+						if (hasMinus6) {
+							const offsetsWithoutMinus6 = fifthsOffsets.filter(offset => offset !== -6);
+							allLighter = offsetsWithoutMinus6.length > 0 && offsetsWithoutMinus6.every(offset => offset >= 0);
+						} else {
+							allLighter = fifthsOffsets.every(offset => offset >= 0);
+						}
 
-					// For "darker": if +6 is present, exclude it and check if all others are <= 0
-					// (treating +6 as equivalent to -6 in a darker context)
-					let allDarker = false;
-					if (hasPlus6) {
-						const offsetsWithoutPlus6 = fifthsOffsets.filter(offset => offset !== 6);
-						allDarker = offsetsWithoutPlus6.length > 0 && offsetsWithoutPlus6.every(offset => offset <= 0);
-					} else {
-						allDarker = fifthsOffsets.every(offset => offset <= 0);
-					}
+						// For "darker": if +6 is present, exclude it and check if all others are <= 0
+						// (treating +6 as equivalent to -6 in a darker context)
+						let allDarker = false;
+						if (hasPlus6) {
+							const offsetsWithoutPlus6 = fifthsOffsets.filter(offset => offset !== 6);
+							allDarker = offsetsWithoutPlus6.length > 0 && offsetsWithoutPlus6.every(offset => offset <= 0);
+						} else {
+							allDarker = fifthsOffsets.every(offset => offset <= 0);
+						}
 
-					if (allLighter && !cr.tags.includes('lighter')) {
-						cr.tags.push('lighter');
-						lighterCount++;
-					}
+						if (allLighter && !cr.tags.includes('lighter')) {
+							cr.tags.push('lighter');
+							lighterCount++;
+						}
 
-					if (allDarker && !cr.tags.includes('darker')) {
-						cr.tags.push('darker');
-						darkerCount++;
+						if (allDarker && !cr.tags.includes('darker')) {
+							cr.tags.push('darker');
+							darkerCount++;
+						}
+
+						// Check for "ambiguous" - has both lighter and darker modulations
+						// This means there are scales with fifthsOffset > 0 AND scales with fifthsOffset < 0
+						// (accounting for +6/-6 equivalence: exclude both +6 and -6 from the check since they're the same)
+						const hasPositiveOffsets = fifthsOffsets.some(offset => offset > 0 && offset !== 6);
+						const hasNegativeOffsets = fifthsOffsets.some(offset => offset < 0 && offset !== -6);
+						
+						// Ambiguous only if there are genuine positive offsets (>0, excluding +6) 
+						// AND genuine negative offsets (<0, excluding -6)
+						const isAmbiguous = hasPositiveOffsets && hasNegativeOffsets;
+
+						if (isAmbiguous && !cr.tags.includes('ambiguous')) {
+							cr.tags.push('ambiguous');
+							ambiguousCount++;
+						}
 					}
 				}
 			}
@@ -273,6 +303,7 @@ export default class AutoTagger {
 
 		debugLog(`AutoTagger: Added "lighter" tag to ${lighterCount} chord relationships`);
 		debugLog(`AutoTagger: Added "darker" tag to ${darkerCount} chord relationships`);
+		debugLog(`AutoTagger: Added "ambiguous" tag to ${ambiguousCount} chord relationships`);
 	}
 }
 
