@@ -140,26 +140,31 @@ function extractTags(query) {
 // Remove tags from query string
 function removeTagsFromQuery(query) {
   if (!query) return "";
-  // Replace #tag patterns with empty string, then clean up extra spaces
-  return query.replace(/#[\w]+/g, '').replace(/\s+/g, ' ').trim();
+  // Replace #tag patterns with empty string, then clean up extra spaces and trailing commas
+  return query.replace(/#[\w]+/g, '').replace(/\s+/g, ' ').replace(/,\s*$/, '').trim();
 }
 
 const filters = computed(() => {
-  const queryWithoutTags = removeTagsFromQuery(searchQuery.value || "");
-  const extractedTags = extractTags(searchQuery.value || "");
+  // Keep the original query with tags - Search.js will parse it properly
+  const originalQuery = searchQuery.value || "";
   
-  // Merge extracted tags from query with manually selected tags
-  const allTags = [...new Set([...extractedTags, ...selected.tags])];
+  // Extract tags from query for filter panel display, but don't remove from query
+  const extractedTags = extractTags(originalQuery);
+  
+  // Filter panel tags are separate from query tags (AND logic)
+  // Query tags will be handled as part of comma-separated OR in Search.js
+  const filterPanelTags = [...selected.tags];
   
   return {
-    query: queryWithoutTags,
+    query: originalQuery, // Keep original query with tags for proper comma-separated OR parsing
     root: [...selected.root],
     intervals: [...selected.intervals],
     target: [...selected.target],
     scales: [...selected.scales],
     commonTones: [...selected.commonTones],
     fifthsOffsets: [...selected.fifthsOffsets],
-    tags: allTags,
+    queryTags: extractedTags, // Tags from query (for OR logic)
+    filterTags: filterPanelTags, // Tags from filter panel (for AND logic)
     selected: store.activeFilters.selected
   };
 });
@@ -187,7 +192,8 @@ function updateActiveFilters() {
   store.activeFilters.scales = [...filters.value.scales];
   store.activeFilters.commonTones = [...filters.value.commonTones];
   store.activeFilters.fifthsOffsets = [...filters.value.fifthsOffsets];
-  store.activeFilters.tags = [...filters.value.tags];
+  store.activeFilters.queryTags = [...filters.value.queryTags];
+  store.activeFilters.filterTags = [...filters.value.filterTags];
   store.activeFilters.selected = filters.value.selected;
 }
 

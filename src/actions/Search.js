@@ -14,7 +14,8 @@ export default class Search {
       scales: [], 
       commonTones: [], 
       fifthsOffsets: store?.config?.extendedScales ? [0] : [0],
-      tags: [],
+      queryTags: [], // Tags from query (OR logic with query)
+      filterTags: [], // Tags from filter panel (AND logic)
       selected: false
     };
   }
@@ -22,29 +23,96 @@ export default class Search {
   static execute(data, f = this.defaultFilters(), selectedItems = []) {
     let results = data;
 
-    // 1) text query (tags are extracted separately, so query here excludes tags)
+    // Helper function to check if a CR matches a specific tag
+    const matchesTag = (cr, tagName) => {
+      const crTags = Array.isArray(cr.tags) ? cr.tags : [];
+      if (crTags.length === 0) return false;
+      const crTagsLower = crTags.map(tag => tag.toLowerCase());
+      const tagLower = tagName.toLowerCase();
+      return crTagsLower.some(crTag => crTag.includes(tagLower));
+    };
+
+    // Helper function to check if a CR matches tag filters (OR logic for filter panel)
+    const matchesFilterTags = (cr) => {
+      if (!f.filterTags?.length) return true; // No filter tags = no restriction
+      return f.filterTags.some(filterTag => matchesTag(cr, filterTag));
+    };
+
+    // Helper function to check if a term (text or tag) matches a CR
+    const matchesTerm = (cr, term) => {
+      const trimmed = term.trim();
+      if (!trimmed) return false;
+      
+      // Check if this term is a tag (starts with #)
+      if (trimmed.startsWith('#')) {
+        const tagName = trimmed.substring(1).trim();
+        if (!tagName) return false;
+        return matchesTag(cr, tagName);
+      }
+      
+      // Otherwise, treat as text query
+      return SearchParser.matchSingleTerm(cr, trimmed);
+    };
+
+    // Helper function to match complex queries that may include tags
+    const matchesComplexQueryWithTags = (cr, query) => {
+      const terms = SearchParser.parseComplexQuery(query);
+      const includeTerms = terms.filter(term => term.operator === "include" && term.term.trim());
+      const excludeTerms = terms.filter(term => term.operator === "exclude" && term.term.trim());
+
+      // All include terms must match (AND logic)
+      // If no include terms (e.g., just a trailing +), don't match anything
+      const includeMatch =
+        includeTerms.length > 0 &&
+        includeTerms.every(term => matchesTerm(cr, term.term));
+
+      // No exclude terms should match
+      const excludeMatch =
+        excludeTerms.some(term => matchesTerm(cr, term.term));
+
+      return includeMatch && !excludeMatch;
+    };
+
+    // Helper function to check if a CR matches query (comma-separated OR logic)
+    // Handles both text queries and tags in the query string
+    const matchesQuery = (cr) => {
+      if (!f.query || !f.query.trim()) return false;
+      
+      // Split by comma for OR logic
+      const parts = f.query.split(',').map(part => part.trim()).filter(Boolean);
+      
+      return parts.some(part => {
+        // Check if this part contains + or - (complex query)
+        if (part.includes('+') || part.includes('-')) {
+          return matchesComplexQueryWithTags(cr, part);
+        }
+        
+        // Simple term (single tag or text)
+        return matchesTerm(cr, part);
+      });
+    };
+
+    // 1) Query (comma-separated OR logic, includes tags in query)
     if (f.query && f.query.trim()) {
-      const queries = f.query.split(',').map(query => query.trim()).filter(Boolean);
-      results = results.filter(cr =>
-        queries.some(query =>
-          (query.includes('+') || query.includes('-'))
-            ? SearchParser.matchComplexQuery(cr, query)
-            : SearchParser.matchSingleTerm(cr, query)
-        )
-      );
+      results = results.filter(cr => matchesQuery(cr));
     }
 
-    // 2) root quality
+    // 2) Filter panel tags (OR logic - any can match, like scales)
+    if (f.filterTags?.length > 0) {
+      results = results.filter(cr => matchesFilterTags(cr));
+    }
+
+    // 3) root quality
     if (f.root?.length) {
       results = results.filter(cr => f.root.includes(cr.rootQuality));
     } 
 
-    // 3) intervals
+    // 4) intervals
     if (f.intervals?.length) {
       results = results.filter(cr => f.intervals.includes(cr.pitchClass));
     }
 
-    // 4) target quality
+    // 5) target quality
     if (f.target?.length){ 
       results = results.filter(cr => f.target.includes(cr.targetQuality));
     }
@@ -68,7 +136,7 @@ export default class Search {
       }
     }
     
-    // 5) scales
+    // 6) scales
     if (f.scales?.length) {
       results = results.filter(cr =>
         Array.isArray(cr.scales) && cr.scales.some(scale => f.scales.includes(scale))
@@ -76,22 +144,8 @@ export default class Search {
     }
     
 
-    // 6) common tones
+    // 7) common tones
     if (f.commonTones?.length) results = results.filter(cr => f.commonTones.includes(cr.commonTones));
-
-    // 7) tags - partial match (case-insensitive)
-    if (f.tags?.length) {
-      results = results.filter(cr => {
-        const crTags = Array.isArray(cr.tags) ? cr.tags : [];
-        if (crTags.length === 0) return false;
-        // Convert to lowercase for case-insensitive partial matching
-        const crTagsLower = crTags.map(tag => tag.toLowerCase());
-        return f.tags.some(filterTag => {
-          const filterTagLower = filterTag.toLowerCase();
-          return crTagsLower.some(crTag => crTag.includes(filterTagLower));
-        });
-      });
-    }
 
     // 8) selected filter
     if (f.selected === true && Array.isArray(selectedItems)) {
