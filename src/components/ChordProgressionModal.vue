@@ -23,6 +23,14 @@
                     <button @click="increaseRoot">+</button>
                 </div>
             </div>
+            <div class="progression-config-item">
+                <label for="progression-tempo">Tempo (BPM):</label>
+                <div class="progression-control">
+                    <button @click="decreaseTempo">-</button>
+                    <kbd>{{ store.generator.tempo }}</kbd>
+                    <button @click="increaseTempo">+</button>
+                </div>
+            </div>
         </div>
 
     </details>
@@ -143,6 +151,18 @@ function increaseRoot() {
     store.generator.root = 0; // Wrap around to min MIDI note
   }
   updateProgressionChords();
+}
+
+function decreaseTempo() {
+  if (store.generator.tempo > 30) {
+    store.generator.tempo -= 5;
+  }
+}
+
+function increaseTempo() {
+  if (store.generator.tempo < 200) {
+    store.generator.tempo += 5;
+  }
 }
 
 function generateProgression() {

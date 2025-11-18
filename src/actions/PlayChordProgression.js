@@ -43,9 +43,12 @@ export default class PlayChordProgression {
       store.audio.stopAll();
     }
 
-    const chordDuration = 1; // seconds
-    const delayBetweenChords = 500; // milliseconds
-
+     // seconds
+    // Calculate delay based on tempo: (60 seconds / tempo BPM) * 1000 ms
+    const tempo = store.generator.tempo || 120;
+    const delayBetweenChords = (60 / tempo * 4) * 1000; // milliseconds. *4 because whole note = 4 beats.
+    const chordDuration = delayBetweenChords/1000; //seconds
+    
     for (let i = 0; i < progressionWithNotes.length; i++) {
       const item = progressionWithNotes[i];
       

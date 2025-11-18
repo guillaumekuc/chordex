@@ -9,7 +9,15 @@
         @click="toggleSelectedFilter"
         title="Filter by selected items"
       >
-        <i class="fa-solid fa-filter"></i> Selected Filter
+        <i class="fa-solid fa-filter"></i> Filter Selected
+      </button>
+
+      <button 
+        class="footer-button"
+        @click="clearSelection"
+        title="Clear all selected items"
+      >
+        <i class="fa-solid fa-xmark"></i> Clear 
       </button>
 
       <button 
@@ -60,6 +68,10 @@ function generateChordProgression() {
 
 function toggleSelectedFilter() {
   store.activeFilters.selected = !store.activeFilters.selected;
+}
+
+function clearSelection() {
+  store.selected = [];
 }
 </script>
 

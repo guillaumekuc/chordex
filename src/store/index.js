@@ -39,6 +39,7 @@ export const useStore = defineStore("main", function() {
     const generator = reactive({
         slots: 8,
         root: 64,
+        tempo: 120,
         progression: [],
         showModal: false,
         unaccessible: [],
