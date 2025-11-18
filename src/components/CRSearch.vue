@@ -262,14 +262,14 @@ function reset() {
 .cr-advanced-search kbd {
   cursor: pointer;
   user-select: none;
-  border: 1px solid var(--pico-muted-border-color, #ccc);
+  border: 1px solid var(--pico-muted-border-color);
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
   outline: none;
 }
 
 .cr-advanced-search kbd:focus-visible {
-  box-shadow: 0 0 0 2px var(--pico-primary, #5b9);
+  box-shadow: 0 0 0 2px var(--pico-primary);
 }
 
 .cr-advanced-search kbd:active {

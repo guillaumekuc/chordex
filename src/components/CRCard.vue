@@ -176,7 +176,7 @@
   
 
   button:hover {
-    color: white;
+    color: var(--pico-primary-inverse);
     box-shadow: unset !important; 
   }
 
@@ -322,7 +322,8 @@
   }
 
   .empty-text {
-    color: var(--pico-muted-color, rgba(128, 128, 128, 0.5));
+    color: var(--pico-muted-color);
+    opacity: 0.5;
     font-size: 0.75rem;
     white-space: nowrap;
   }
@@ -330,7 +331,8 @@
   .add-button {
     background: none;
     border: none;
-    color: var(--pico-muted-color, rgba(128, 128, 128, 0.6));
+    color: var(--pico-muted-color);
+    opacity: 0.6;
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     margin-left: auto;

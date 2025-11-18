@@ -86,13 +86,13 @@ onUnmounted(() => {
 }
 
 .tooltip {
-  --tooltip-background-color: #111;
+  --tooltip-background-color: var(--pico-background-color);
 
   position: fixed;
   z-index: 10000;
   padding: 0.5rem 0.75rem;
   background-color: var(--tooltip-background-color);
-  color: #fff;
+  color: var(--pico-color);
   border-radius: 4px;
   font-size: 0.8rem;
   white-space: nowrap;
