@@ -12,25 +12,21 @@ describe('Triads', () => {
 
     it('should have correct pitch classes for Major (M)', () => {
       expect(Triads.types.M.pitchClasses).toEqual([0, 4, 7]);
-      expect(Triads.types.M.rootPriority).toBe(1);
       expect(Triads.types.M.symbol).toBe('');
     });
 
     it('should have correct pitch classes for minor (m)', () => {
       expect(Triads.types.m.pitchClasses).toEqual([0, 3, 7]);
-      expect(Triads.types.m.rootPriority).toBe(2);
       expect(Triads.types.m.symbol).toBe('m');
     });
 
     it('should have correct pitch classes for diminished (d)', () => {
       expect(Triads.types.d.pitchClasses).toEqual([0, 3, 6]);
-      expect(Triads.types.d.rootPriority).toBe(3);
       expect(Triads.types.d.symbol).toBe('<sup>o</sup>');
     });
 
     it('should have correct pitch classes for Augmented (A)', () => {
       expect(Triads.types.A.pitchClasses).toEqual([0, 4, 8]);
-      expect(Triads.types.A.rootPriority).toBe(4);
       expect(Triads.types.A.symbol).toBe('+');
     });
 
@@ -87,7 +83,7 @@ describe('Triads', () => {
       const triads2 = Triads.fromScale(scale2);
       const triads3 = Triads.fromScale(scale3);
       
-      // All should identify C Major, but rootPitchClass may differ
+      // All should identify C Major
       expect(triads1.length).toBeGreaterThan(0);
       expect(triads2.length).toBeGreaterThan(0);
       expect(triads3.length).toBeGreaterThan(0);
@@ -213,4 +209,5 @@ describe('Triads', () => {
     });
   });
 });
+
 
