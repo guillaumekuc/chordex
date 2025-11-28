@@ -44,6 +44,7 @@ export const useStore = defineStore("main", function() {
         showModal: false,
         unaccessible: [],
         leadsToNowhere: [],
+        midi: null,
     });
 
     const filtered = computed(() => {

@@ -88,6 +88,12 @@
         <i class="fa-solid fa-play"></i> Listen
       </button>
     </div>
+
+    <div v-if="store.generator.progression && store.generator.progression.length > 0" class="progression-download-button">
+      <button @click="downloadMIDI" class="download-button">
+        <i class="fa-solid fa-download"></i> Download MIDI
+      </button>
+    </div>
   </Modal>
 </template>
 
@@ -102,6 +108,7 @@ import * as Common from "../theory/common.js";
 import GenerateChordProgression from "../actions/GenerateChordProgression.js";
 import RerollChord from "../actions/RerollChord.js";
 import PlayChordProgression from "../actions/PlayChordProgression.js";
+import DownloadMIDI from "../actions/DownloadMIDI.js";
 
 const store = useStore();
 
@@ -175,6 +182,10 @@ function rerollChord(index) {
 
 function playProgression() {
   PlayChordProgression.execute(store);
+}
+
+function downloadMIDI() {
+  DownloadMIDI.execute(store);
 }
 
 function isUnaccessible(cr) {
@@ -357,6 +368,21 @@ function getTooltipMessage(cr) {
   }
 
   .listen-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .progression-download-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .download-button {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     cursor: pointer;
