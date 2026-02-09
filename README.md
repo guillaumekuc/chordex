@@ -3,6 +3,7 @@
 ## About
 
 A Chord Relationship (CR) shows how one chord relates to another by highlighting the interval between them and their qualities that give each CR its unique emotional color. This taxonomy catalogs all 192 possible tertian triad CRs.
+Direct application of a music theory framework taught by [Jjay Berthume](https://www.youtube.com/watch?v=kt5_LPC8epM)
 
 ## Live
 
@@ -10,11 +11,23 @@ A Chord Relationship (CR) shows how one chord relates to another by highlighting
 
 ## References
 
+- [How to Spice Up Your Harmony! :D [Harmonic Relativity] Part 1 - Basics](https://www.youtube.com/watch?v=kt5_LPC8epM) - Original music theory framework by Jjay Berthume
 - [Pokédex!](https://www.pokemon.com/fr/pokedex)
 
 ## Features
 
-### Implemented Features
+**Core Capabilities:**
+- **192 Chord Relationships**: All possible tertian triad combinations (4 qualities × 12 intervals × 4 target qualities)
+- **Interactive Exploration**: Browse, search, and filter through all chord relationships with advanced search operators and multiple filter options
+- **Audio**: Play individual chord relationships or full progressions with automatic voice leading and smooth inversions
+- **Visualisation**: Interactive keyboard visualizations with multiple layouts showing chord relationships in real-time
+- **Defaults tags**: Automatic tagging system categorizes relationships by scale types, with affect tags based on emotional characteristics using the VAD (Valence-Arousal-Dominance) model
+- **Chord Progression Generator**: Generate musical chord progressions from selected Chord Relationships enforcing connectivity constraints.
+- **Personalization**: Add custom tags, notes, and aliases to relationships, with full data persistence and import/export capabilities
+- **Extended Scales**: Optional extended scales mode expands from 21 base scales to 112 total scales through fifths offset modulations
+- **Metadata**: Inspector panel provides detailed information about common tones, scale associations, and relationship properties
+
+### Detailed Features
 
 - **Audio Playback**: Web Audio API with automatic voice leading
   - **Individual CR playback**: Play root chord followed by target chord
@@ -44,6 +57,13 @@ A Chord Relationship (CR) shows how one chord relates to another by highlighting
   - **melodic-minor**: CRs from Melodic Minor scale modes
   - **lighter/darker**: Based on fifths offset modulation (Major-derived scales)
   - **ambiguous**: CRs with both lighter and darker modulations
+- **Affect Tags**: Emotion-based tags for Chord Relationships (relative notation for moves between chords)
+  - **Purpose**: Required to navigate the 192 relationships efficiently and make the system usable out of the box
+  - **Derivation**: Sourced from global consensus using LLMs and Agent Skills architecture to avoid subjective bias
+  - **Research Method**: Used Perplexity Deep Research to systematically search for affect information across multiple notation formats (absolute notation, natural-language descriptions, Roman numeral analysis, etc.)
+  - **Coverage**: Tags attributed to approximately 1/3 of the 192 relationships; the remainder are under-determined due to lack of online discussion, suggesting roughly 2/3 of harmonic space is under-explored or non-pertinent in practice
+  - **Taxonomy**: Based on the Valence–Arousal–Dominance (VAD) model with three axes: valence (pleasure/displeasure), arousal (activation), dominance (control/submission)
+  - **Eight Affect Labels**: Anger/Defiance, Calm/Safe, Content/Assured, Excited/Uplifted, Grim/Control, Joy/Triumph, Sadness/Melancholy, Fear/Tension
 - **Custom Tags**: Add/remove custom tags to chord relationships (searchable with `#tag` syntax)
 - **Personal Notes**: Add custom notes to any chord relationship
 - **Aliases**: Create custom aliases for chord relationships
@@ -100,71 +120,20 @@ npm run dev
 # Production build
 npm run build
 
-# Deploy to GitHub Pages
-npm run deploy
+# Preview production build locally
+npm run preview
 ```
 
-## Architecture
+## Deployment
 
-```text
-src/
-├── actions/         # Business logic
-│   ├── Search.js                # Search and filtering
-│   ├── PlayCR.js                # Individual CR playback
-│   ├── PlayChordProgression.js  # Progression playback
-│   ├── GenerateChordProgression.js # Progression generation
-│   ├── RerollChord.js           # Chord rerolling in progressions
-│   ├── ResetFilters.js          # Filter reset
-│   ├── ResetMetadata.js         # Metadata reset
-│   └── ...                      # Other actions (Select, Tag, Alias, etc.)
-├── audio/           # AudioEngine with memory management
-├── components/      # Vue components
-│   ├── CRCard.vue              # Chord relationship card display
-│   ├── CRSearch.vue            # Search interface with advanced filters
-│   ├── Keyboard.vue            # Visual keyboard representation
-│   ├── InspectorPanel.vue      # Side panel for detailed CR inspection
-│   ├── ConfigInspector.vue     # Configuration panel
-│   ├── ChordProgressionModal.vue # Chord progression generator modal
-│   ├── Footer.vue              # Selection footer with quick actions
-│   ├── FilterSection.vue       # Reusable filter component
-│   ├── CommonTonesFilterSection.vue # Common tones filter
-│   ├── FifthsLevelFilterSection.vue # Fifths level filter
-│   ├── ScrollLine.vue          # Horizontal scrolling component
-│   ├── Key.vue                 # Individual piano key component
-│   ├── SearchInput.vue         # Search input component
-│   ├── Modal.vue               # Reusable modal component
-│   ├── Tooltip.vue             # Tooltip component
-│   ├── ExtendedScalesHelp.vue  # Help for extended scales
-│   ├── KeyboardLayoutHelp.vue  # Help for keyboard layouts
-│   └── ...                     # Other UI components
-├── config/          # Keyboard layouts and keymaps
-│   ├── keymap.js                # MIDI to keyboard key mappings
-│   ├── keyboardRowPatterns.js  # Upper/lower row patterns
-│   └── keyboardColorPatterns.js # White/black key patterns
-├── store/           # Pinia state management
-├── theory/          # Music theory modules
-│   ├── ChordRelationships.js  # CR generation and management (192 CRs)
-│   ├── ChordProgressions.js   # Progression generation with voice leading
-│   ├── Intervals.js            # Interval utilities and notation
-│   ├── Scales.js              # Scale generation and modulation
-│   ├── Triads.js              # Triad type definitions
-│   ├── Notes.js               # Note name utilities
-│   └── common.js              # Common math utilities
-├── utils/           # Utilities
-│   ├── SearchParser.js         # Advanced search query parsing
-│   ├── AutoTagger.js           # Automatic tag assignment
-│   ├── Animation.js            # Keyboard animation controller
-│   └── minimal-theme-switcher.js # Theme management
-└── styles/          # CSS variables and theming
-```
+Deployment to GitHub Pages is automated via GitHub Actions. The workflow (`.github/workflows/deploy.yml`) automatically:
+- Triggers on push to the `master` branch
+- Builds the project using `npm run build`
+- Deploys the `dist` directory to GitHub Pages using `peaceiris/actions-gh-pages@v3`
 
-## Music Theory Details
+No manual deployment command is needed - simply push to `master` to deploy.
 
-- **192 Chord Relationships**: All possible tertian triad combinations (4 qualities × 12 intervals × 4 target qualities)
-- **Common Tones**: Calculated for each CR (0-3 shared tones between root and target chords)
-- **Voice Leading**: Automatic selection of smoothest inversions based on minimal voice movement
-- **Scale Mapping**: Each CR is mapped to all scales containing that chord relationship
-- **Root Priority**: When multiple triads share a root in a scale, Major > minor > diminished > Augmented
+
 
 ## Documentation
 
