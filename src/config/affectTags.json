@@ -1,0 +1,1112 @@
+{
+  "100": {
+    "label": "d I A",
+    "tags": []
+  },
+  "101": {
+    "label": "d ♭II M",
+    "tags": []
+  },
+  "102": {
+    "label": "d ♭II m",
+    "tags": []
+  },
+  "103": {
+    "label": "d ♭II d",
+    "tags": []
+  },
+  "104": {
+    "label": "d ♭II A",
+    "tags": []
+  },
+  "105": {
+    "label": "d II M",
+    "tags": []
+  },
+  "106": {
+    "label": "d II m",
+    "tags": []
+  },
+  "107": {
+    "label": "d II d",
+    "tags": []
+  },
+  "108": {
+    "label": "d II A",
+    "tags": []
+  },
+  "109": {
+    "label": "d ♭III M",
+    "tags": []
+  },
+  "110": {
+    "label": "d ♭III m",
+    "tags": []
+  },
+  "111": {
+    "label": "d ♭III d",
+    "tags": []
+  },
+  "112": {
+    "label": "d ♭III A",
+    "tags": []
+  },
+  "113": {
+    "label": "d III M",
+    "tags": []
+  },
+  "114": {
+    "label": "d III m",
+    "tags": []
+  },
+  "115": {
+    "label": "d III d",
+    "tags": []
+  },
+  "116": {
+    "label": "d III A",
+    "tags": []
+  },
+  "117": {
+    "label": "d IV M",
+    "tags": []
+  },
+  "118": {
+    "label": "d IV m",
+    "tags": [
+      "releasing",
+      "settling",
+      "clarifying",
+      "sigh-of-relief",
+      "soft-resolution"
+    ]
+  },
+  "119": {
+    "label": "d IV d",
+    "tags": []
+  },
+  "120": {
+    "label": "d IV A",
+    "tags": []
+  },
+  "121": {
+    "label": "d ♭V M",
+    "tags": []
+  },
+  "122": {
+    "label": "d ♭V m",
+    "tags": []
+  },
+  "123": {
+    "label": "d ♭V d",
+    "tags": []
+  },
+  "124": {
+    "label": "d ♭V A",
+    "tags": []
+  },
+  "125": {
+    "label": "d V M",
+    "tags": [
+      "resolving",
+      "conclusive",
+      "satisfying",
+      "relieving",
+      "cadential"
+    ]
+  },
+  "126": {
+    "label": "d V m",
+    "tags": [
+      "dramatic",
+      "intense",
+      "dark",
+      "melancholic",
+      "tense",
+      "subdominant"
+    ]
+  },
+  "127": {
+    "label": "d V d",
+    "tags": []
+  },
+  "128": {
+    "label": "d V A",
+    "tags": []
+  },
+  "129": {
+    "label": "d ♭VI M",
+    "tags": []
+  },
+  "130": {
+    "label": "d ♭VI m",
+    "tags": []
+  },
+  "131": {
+    "label": "d ♭VI d",
+    "tags": []
+  },
+  "132": {
+    "label": "d ♭VI A",
+    "tags": []
+  },
+  "133": {
+    "label": "d VI M",
+    "tags": []
+  },
+  "134": {
+    "label": "d VI m",
+    "tags": []
+  },
+  "135": {
+    "label": "d VI d",
+    "tags": []
+  },
+  "136": {
+    "label": "d VI A",
+    "tags": []
+  },
+  "137": {
+    "label": "d ♭VII M",
+    "tags": []
+  },
+  "138": {
+    "label": "d ♭VII m",
+    "tags": []
+  },
+  "139": {
+    "label": "d ♭VII d",
+    "tags": []
+  },
+  "140": {
+    "label": "d ♭VII A",
+    "tags": []
+  },
+  "141": {
+    "label": "d VII M",
+    "tags": []
+  },
+  "142": {
+    "label": "d VII m",
+    "tags": []
+  },
+  "143": {
+    "label": "d VII d",
+    "tags": []
+  },
+  "144": {
+    "label": "d VII A",
+    "tags": []
+  },
+  "145": {
+    "label": "A I M",
+    "tags": [
+      "grounding",
+      "clarifying",
+      "return-to-reality",
+      "stabilizing",
+      "re-centering"
+    ]
+  },
+  "146": {
+    "label": "A I m",
+    "tags": [
+      "resolving",
+      "landing",
+      "clarifying",
+      "cathartic",
+      "closing"
+    ]
+  },
+  "147": {
+    "label": "A I d",
+    "tags": []
+  },
+  "148": {
+    "label": "A I A",
+    "tags": []
+  },
+  "149": {
+    "label": "A ♭II M",
+    "tags": []
+  },
+  "150": {
+    "label": "A ♭II m",
+    "tags": []
+  },
+  "151": {
+    "label": "A ♭II d",
+    "tags": []
+  },
+  "152": {
+    "label": "A ♭II A",
+    "tags": []
+  },
+  "153": {
+    "label": "A II M",
+    "tags": []
+  },
+  "154": {
+    "label": "A II m",
+    "tags": []
+  },
+  "155": {
+    "label": "A II d",
+    "tags": []
+  },
+  "156": {
+    "label": "A II A",
+    "tags": []
+  },
+  "157": {
+    "label": "A ♭III M",
+    "tags": []
+  },
+  "158": {
+    "label": "A ♭III m",
+    "tags": []
+  },
+  "159": {
+    "label": "A ♭III d",
+    "tags": []
+  },
+  "160": {
+    "label": "A ♭III A",
+    "tags": []
+  },
+  "161": {
+    "label": "A III M",
+    "tags": []
+  },
+  "162": {
+    "label": "A III m",
+    "tags": []
+  },
+  "163": {
+    "label": "A III d",
+    "tags": []
+  },
+  "164": {
+    "label": "A III A",
+    "tags": []
+  },
+  "165": {
+    "label": "A IV M",
+    "tags": [
+      "revealing",
+      "brightening",
+      "arriving",
+      "hopeful",
+      "release"
+    ]
+  },
+  "166": {
+    "label": "A IV m",
+    "tags": [
+      "resolving",
+      "soothing",
+      "landing",
+      "cathartic",
+      "accepting"
+    ]
+  },
+  "167": {
+    "label": "A IV d",
+    "tags": []
+  },
+  "168": {
+    "label": "A IV A",
+    "tags": []
+  },
+  "169": {
+    "label": "A ♭V M",
+    "tags": []
+  },
+  "170": {
+    "label": "A ♭V m",
+    "tags": []
+  },
+  "171": {
+    "label": "A ♭V d",
+    "tags": []
+  },
+  "172": {
+    "label": "A ♭V A",
+    "tags": []
+  },
+  "173": {
+    "label": "A V M",
+    "tags": []
+  },
+  "174": {
+    "label": "A V m",
+    "tags": [
+      "grounding",
+      "sobering",
+      "settling",
+      "clarifying",
+      "snap-into-focus"
+    ]
+  },
+  "175": {
+    "label": "A V d",
+    "tags": []
+  },
+  "176": {
+    "label": "A V A",
+    "tags": []
+  },
+  "177": {
+    "label": "A ♭VI M",
+    "tags": []
+  },
+  "178": {
+    "label": "A ♭VI m",
+    "tags": []
+  },
+  "179": {
+    "label": "A ♭VI d",
+    "tags": []
+  },
+  "180": {
+    "label": "A ♭VI A",
+    "tags": []
+  },
+  "181": {
+    "label": "A VI M",
+    "tags": []
+  },
+  "182": {
+    "label": "A VI m",
+    "tags": []
+  },
+  "183": {
+    "label": "A VI d",
+    "tags": []
+  },
+  "184": {
+    "label": "A VI A",
+    "tags": []
+  },
+  "185": {
+    "label": "A ♭VII M",
+    "tags": []
+  },
+  "186": {
+    "label": "A ♭VII m",
+    "tags": []
+  },
+  "187": {
+    "label": "A ♭VII d",
+    "tags": []
+  },
+  "188": {
+    "label": "A ♭VII A",
+    "tags": []
+  },
+  "189": {
+    "label": "A VII M",
+    "tags": []
+  },
+  "190": {
+    "label": "A VII m",
+    "tags": []
+  },
+  "191": {
+    "label": "A VII d",
+    "tags": []
+  },
+  "192": {
+    "label": "A VII A",
+    "tags": []
+  },
+  "001": {
+    "label": "M I M",
+    "tags": []
+  },
+  "002": {
+    "label": "M I m",
+    "tags": [
+      "bittersweet",
+      "melancholic",
+      "darkening"
+    ]
+  },
+  "003": {
+    "label": "M I d",
+    "tags": [
+      "ominous",
+      "unstable",
+      "suspenseful"
+    ]
+  },
+  "004": {
+    "label": "M I A",
+    "tags": [
+      "surreal",
+      "uncanny",
+      "unsettled"
+    ]
+  },
+  "005": {
+    "label": "M ♭II M",
+    "tags": [
+      "spicy",
+      "exotic",
+      "dramatic",
+      "energizing",
+      "surreal",
+      "intense"
+    ]
+  },
+  "006": {
+    "label": "M ♭II m",
+    "tags": []
+  },
+  "007": {
+    "label": "M ♭II d",
+    "tags": []
+  },
+  "008": {
+    "label": "M ♭II A",
+    "tags": []
+  },
+  "009": {
+    "label": "M II M",
+    "tags": [
+      "bright",
+      "uplifting",
+      "energizing",
+      "smooth"
+    ]
+  },
+  "010": {
+    "label": "M II m",
+    "tags": [
+      "preparatory",
+      "smooth"
+    ]
+  },
+  "011": {
+    "label": "M II d",
+    "tags": []
+  },
+  "012": {
+    "label": "M II A",
+    "tags": []
+  },
+  "013": {
+    "label": "M ♭III M",
+    "tags": [
+      "cinematic",
+      "lush",
+      "dramatic",
+      "colorful"
+    ]
+  },
+  "014": {
+    "label": "M ♭III m",
+    "tags": []
+  },
+  "015": {
+    "label": "M ♭III d",
+    "tags": []
+  },
+  "016": {
+    "label": "M ♭III A",
+    "tags": []
+  },
+  "017": {
+    "label": "M III M",
+    "tags": [
+      "magical",
+      "fantastical",
+      "uncanny",
+      "grand",
+      "bright",
+      "cinematic"
+    ]
+  },
+  "018": {
+    "label": "M III m",
+    "tags": [
+      "sad",
+      "tragic",
+      "melancholic",
+      "reflective",
+      "bittersweet",
+      "yearning"
+    ]
+  },
+  "019": {
+    "label": "M III d",
+    "tags": []
+  },
+  "020": {
+    "label": "M III A",
+    "tags": []
+  },
+  "021": {
+    "label": "M IV M",
+    "tags": [
+      "warm",
+      "supportive",
+      "anticipatory",
+      "open",
+      "gently-hopeful",
+      "nostalgic"
+    ]
+  },
+  "022": {
+    "label": "M IV m",
+    "tags": [
+      "melancholic",
+      "tender",
+      "nostalgic",
+      "bittersweet",
+      "introspective",
+      "vulnerable"
+    ]
+  },
+  "023": {
+    "label": "M IV d",
+    "tags": [
+      "destabilizing",
+      "tension-building",
+      "unraveling",
+      "cliffhanger",
+      "ominous"
+    ]
+  },
+  "024": {
+    "label": "M IV A",
+    "tags": []
+  },
+  "025": {
+    "label": "M ♭V M",
+    "tags": [
+      "otherworldly",
+      "disorienting",
+      "uncanny",
+      "awe-struck",
+      "ominous",
+      "cosmic"
+    ]
+  },
+  "026": {
+    "label": "M ♭V m",
+    "tags": []
+  },
+  "027": {
+    "label": "M ♭V d",
+    "tags": []
+  },
+  "028": {
+    "label": "M ♭V A",
+    "tags": []
+  },
+  "029": {
+    "label": "M V M",
+    "tags": [
+      "adventurous",
+      "energetic",
+      "heroic",
+      "anticipatory",
+      "uplifting",
+      "open-ended"
+    ]
+  },
+  "030": {
+    "label": "M V m",
+    "tags": [
+      "dramatic",
+      "intense",
+      "sacrificial",
+      "dark",
+      "bittersweet"
+    ]
+  },
+  "031": {
+    "label": "M V d",
+    "tags": []
+  },
+  "032": {
+    "label": "M V A",
+    "tags": [
+      "dreamy",
+      "mysterious",
+      "ambiguous",
+      "yearning",
+      "uneasy",
+      "suspenseful"
+    ]
+  },
+  "033": {
+    "label": "M ♭VI M",
+    "tags": [
+      "cinematic",
+      "grand",
+      "sacred",
+      "bold",
+      "surprising"
+    ]
+  },
+  "034": {
+    "label": "M ♭VI m",
+    "tags": []
+  },
+  "035": {
+    "label": "M ♭VI d",
+    "tags": []
+  },
+  "036": {
+    "label": "M ♭VI A",
+    "tags": []
+  },
+  "037": {
+    "label": "M VI M",
+    "tags": [
+      "despairing",
+      "angry",
+      "dark",
+      "dramatic"
+    ]
+  },
+  "038": {
+    "label": "M VI m",
+    "tags": [
+      "melancholic",
+      "bittersweet",
+      "reflective",
+      "nostalgic",
+      "soft-sad",
+      "accepting"
+    ]
+  },
+  "039": {
+    "label": "M VI d",
+    "tags": []
+  },
+  "040": {
+    "label": "M VI A",
+    "tags": []
+  },
+  "041": {
+    "label": "M ♭VII M",
+    "tags": [
+      "anthemic",
+      "triumphant",
+      "driving",
+      "euphoric",
+      "powerful",
+      "rock-like"
+    ]
+  },
+  "042": {
+    "label": "M ♭VII m",
+    "tags": []
+  },
+  "043": {
+    "label": "M ♭VII d",
+    "tags": []
+  },
+  "044": {
+    "label": "M ♭VII A",
+    "tags": []
+  },
+  "045": {
+    "label": "M VII M",
+    "tags": []
+  },
+  "046": {
+    "label": "M VII m",
+    "tags": []
+  },
+  "047": {
+    "label": "M VII d",
+    "tags": []
+  },
+  "048": {
+    "label": "M VII A",
+    "tags": []
+  },
+  "049": {
+    "label": "m I M",
+    "tags": [
+      "uplifting",
+      "brightening",
+      "hopeful",
+      "triumphant",
+      "cathartic",
+      "contrast-rich"
+    ]
+  },
+  "050": {
+    "label": "m I m",
+    "tags": []
+  },
+  "051": {
+    "label": "m I d",
+    "tags": [
+      "tightening",
+      "darkening",
+      "destabilizing",
+      "ominous",
+      "anxious"
+    ]
+  },
+  "052": {
+    "label": "m I A",
+    "tags": [
+      "tense",
+      "anticipatory",
+      "ambiguous",
+      "suspenseful",
+      "unresolved"
+    ]
+  },
+  "053": {
+    "label": "m ♭II M",
+    "tags": [
+      "tragic",
+      "operatic",
+      "cinematic",
+      "mysterious",
+      "dark",
+      "hopeful-melancholic"
+    ]
+  },
+  "054": {
+    "label": "m ♭II m",
+    "tags": []
+  },
+  "055": {
+    "label": "m ♭II d",
+    "tags": []
+  },
+  "056": {
+    "label": "m ♭II A",
+    "tags": []
+  },
+  "057": {
+    "label": "m II M",
+    "tags": []
+  },
+  "058": {
+    "label": "m II m",
+    "tags": []
+  },
+  "059": {
+    "label": "m II d",
+    "tags": []
+  },
+  "060": {
+    "label": "m II A",
+    "tags": []
+  },
+  "061": {
+    "label": "m ♭III M",
+    "tags": [
+      "hopeful",
+      "consoling",
+      "bittersweet",
+      "warm",
+      "uplifting",
+      "wistful"
+    ]
+  },
+  "062": {
+    "label": "m ♭III m",
+    "tags": []
+  },
+  "063": {
+    "label": "m ♭III d",
+    "tags": []
+  },
+  "064": {
+    "label": "m ♭III A",
+    "tags": []
+  },
+  "065": {
+    "label": "m III M",
+    "tags": [
+      "dramatic",
+      "surprising",
+      "triumphant",
+      "uplifting",
+      "cinematic"
+    ]
+  },
+  "066": {
+    "label": "m III m",
+    "tags": [
+      "mysterious",
+      "wandering",
+      "unstable",
+      "searching",
+      "ambiguous"
+    ]
+  },
+  "067": {
+    "label": "m III d",
+    "tags": [
+      "ominous",
+      "tense",
+      "unstable",
+      "unsettled"
+    ]
+  },
+  "068": {
+    "label": "m III A",
+    "tags": [
+      "surreal",
+      "dreamlike",
+      "floating",
+      "otherworldly",
+      "ambiguous"
+    ]
+  },
+  "069": {
+    "label": "m IV M",
+    "tags": [
+      "uplifting",
+      "hopeful",
+      "warm",
+      "open",
+      "resolving"
+    ]
+  },
+  "070": {
+    "label": "m IV m",
+    "tags": [
+      "dark",
+      "brooding",
+      "contemplative",
+      "unresolved",
+      "folk-like"
+    ]
+  },
+  "071": {
+    "label": "m IV d",
+    "tags": [
+      "tense",
+      "preparatory",
+      "unstable",
+      "anticipatory"
+    ]
+  },
+  "072": {
+    "label": "m IV A",
+    "tags": [
+      "surreal",
+      "dreamlike",
+      "floating",
+      "ambiguous"
+    ]
+  },
+  "073": {
+    "label": "m ♭V M",
+    "tags": [
+      "jazzy",
+      "exotic",
+      "disorienting",
+      "sophisticated",
+      "resolving"
+    ]
+  },
+  "074": {
+    "label": "m ♭V m",
+    "tags": [
+      "dark",
+      "ominous",
+      "foreboding",
+      "tense",
+      "disorienting"
+    ]
+  },
+  "075": {
+    "label": "m ♭V d",
+    "tags": [
+      "ominous",
+      "unstable",
+      "gothic",
+      "dramatic"
+    ]
+  },
+  "076": {
+    "label": "m ♭V A",
+    "tags": [
+      "surreal",
+      "dreamlike",
+      "otherworldly",
+      "floating"
+    ]
+  },
+  "077": {
+    "label": "m V M",
+    "tags": [
+      "resolving",
+      "powerful",
+      "anticipatory",
+      "heroic",
+      "triumphant"
+    ]
+  },
+  "078": {
+    "label": "m V m",
+    "tags": [
+      "subdued",
+      "brooding",
+      "unresolved",
+      "dark",
+      "contemplative"
+    ]
+  },
+  "079": {
+    "label": "m V d",
+    "tags": [
+      "tense",
+      "preparatory",
+      "unstable",
+      "anticipatory",
+      "classical"
+    ]
+  },
+  "080": {
+    "label": "m V A",
+    "tags": [
+      "tense",
+      "yearning",
+      "unresolved",
+      "dramatic",
+      "suspenseful"
+    ]
+  },
+  "081": {
+    "label": "m ♭VI M",
+    "tags": [
+      "dramatic",
+      "powerful",
+      "haunting",
+      "mystical",
+      "longing",
+      "driving"
+    ]
+  },
+  "082": {
+    "label": "m ♭VI m",
+    "tags": [
+      "approaching-limit",
+      "pressurized",
+      "intense"
+    ]
+  },
+  "083": {
+    "label": "m ♭VI d",
+    "tags": []
+  },
+  "084": {
+    "label": "m ♭VI A",
+    "tags": []
+  },
+  "085": {
+    "label": "m VI M",
+    "tags": [
+      "balanced",
+      "drifting",
+      "directionless"
+    ]
+  },
+  "086": {
+    "label": "m VI m",
+    "tags": [
+      "assured",
+      "grounded",
+      "quiet-confidence"
+    ]
+  },
+  "087": {
+    "label": "m VI d",
+    "tags": []
+  },
+  "088": {
+    "label": "m VI A",
+    "tags": []
+  },
+  "089": {
+    "label": "m ♭VII M",
+    "tags": [
+      "anthemic",
+      "triumphant",
+      "powerful",
+      "driving",
+      "expansive",
+      "uplifting"
+    ]
+  },
+  "090": {
+    "label": "m ♭VII m",
+    "tags": [
+      "brooding",
+      "ominous",
+      "watchful",
+      "foreboding"
+    ]
+  },
+  "091": {
+    "label": "m ♭VII d",
+    "tags": []
+  },
+  "092": {
+    "label": "m ♭VII A",
+    "tags": []
+  },
+  "093": {
+    "label": "m VII M",
+    "tags": [
+      "uncanny",
+      "disorienting",
+      "uneasy",
+      "wrong-turn"
+    ]
+  },
+  "094": {
+    "label": "m VII m",
+    "tags": [
+      "descending",
+      "sinking",
+      "somber",
+      "resigned"
+    ]
+  },
+  "095": {
+    "label": "m VII d",
+    "tags": []
+  },
+  "096": {
+    "label": "m VII A",
+    "tags": []
+  },
+  "097": {
+    "label": "d I M",
+    "tags": [
+      "serene",
+      "tranquil",
+      "powerful",
+      "beautiful",
+      "resolving"
+    ]
+  },
+  "098": {
+    "label": "d I m",
+    "tags": [
+      "resolving",
+      "accepting",
+      "melancholic"
+    ]
+  },
+  "099": {
+    "label": "d I d",
+    "tags": []
+  }
+}

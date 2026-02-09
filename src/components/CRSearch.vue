@@ -122,7 +122,7 @@ const selected = reactive({
   target: [],
   scales: [],
   commonTones: [],
-  fifthsOffsets: [0],
+  fifthsOffsets: [],
   tags: []
   // Note: 'selected' is now managed directly in store.activeFilters.selected
 });
@@ -236,7 +236,7 @@ function reset() {
   searchQuery.value = "";
   Object.keys(selected).forEach(key => {
     if (key === 'fifthsOffsets') {
-      selected[key] = [0];
+      selected[key] = [];
     } else {
       selected[key] = [];
     }

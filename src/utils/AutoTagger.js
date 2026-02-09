@@ -1,5 +1,6 @@
 import Scales from "../theory/Scales.js";
 import debugLog from "./debugLog.js";
+import affectTagsData from "../config/affectTags3.json";
 
 /**
  * AutoTagger utility
@@ -19,6 +20,7 @@ export default class AutoTagger {
 		this.addHarmonicMinorTags(store);
 		this.addMelodicMinorTags(store);
 		this.addLighterDarkerTags(store);
+		this.addAffectTags(store);
 		
 		debugLog('AutoTagger: Automatic tagging complete');
 	}
@@ -304,6 +306,46 @@ export default class AutoTagger {
 		debugLog(`AutoTagger: Added "lighter" tag to ${lighterCount} chord relationships`);
 		debugLog(`AutoTagger: Added "darker" tag to ${darkerCount} chord relationships`);
 		debugLog(`AutoTagger: Added "ambiguous" tag to ${ambiguousCount} chord relationships`);
+	}
+
+	/**
+	 * Adds tags from affectTags.json to chord relationships
+	 * @param {Object} store - The Pinia store instance
+	 */
+	static addAffectTags(store) {
+		let taggedCount = 0;
+
+		// Get chord relationships - handle both .value (ref) and direct access
+		const chordRelationships = store.chordRelationships?.value ?? store.chordRelationships;
+		
+		// Ensure it's an array
+		if (!Array.isArray(chordRelationships)) {
+			debugLog('AutoTagger: chordRelationships is not an array, skipping affect tags');
+			return;
+		}
+
+		// Work with the store's chord relationships
+		for (const cr of chordRelationships) {
+			// Initialize tags array if null
+			if (!cr.tags) {
+				cr.tags = [];
+			}
+
+			// Look up tags for this chord relationship by uid
+			const affectTagEntry = affectTagsData[cr.uid];
+			
+			if (affectTagEntry && Array.isArray(affectTagEntry.tags)) {
+				// Add each tag from the JSON file if it's not already present
+				for (const tag of affectTagEntry.tags) {
+					if (tag && tag.trim() && !cr.tags.includes(tag.trim())) {
+						cr.tags.push(tag.trim());
+						taggedCount++;
+					}
+				}
+			}
+		}
+
+		debugLog(`AutoTagger: Added ${taggedCount} affect tags from affectTags.json`);
 	}
 }
 
