@@ -62,7 +62,7 @@ import CRSearch from "./components/CRSearch.vue";
 import ChordProgressionModal from "./components/ChordProgressionModal.vue";
 import Footer from "./components/Footer.vue";
 import { useStore } from "./store";
-import Animation from "./utils/Animation.js";
+import Animation from "./utils/animation.js";
 
 const store = useStore();
 
